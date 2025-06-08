@@ -1,0 +1,55 @@
+package model;
+
+import javax.swing.text.html.ImageView;
+
+public abstract class Plants {
+    protected int HP;
+    protected int row;
+    protected int column;
+    protected int price;
+    protected ImageView image;
+    protected double rechargeTime;
+    protected boolean availabe = true;
+
+    public Plants(int hp, int i, int j, int price, double rechargeTime){
+        HP = hp;
+        row = i;
+        column = j;
+        this.price = price;
+        this.rechargeTime = rechargeTime;
+    }
+
+//    public abstract void act(); // shoot or make sun.
+
+    public void takeDamage(int damage){
+        HP -= damage;
+    }
+
+    public boolean isDead(){
+        return HP <= 0;
+    }
+
+    public int getHP() {
+        return HP;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public ImageView getImage() {
+        return image;
+    }
+
+    public void setImage(ImageView image) {
+        this.image = image;
+    }
+}
