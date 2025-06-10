@@ -1,15 +1,297 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="588.0" prefWidth="890.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PickIcon">
+<AnchorPane prefHeight="1500.0" prefWidth="1588.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PickIcon">
    <children>
-      <ImageView fitHeight="601.0" fitWidth="890.0" layoutX="311.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="-7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView fitHeight="931.0" fitWidth="1539.0" layoutX="6.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
-            <Image url="@images/background.png" />
+            <Image url="@images/Frontyard.png" />
          </image>
       </ImageView>
+      <BorderPane layoutX="217.0" layoutY="55.0" prefHeight="593.0" prefWidth="651.0" style="-fx-background-color: #A0522D;" AnchorPane.leftAnchor="217.0" AnchorPane.topAnchor="55.0">
+         <center>
+            <AnchorPane prefHeight="189.0" prefWidth="318.0" style="-fx-background-color: #7B3F1D;" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="610.0">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="589.0" spacing="10.0">
+                           <children>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="128.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/pea%20shooter.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="peashooterSelecter" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="81.0" prefWidth="126.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="124.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/sunflower.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="sunflowerSelecter" layoutX="2.0" layoutY="6.0" mnemonicParsing="false" opacity="0.0" prefHeight="95.0" prefWidth="119.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="128.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/cherry%20bomb.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="cherrybombSelecter" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="94.0" prefWidth="123.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="86.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/photo_۲۰۲۵-۰۶-۱۰_۰۴-۳۵-۴۹.jpg" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="wallnutSelecter" layoutX="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="80.0" prefWidth="156.0" />
+                                 </children>
+                              </Group>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="589.0" spacing="10.0">
+                           <children>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="128.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/snow%20shooter%20card.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="snowshooterSelecter" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="81.0" prefWidth="126.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="124.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/repeater-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="repeaterSelecter" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="87.0" prefWidth="119.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="128.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/cherry%20bomb.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="cherrybombSelecter1" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="94.0" prefWidth="123.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="86.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/photo_۲۰۲۵-۰۶-۱۰_۰۴-۳۵-۴۹.jpg" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="wallnutSelecter1" layoutX="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="80.0" prefWidth="156.0" />
+                                 </children>
+                              </Group>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="589.0" spacing="10.0">
+                           <children>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="128.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/pea%20shooter.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="peashooterSelecter2" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="81.0" prefWidth="126.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="124.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/sunflower.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="sunflowerSelecter2" layoutX="2.0" layoutY="6.0" mnemonicParsing="false" opacity="0.0" prefHeight="95.0" prefWidth="119.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="128.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/cherry%20bomb.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="cherrybombSelecter2" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="94.0" prefWidth="123.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="86.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/photo_۲۰۲۵-۰۶-۱۰_۰۴-۳۵-۴۹.jpg" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="wallnutSelecter2" layoutX="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="80.0" prefWidth="156.0" />
+                                 </children>
+                              </Group>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="589.0" spacing="10.0">
+                           <children>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="128.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/pea%20shooter.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="peashooterSelecter3" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="81.0" prefWidth="126.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="124.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/sunflower.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="sunflowerSelecter3" layoutX="2.0" layoutY="6.0" mnemonicParsing="false" opacity="0.0" prefHeight="95.0" prefWidth="119.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="128.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/cherry%20bomb.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="cherrybombSelecter3" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="94.0" prefWidth="123.0" />
+                                 </children>
+                              </Group>
+                              <Group>
+                                 <children>
+                                    <ImageView fitHeight="86.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/photo_۲۰۲۵-۰۶-۱۰_۰۴-۳۵-۴۹.jpg" />
+                                       </image>
+                                    </ImageView>
+                                    <Button fx:id="wallnutSelecter3" layoutX="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="80.0" prefWidth="156.0" />
+                                 </children>
+                              </Group>
+                           </children>
+                           <padding>
+                              <Insets left="10.0" />
+                           </padding>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </center>
+         <top>
+            <AnchorPane prefHeight="20.0" prefWidth="651.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" text="CHOOSE YOUR PLANTS" textFill="#ffef0a" AnchorPane.leftAnchor="155.0">
+                     <font>
+                        <Font name="Bell MT Bold" size="29.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </top>
+         <left>
+            <AnchorPane prefHeight="554.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <AnchorPane prefHeight="562.0" prefWidth="20.0" BorderPane.alignment="CENTER" />
+         </right>
+         <bottom>
+            <AnchorPane prefHeight="20.0" prefWidth="651.0" BorderPane.alignment="CENTER" />
+         </bottom>
+      </BorderPane>
+      <ImageView fitHeight="200.0" fitWidth="259.0" layoutX="936.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/normalZombie.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="244.0" fitWidth="193.0" layoutX="1180.0" layoutY="89.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/ghandiZhambie.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="244.0" fitWidth="208.0" layoutX="1048.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/screenDoorZombie.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="179.0" fitWidth="135.0" layoutX="1036.0" layoutY="418.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/impZombie.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="234.0" fitWidth="302.0" layoutX="1180.0" layoutY="246.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/normalZombie.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="281.0" fitWidth="228.0" layoutX="1243.0" layoutY="434.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/screenDoorZombie.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="312.0" fitWidth="160.0" layoutX="1134.0" layoutY="561.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/ghandiZhambie.png" />
+         </image>
+      </ImageView>
+      <VBox layoutX="28.0" layoutY="55.0" prefHeight="594.0" prefWidth="150.0" spacing="15.0">
+         <children>
+            <Button fx:id="plant1BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+            <Button fx:id="plant2BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+            <Button fx:id="plant3BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+            <Button fx:id="plant4BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+            <Button fx:id="plant5BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+            <Button fx:id="plant6BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+            <Button fx:id="plant7BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+         </children>
+         <opaqueInsets>
+            <Insets top="50.0" />
+         </opaqueInsets>
+      </VBox>
+      <Button fx:id="playBTN" layoutX="443.0" layoutY="672.0" mnemonicParsing="false" opacity="0.8" prefHeight="46.0" prefWidth="150.0" style="-fx-background-color: #A0522D;" text="PLAY" textFill="#ffef0a">
+         <font>
+            <Font name="Bell MT Bold" size="24.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
