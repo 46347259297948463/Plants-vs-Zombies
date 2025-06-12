@@ -23,48 +23,48 @@
          <center>
             <AnchorPane prefHeight="189.0" prefWidth="318.0" style="-fx-background-color: #7B3F1D;" BorderPane.alignment="CENTER">
                <children>
-                  <VBox prefHeight="200.0" prefWidth="610.0">
+                  <VBox prefHeight="529.0" prefWidth="610.0">
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="589.0" spacing="10.0">
                            <children>
                               <Group>
                                  <children>
-                                    <ImageView fitHeight="128.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="137.0" fitWidth="148.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/pea%20shooter.png" />
+                                          <Image url="@images/pea%20shooter%20card.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="peashooterSelecter" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="81.0" prefWidth="126.0" />
+                                    <Button fx:id="peashooterSelecterBTN" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="84.0" prefWidth="133.0" />
                                  </children>
                               </Group>
                               <Group>
                                  <children>
-                                    <ImageView fitHeight="124.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="137.0" fitWidth="159.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/sunflower.png" />
+                                          <Image url="@images/sunflower%20card.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="sunflowerSelecter" layoutX="2.0" layoutY="6.0" mnemonicParsing="false" opacity="0.0" prefHeight="95.0" prefWidth="119.0" />
+                                    <Button fx:id="sunflowerSelecterBTN" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="95.0" prefWidth="132.0" />
                                  </children>
                               </Group>
                               <Group>
                                  <children>
-                                    <ImageView fitHeight="128.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="142.0" fitWidth="144.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/cherry%20bomb.png" />
+                                          <Image url="@images/cherry%20bomb%20card.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="cherrybombSelecter" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="94.0" prefWidth="123.0" />
+                                    <Button fx:id="cherrybombSelecterBTN" layoutX="5.0" layoutY="22.0" mnemonicParsing="false" opacity="0.0" prefHeight="98.0" prefWidth="132.0" />
                                  </children>
                               </Group>
                               <Group>
                                  <children>
-                                    <ImageView fitHeight="86.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="152.0" fitWidth="148.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/photo_۲۰۲۵-۰۶-۱۰_۰۴-۳۵-۴۹.jpg" />
+                                          <Image url="@images/wall%20nut%20card.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="wallnutSelecter" layoutX="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="80.0" prefWidth="156.0" />
+                                    <Button fx:id="wallnutSelecterBTN" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="104.0" prefWidth="140.0" />
                                  </children>
                               </Group>
                            </children>
@@ -76,42 +76,42 @@
                            <children>
                               <Group>
                                  <children>
-                                    <ImageView fitHeight="128.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="141.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@images/snow%20shooter%20card.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="snowshooterSelecter" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="81.0" prefWidth="126.0" />
+                                    <Button fx:id="snowshooterSelecterBTN" layoutX="2.0" layoutY="30.0" mnemonicParsing="false" opacity="0.0" prefHeight="81.0" prefWidth="138.0" />
                                  </children>
                               </Group>
                               <Group>
                                  <children>
-                                    <ImageView fitHeight="124.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="137.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/repeater-removebg-preview.png" />
+                                          <Image url="@images/repeater%20card.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="repeaterSelecter" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="87.0" prefWidth="119.0" />
+                                    <Button fx:id="repeaterSelecterBTN" layoutX="5.0" layoutY="22.0" mnemonicParsing="false" opacity="0.0" prefHeight="93.0" prefWidth="127.0" />
                                  </children>
                               </Group>
                               <Group>
                                  <children>
-                                    <ImageView fitHeight="128.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="141.0" fitWidth="152.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/cherry%20bomb.png" />
+                                          <Image url="@images/jalapenos%20card.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="cherrybombSelecter1" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="94.0" prefWidth="123.0" />
+                                    <Button fx:id="jalapenoSelecterBTN" layoutX="5.0" layoutY="23.0" mnemonicParsing="false" opacity="0.0" prefHeight="95.0" prefWidth="131.0" />
                                  </children>
                               </Group>
                               <Group>
                                  <children>
-                                    <ImageView fitHeight="86.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="144.0" fitWidth="144.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/photo_۲۰۲۵-۰۶-۱۰_۰۴-۳۵-۴۹.jpg" />
+                                          <Image url="@images/tall%20nut%20card.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="wallnutSelecter1" layoutX="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="80.0" prefWidth="156.0" />
+                                    <Button fx:id="tallNutSelecterBTN" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="101.0" prefWidth="141.0" />
                                  </children>
                               </Group>
                            </children>
@@ -119,101 +119,32 @@
                               <Insets left="10.0" />
                            </padding>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="589.0" spacing="10.0">
-                           <children>
-                              <Group>
-                                 <children>
-                                    <ImageView fitHeight="128.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/pea%20shooter.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Button fx:id="peashooterSelecter2" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="81.0" prefWidth="126.0" />
-                                 </children>
-                              </Group>
-                              <Group>
-                                 <children>
-                                    <ImageView fitHeight="124.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/sunflower.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Button fx:id="sunflowerSelecter2" layoutX="2.0" layoutY="6.0" mnemonicParsing="false" opacity="0.0" prefHeight="95.0" prefWidth="119.0" />
-                                 </children>
-                              </Group>
-                              <Group>
-                                 <children>
-                                    <ImageView fitHeight="128.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/cherry%20bomb.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Button fx:id="cherrybombSelecter2" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="94.0" prefWidth="123.0" />
-                                 </children>
-                              </Group>
-                              <Group>
-                                 <children>
-                                    <ImageView fitHeight="86.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/photo_۲۰۲۵-۰۶-۱۰_۰۴-۳۵-۴۹.jpg" />
-                                       </image>
-                                    </ImageView>
-                                    <Button fx:id="wallnutSelecter2" layoutX="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="80.0" prefWidth="156.0" />
-                                 </children>
-                              </Group>
-                           </children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="123.0" prefWidth="610.0" spacing="10.0">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <children>
+                              <Button fx:id="snowshooterSelecterBTN15" mnemonicParsing="false" opacity="0.4" prefHeight="81.0" prefWidth="138.0" />
+                              <Button fx:id="snowshooterSelecterBTN152" mnemonicParsing="false" opacity="0.4" prefHeight="81.0" prefWidth="138.0" />
+                              <Button fx:id="snowshooterSelecterBTN153" mnemonicParsing="false" opacity="0.4" prefHeight="81.0" prefWidth="138.0" />
+                              <Button fx:id="snowshooterSelecterBTN154" mnemonicParsing="false" opacity="0.4" prefHeight="81.0" prefWidth="138.0" />
+                           </children>
                         </HBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="128.0" prefWidth="589.0" spacing="10.0">
-                           <children>
-                              <Group>
-                                 <children>
-                                    <ImageView fitHeight="128.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/pea%20shooter.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Button fx:id="peashooterSelecter3" layoutY="24.0" mnemonicParsing="false" opacity="0.0" prefHeight="81.0" prefWidth="126.0" />
-                                 </children>
-                              </Group>
-                              <Group>
-                                 <children>
-                                    <ImageView fitHeight="124.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/sunflower.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Button fx:id="sunflowerSelecter3" layoutX="2.0" layoutY="6.0" mnemonicParsing="false" opacity="0.0" prefHeight="95.0" prefWidth="119.0" />
-                                 </children>
-                              </Group>
-                              <Group>
-                                 <children>
-                                    <ImageView fitHeight="128.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/cherry%20bomb.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Button fx:id="cherrybombSelecter3" layoutX="3.0" layoutY="14.0" mnemonicParsing="false" opacity="0.0" prefHeight="94.0" prefWidth="123.0" />
-                                 </children>
-                              </Group>
-                              <Group>
-                                 <children>
-                                    <ImageView fitHeight="86.0" fitWidth="157.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/photo_۲۰۲۵-۰۶-۱۰_۰۴-۳۵-۴۹.jpg" />
-                                       </image>
-                                    </ImageView>
-                                    <Button fx:id="wallnutSelecter3" layoutX="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="80.0" prefWidth="156.0" />
-                                 </children>
-                              </Group>
-                           </children>
+                        <HBox alignment="CENTER_LEFT" prefHeight="123.0" prefWidth="610.0" spacing="10.0">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
+                           <children>
+                              <Button fx:id="snowshooterSelecterBTN152" mnemonicParsing="false" opacity="0.4" prefHeight="81.0" prefWidth="138.0" />
+                              <Button fx:id="snowshooterSelecterBTN1521" mnemonicParsing="false" opacity="0.4" prefHeight="81.0" prefWidth="138.0" />
+                              <Button fx:id="snowshooterSelecterBTN1531" mnemonicParsing="false" opacity="0.4" prefHeight="81.0" prefWidth="138.0" />
+                              <Button fx:id="snowshooterSelecterBTN1541" mnemonicParsing="false" opacity="0.4" prefHeight="81.0" prefWidth="138.0" />
+                           </children>
                         </HBox>
                      </children>
+                     <opaqueInsets>
+                        <Insets bottom="15.0" />
+                     </opaqueInsets>
                   </VBox>
                </children>
             </AnchorPane>
@@ -221,9 +152,9 @@
          <top>
             <AnchorPane prefHeight="20.0" prefWidth="651.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" text="CHOOSE YOUR PLANTS" textFill="#ffef0a" AnchorPane.leftAnchor="155.0">
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="654.0" text="CHOOSE YOUR PLANTS" textFill="#ffef0a" AnchorPane.leftAnchor="0.0">
                      <font>
-                        <Font name="Bell MT Bold" size="29.0" />
+                        <Font name="Bell MT Bold" size="36.0" />
                      </font>
                   </Label>
                </children>
@@ -276,19 +207,47 @@
       </ImageView>
       <VBox layoutX="28.0" layoutY="55.0" prefHeight="594.0" prefWidth="150.0" spacing="15.0">
          <children>
-            <Button fx:id="plant1BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
-            <Button fx:id="plant2BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
-            <Button fx:id="plant3BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
-            <Button fx:id="plant4BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
-            <Button fx:id="plant5BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
-            <Button fx:id="plant6BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
-            <Button fx:id="plant7BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+            <Group fx:id="group1">
+               <children>
+                  <Button fx:id="plant1BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+               </children>
+            </Group>
+            <Group fx:id="group2">
+               <children>
+                  <Button fx:id="plant2BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+               </children>
+            </Group>
+            <Group fx:id="group3">
+               <children>
+                  <Button fx:id="plant3BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+               </children>
+            </Group>
+            <Group fx:id="group4">
+               <children>
+                  <Button fx:id="plant4BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+               </children>
+            </Group>
+            <Group fx:id="group5">
+               <children>
+                  <Button fx:id="plant5BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+               </children>
+            </Group>
+            <Group fx:id="group6">
+               <children>
+                  <Button fx:id="plant6BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+               </children>
+            </Group>
+            <Group fx:id="group7">
+               <children>
+                  <Button fx:id="plant7BTN" mnemonicParsing="false" opacity="0.45" prefHeight="74.0" prefWidth="118.0" />
+               </children>
+            </Group>
          </children>
          <opaqueInsets>
             <Insets top="50.0" />
          </opaqueInsets>
       </VBox>
-      <Button fx:id="playBTN" layoutX="443.0" layoutY="672.0" mnemonicParsing="false" opacity="0.8" prefHeight="46.0" prefWidth="150.0" style="-fx-background-color: #A0522D;" text="PLAY" textFill="#ffef0a">
+      <Button fx:id="playBTN" layoutX="469.0" layoutY="727.0" mnemonicParsing="false" opacity="0.8" prefHeight="46.0" prefWidth="150.0" style="-fx-background-color: #A0522D;" text="PLAY" textFill="#ffef0a">
          <font>
             <Font name="Bell MT Bold" size="24.0" />
          </font>
