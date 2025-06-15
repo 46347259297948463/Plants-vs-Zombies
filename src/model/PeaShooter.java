@@ -1,6 +1,5 @@
 package model;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class PeaShooter extends PeaPlants{
@@ -13,12 +12,18 @@ public class PeaShooter extends PeaPlants{
 
     public PeaShooter(int i, int j) {
         super(HP, i, j, price, bullets, rechargeTime);
-        Image image = new Image(getClass().getResource("/view/images/pea shooter.png").toString());
-        ImageView imageView = new ImageView(image);
-        setImage(imageView);
+        ImageView imageView = new ImageView(getClass().getResource("/view/images/pea shooter.png").toString());
+        imageView.setFitWidth(140);
+        imageView.setFitHeight(140);
+        this.setImage(imageView);
     }
 
     public PeaShooter(){
 
+    }
+
+    @Override
+    public Plants clonePlant(int row, int column) {
+        return new PeaShooter(row, column);
     }
 }

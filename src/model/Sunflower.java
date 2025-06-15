@@ -10,14 +10,20 @@ public class Sunflower extends Plants{
     private final static double rechargeTime = 3;
     private static boolean available = true;
 
-    public Sunflower(int hp, int i, int j, int price) {
-        super(hp, i, j, price, rechargeTime);
-        Image image = new Image(getClass().getResource("/view/images/sunflower.png").toString());
-        ImageView imageView = new ImageView(image);
+    public Sunflower(int i, int j) {
+        super(HP, i, j, price, rechargeTime);
+        ImageView imageView = new ImageView(getClass().getResource("/view/images/sunflower.png").toString());
+        imageView.setFitWidth(140);
+        imageView.setFitHeight(140);
         setImage(imageView);
     }
 
     public Sunflower(){
 
+    }
+
+    @Override
+    public Plants clonePlant(int row, int column) {
+        return new Sunflower(row, column);
     }
 }

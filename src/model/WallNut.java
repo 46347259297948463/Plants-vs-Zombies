@@ -12,11 +12,17 @@ public class WallNut extends NutPlants{
 
     public WallNut(int i, int j) {
         super(HP, i, j, price, rechargeTime);
-        Image image = new Image(getClass().getResource("/view/images/wall nut.png").toString());
-        ImageView imageView = new ImageView(image);
+        ImageView imageView = new ImageView(getClass().getResource("/view/images/wall nut.png").toString());
+        imageView.setFitWidth(140);
+        imageView.setFitHeight(140);
         setImage(imageView);
     }
     public WallNut(){
 
+    }
+
+    @Override
+    public Plants clonePlant(int row, int column) {
+        return new WallNut(row, column);
     }
 }

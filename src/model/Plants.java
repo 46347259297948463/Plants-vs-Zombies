@@ -25,6 +25,12 @@ public abstract class Plants {
 
 //    public abstract void act(); // shoot or make sun.
 
+    public abstract Plants clonePlant(int row, int column);
+
+    public String getName() {
+        return this.getClass().getSimpleName().toLowerCase();
+    }
+
     public void takeDamage(int damage){
         HP -= damage;
     }

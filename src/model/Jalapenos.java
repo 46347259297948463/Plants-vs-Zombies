@@ -9,15 +9,21 @@ public class Jalapenos extends BombPlants{
     private final static double rechargeTime = 30;
     private static boolean available = true;
 
-    public Jalapenos(int i, int j, int price) {
+    public Jalapenos(int i, int j) {
         super(i, j, price, rechargeTime);
-        Image image = new Image(getClass().getResource("/view/images/jalapenos.png").toString());
-        ImageView imageView = new ImageView(image);
+        ImageView imageView = new ImageView(getClass().getResource("/view/images/jalapenos.png").toString());
+        imageView.setFitWidth(140);
+        imageView.setFitHeight(140);
         setImage(imageView);
     }
 
     public Jalapenos(){
 
+    }
+
+    @Override
+    public Plants clonePlant(int row, int column) {
+        return new Jalapenos(row, column);
     }
 
     @Override

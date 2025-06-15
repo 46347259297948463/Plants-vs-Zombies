@@ -21,67 +21,67 @@
          <children>
             <HBox prefHeight="199.0" prefWidth="1394.0">
                <children>
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell00" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell01" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell02" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell03" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell04" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell05" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell06" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell07" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell08" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
                </children>
             </HBox>
             <HBox prefHeight="199.0" prefWidth="1394.0">
                <children>
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell10" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell11" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell12" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell13" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell14" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell15" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell16" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell17" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell18" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
                </children>
             </HBox>
             <HBox prefHeight="199.0" prefWidth="1394.0">
                <children>
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell20" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell21" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell22" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell23" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell24" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell25" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell26" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell27" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell28" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
                </children>
             </HBox>
             <HBox prefHeight="199.0" prefWidth="1394.0">
                <children>
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell30" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell31" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell32" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell33" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell34" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell35" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell36" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell37" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell38" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
                </children>
             </HBox>
             <HBox prefHeight="199.0" prefWidth="1394.0">
                <children>
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
-                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell40" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell41" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell42" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell43" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell44" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell45" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell46" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell47" mnemonicParsing="false" opacity="0.0" prefHeight="203.0" prefWidth="163.0" />
+                  <Button fx:id="cell48" mnemonicParsing="false" opacity="0.65" prefHeight="203.0" prefWidth="163.0" />
                </children>
             </HBox>
          </children>

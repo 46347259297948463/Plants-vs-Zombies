@@ -13,11 +13,17 @@ public class SnowShooter extends PeaPlants{
 
     public SnowShooter(int i, int j) {
         super(HP, i, j, price, bullets, rechargeTime);
-        Image image = new Image(getClass().getResource("/view/images/snow shooter.png").toString());
-        ImageView imageView = new ImageView(image);
+        ImageView imageView = new ImageView(getClass().getResource("/view/images/snow shooter.png").toString());
+        imageView.setFitWidth(140);
+        imageView.setFitHeight(140);
         setImage(imageView);
     }
     public SnowShooter(){
 
+    }
+
+    @Override
+    public Plants clonePlant(int row, int column) {
+        return new SnowShooter(row, column);
     }
 }

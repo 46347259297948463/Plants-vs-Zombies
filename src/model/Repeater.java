@@ -13,12 +13,18 @@ public class Repeater extends PeaPlants{
 
     public Repeater(int i, int j) {
         super(HP, i, j, price, bullets, rechargeTime);
-        Image image = new Image(getClass().getResource("/view/images/repeater.png").toString());
-        ImageView imageView = new ImageView(image);
+        ImageView imageView = new ImageView(getClass().getResource("/view/images/repeater.png").toString());
+        imageView.setFitWidth(140);
+        imageView.setFitHeight(140);
         setImage(imageView);
     }
 
     public Repeater(){
 
+    }
+
+    @Override
+    public Plants clonePlant(int row, int column) {
+        return new Repeater(row, column);
     }
 }
