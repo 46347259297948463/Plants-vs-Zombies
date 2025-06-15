@@ -1,6 +1,7 @@
 package model;
 
-import javax.swing.text.html.ImageView;
+
+import javafx.scene.image.ImageView;
 
 public abstract class Plants {
     protected int HP;
@@ -17,6 +18,9 @@ public abstract class Plants {
         column = j;
         this.price = price;
         this.rechargeTime = rechargeTime;
+    }
+    public Plants(){
+
     }
 
 //    public abstract void act(); // shoot or make sun.

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -9,77 +10,154 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="691.0" prefWidth="1033.0" style="-fx-background-image: url('../images/chatgpt_bg_2025_06_08.png'); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DayLevel">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1203.0" prefWidth="2015.0" style="-fx-background-image: url('../images/chatgpt_bg_2025_06_08.png'); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DayLevel">
     <children>
-      <ImageView fitHeight="710.0" fitWidth="1037.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.66668701171875" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="0.0">
+      <ImageView fitHeight="1158.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
-            <Image url="@images/background.png" />
+            <Image url="@images/Frontyard%20(1).png" />
          </image>
       </ImageView>
-        <VBox layoutX="14.0" layoutY="14.0" prefHeight="622.0" prefWidth="130.0">
+      <VBox layoutY="151.2" prefHeight="946.0" prefWidth="1414.0" AnchorPane.leftAnchor="490.0" AnchorPane.topAnchor="151.0">
+         <children>
+            <HBox prefHeight="199.0" prefWidth="1394.0">
+               <children>
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="199.0" prefWidth="1394.0">
+               <children>
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="199.0" prefWidth="1394.0">
+               <children>
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="199.0" prefWidth="1394.0">
+               <children>
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+               </children>
+            </HBox>
+            <HBox prefHeight="199.0" prefWidth="1394.0">
+               <children>
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+                  <Button mnemonicParsing="false" opacity="0.5" prefHeight="203.0" prefWidth="163.0" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+        <HBox layoutX="283.2" layoutY="30.0" prefHeight="58.0" prefWidth="230.0" spacing="8.0" style="-fx-background-color: #A0522D;" AnchorPane.leftAnchor="283.0" AnchorPane.topAnchor="30.0">
             <children>
-                <ImageView fitHeight="75.0" fitWidth="91.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../Pictures/images%20(1).jpg" />
-                    </image>
-                </ImageView>
-                <ImageView fitHeight="68.0" fitWidth="111.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../Pictures/images%20(1).jpg" />
-                    </image>
-                </ImageView>
-                <ImageView fitHeight="68.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../Pictures/images%20(1).jpg" />
-                    </image>
-                </ImageView>
-                <ImageView fitHeight="69.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../Pictures/images%20(1).jpg" />
-                    </image>
-                </ImageView>
-                <ImageView fitHeight="69.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../Pictures/images%20(1).jpg" />
-                    </image>
-                </ImageView>
-                <ImageView fitHeight="69.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../Pictures/images%20(1).jpg" />
-                    </image>
-                </ImageView>
-                <ImageView fitHeight="69.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../Pictures/images%20(1).jpg" />
-                    </image>
-                </ImageView>
-            </children>
-        </VBox>
-        <HBox layoutX="160.8" layoutY="8.0" prefHeight="26.0" prefWidth="159.0" style="-fx-background-color: #A0522D;" AnchorPane.leftAnchor="161.0" AnchorPane.topAnchor="4.0">
-            <children>
-                <ImageView fitHeight="42.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="75.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@images/Sun.png" />
                     </image>
                 </ImageView>
-                <Label fx:id="sunPoints" alignment="CENTER" contentDisplay="CENTER" prefHeight="45.0" prefWidth="76.0" style="-fx-background-color: #F0C878;" text="0" textAlignment="RIGHT" />
-                <Group>
-                    <children>
-                        <ImageView fitHeight="40.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@images/shovel.png" />
-                            </image>
-                        </ImageView>
-                        <Button fx:id="shovelBTN" layoutY="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="39.0" prefWidth="43.0" />
-                    </children>
-                </Group>
+                <Label fx:id="sunPoints" alignment="CENTER" contentDisplay="CENTER" prefHeight="44.0" prefWidth="145.0" style="-fx-background-color: #F0C878;" text="0" textAlignment="RIGHT">
+               <HBox.margin>
+                  <Insets top="10.0" />
+               </HBox.margin></Label>
+            <AnchorPane prefHeight="48.0" prefWidth="68.0" style="-fx-background-color: #7B3F1D;">
+               <children>
+                      <Group>
+                          <children>
+                              <ImageView fitHeight="50.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@images/shovel.png" />
+                                  </image>
+                              </ImageView>
+                              <Button fx:id="shovelBTN" layoutY="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="44.0" prefWidth="73.0" />
+                          </children>
+                      </Group>
+               </children>
+               <HBox.margin>
+                  <Insets bottom="8.0" right="8.0" top="8.0" />
+               </HBox.margin>
+            </AnchorPane>
             </children>
         </HBox>
-        <Button fx:id="menuBTN" layoutX="929.0" layoutY="31.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="130.0" text="Menu" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="4.0" />
-      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@image/Sun.png" />
-         </image>
-      </ImageView>
+        <Button fx:id="menuBTN" layoutX="1208.0" layoutY="25.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="130.0" text="Menu" AnchorPane.rightAnchor="29.59999999999991" AnchorPane.topAnchor="25.0" />
+      <VBox layoutX="38.0" layoutY="65.0" prefHeight="815.0" prefWidth="178.0" spacing="5.0">
+         <children>
+            <Group fx:id="group1">
+               <children>
+                  <Button fx:id="plant1BTN" mnemonicParsing="false" opacity="0.45" prefHeight="111.0" prefWidth="177.0" />
+               </children>
+            </Group>
+            <Group fx:id="group2">
+               <children>
+                  <Button fx:id="plant2BTN" mnemonicParsing="false" opacity="0.45" prefHeight="111.0" prefWidth="177.0" />
+               </children>
+            </Group>
+            <Group fx:id="group3">
+               <children>
+                  <Button fx:id="plant3BTN" mnemonicParsing="false" opacity="0.45" prefHeight="111.0" prefWidth="177.0" />
+               </children>
+            </Group>
+            <Group fx:id="group4">
+               <children>
+                  <Button fx:id="plant4BTN" mnemonicParsing="false" opacity="0.45" prefHeight="111.0" prefWidth="177.0" />
+               </children>
+            </Group>
+            <Group fx:id="group5">
+               <children>
+                  <Button fx:id="plant5BTN" mnemonicParsing="false" opacity="0.45" prefHeight="111.0" prefWidth="177.0" />
+               </children>
+            </Group>
+            <Group fx:id="group6">
+               <children>
+                  <Button fx:id="plant6BTN" mnemonicParsing="false" opacity="0.45" prefHeight="111.0" prefWidth="177.0" />
+               </children>
+            </Group>
+            <Group fx:id="group7">
+               <children>
+                  <Button fx:id="plant7BTN" mnemonicParsing="false" opacity="0.45" prefHeight="111.0" prefWidth="177.0" />
+               </children>
+            </Group>
+         </children>
+         <opaqueInsets>
+            <Insets top="50.0" />
+         </opaqueInsets>
+      </VBox>
     </children>
 </AnchorPane>

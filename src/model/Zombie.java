@@ -1,6 +1,7 @@
 package model;
 
-import javax.swing.text.html.ImageView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Zombie {
     private double row;
@@ -13,6 +14,9 @@ public class Zombie {
     public Zombie(int x, int y){
         this.row = x;
         this.column = y;
+        Image image = new Image(getClass().getResource("/view/images/normalZombies.png").toString());
+        ImageView imageV = new ImageView(image);
+        setImage(imageV);
     }
 
     public void move(){
@@ -39,5 +43,9 @@ public class Zombie {
 
     public void setHP(int HP) {
         this.HP = HP;
+    }
+
+    public void setImage(ImageView image) {
+        this.image = image;
     }
 }

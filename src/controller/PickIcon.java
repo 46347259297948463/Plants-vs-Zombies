@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -100,27 +101,6 @@ public class PickIcon implements Initializable{
         private Button snowshooterSelecterBTN;
 
         @FXML
-        private Button snowshooterSelecterBTN15;
-
-        @FXML
-        private Button snowshooterSelecterBTN152;
-
-        @FXML
-        private Button snowshooterSelecterBTN1521;
-
-        @FXML
-        private Button snowshooterSelecterBTN153;
-
-        @FXML
-        private Button snowshooterSelecterBTN1531;
-
-        @FXML
-        private Button snowshooterSelecterBTN154;
-
-        @FXML
-        private Button snowshooterSelecterBTN1541;
-
-        @FXML
         private ImageView sunflowerImage;
 
         @FXML
@@ -146,6 +126,9 @@ public class PickIcon implements Initializable{
 
         @FXML
         private Button homeBTN;
+
+        @FXML
+        private VBox thrownVbox;
 
         private ArrayList<ImageView> imageViews = new ArrayList<>(7);
 
@@ -187,74 +170,88 @@ public class PickIcon implements Initializable{
 
             peashooterSelecterBTN.setOnAction(event -> {
                     if (selecter("pea shooter card", peaShooterImage))
-                        peaShooterImage.setOpacity(0.79);
+                        peaShooterImage.setOpacity(0.45);
             });
             sunflowerSelecterBTN.setOnAction(event -> {
                     if (selecter("sunflower card", sunflowerImage))
-                        sunflowerImage.setOpacity(0.79);
+                        sunflowerImage.setOpacity(0.45);
             });
             cherrybombSelecterBTN.setOnAction(event -> {
                     if (selecter("cherry bomb card", cherryBombImage))
-                        cherryBombImage.setOpacity(0.79);
+                        cherryBombImage.setOpacity(0.45);
             });
             wallnutSelecterBTN.setOnAction(event -> {
                     if (selecter("wall nut card", wallNutImage))
-                        wallNutImage.setOpacity(0.79);
+                        wallNutImage.setOpacity(0.45);
             });
             snowshooterSelecterBTN.setOnAction(event -> {
                     if (selecter("snow shooter card", snowShooterImage))
-                        snowShooterImage.setOpacity(0.79);
+                        snowShooterImage.setOpacity(0.45);
             });
             repeaterSelecterBTN.setOnAction(event -> {
                     if (selecter("repeater card", repeaterImage))
-                        repeaterImage.setOpacity(0.79);
+                        repeaterImage.setOpacity(0.45);
             });
             jalapenoSelecterBTN.setOnAction(event -> {
                     if (selecter("jalapenos card", jalapenoImage))
-                        jalapenoImage.setOpacity(0.79);
+                        jalapenoImage.setOpacity(0.45);
             });
             tallNutSelecterBTN.setOnAction(event -> {
                     if (selecter("tall nut card", tallNutImage))
-                        tallNutImage.setOpacity(0.79);
+                        tallNutImage.setOpacity(0.45);
             });
 
             exitBTN.setOnAction(event -> Platform.exit());
 
             plant1BTN.setOnAction(event -> {
-                    removePic(group1);
-                    plantsPicked.remove(0);
-                    imageViews.get(0).setOpacity(1);
+                    playNButtton(group1, 0);
             });
             plant2BTN.setOnAction(event -> {
-                    removePic(group2);
-                    plantsPicked.remove(1);
-                    imageViews.get(1).setOpacity(1);
+                    playNButtton(group2, 1);
             });
             plant3BTN.setOnAction(event -> {
-                    removePic(group3);
-                    plantsPicked.remove(2);
-                    imageViews.get(2).setOpacity(1);
+                    playNButtton(group3, 2);
             });
             plant4BTN.setOnAction(event -> {
-                    removePic(group4);
-                    plantsPicked.remove(3);
-                    imageViews.get(3).setOpacity(1);
+                    playNButtton(group4, 3);
             });
             plant5BTN.setOnAction(event -> {
-                    removePic(group5);
-                    plantsPicked.remove(4);
-                    imageViews.get(4).setOpacity(1);
+                    playNButtton(group5, 4);
             });
             plant6BTN.setOnAction(event -> {
-                    removePic(group6);
-                    plantsPicked.remove(5);
-                    imageViews.get(5).setOpacity(1);
+                    playNButtton(group6, 5);
             });
             plant7BTN.setOnAction(event -> {
-                    removePic(group7);
-                    plantsPicked.remove(6);
-                    imageViews.get(6).setOpacity(1);
+                    playNButtton(group7, 6);
             });
+
+            playBTN.setOnAction(event -> {
+                    if (isFinish()){
+                            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/DayLevel.fxml"));
+                            try {
+                                    loader.load();
+                            } catch (IOException e) {
+                                    e.printStackTrace();
+                            }
+
+                            DayLevel controller= loader.getController();
+                            controller.setNames(plantsPicked);
+                            Stage stage= new Stage();
+                            stage.setScene(new Scene(loader.getRoot()));
+
+                            stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                            stage.setFullScreen(true);
+                            stage.show();
+
+                            ((Stage)resetBTN.getScene().getWindow()).hide();
+                    }
+            });
+    }
+
+    public void playNButtton(Group group, int i){
+            removePic(group);
+            plantsPicked.set(i, null);
+            imageViews.get(i).setOpacity(1);
     }
 
     public boolean selecter(String str, ImageView im){
@@ -278,6 +275,9 @@ public class PickIcon implements Initializable{
                             stackPane.getChildren().addAll(imageView, buttonsOfPicked.get(i));
                             groupsOfPicked.get(i).getChildren().addAll(stackPane);
                             choose++;
+                            if (isFinish()){
+                                    playBTN.setOpacity(1);
+                            }
                             return true;
                     }
             }
@@ -311,13 +311,12 @@ public class PickIcon implements Initializable{
     }
 
     public void setImages(){
-                for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 7; i++) {
                         imageViews .add(null);
-                }
-        }
+            }
+    }
 
-
-        public void removePic(Group group){
+    public void removePic(Group group){
             Node toRemove = null;
 
             for (Node node : group.getChildren()) {
@@ -325,18 +324,25 @@ public class PickIcon implements Initializable{
                             StackPane sp = (StackPane) node;
                             for (Node child : sp.getChildren()) {
                                     if (child instanceof ImageView) {
-                                            toRemove = node;
-                                            System.out.println("FOUND ImageView!");
+                                            toRemove = child;
                                     } else if (child instanceof Button) {
                                             child.setOpacity(0.45);
                                     }
                             }
+                            if (toRemove != null) {
+                                    sp.getChildren().remove(toRemove);
+                                    choose--;
+                            }
                     }
             }
-
-            if (toRemove != null) {
-                    group.getChildren().remove(toRemove);
-                    choose--;
+            if (!isFinish()){
+                    playBTN.setOpacity(0.8);
             }
     }
+
+    public boolean isFinish(){
+            return choose == 7;
+    }
+
+
 }

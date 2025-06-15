@@ -8,6 +8,9 @@ public abstract class PeaPlants extends Plants{
         super(hp, i, j, price, rechargeTime);
         this.bullets = bullets;
     }
+    public PeaPlants(){
+
+    }
 
 //    @Override
 //    public void act() {

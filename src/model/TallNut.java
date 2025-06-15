@@ -1,5 +1,8 @@
 package model;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class TallNut extends NutPlants{
 
     private final static int HP = 16;
@@ -9,5 +12,11 @@ public class TallNut extends NutPlants{
 
     public TallNut(int i, int j) {
         super(HP, i, j, price, rechargeTime);
+        Image image = new Image(getClass().getResource("/view/images/tall nut.png").toString());
+        ImageView imageView = new ImageView(image);
+        setImage(imageView);
+    }
+    public TallNut(){
+
     }
 }

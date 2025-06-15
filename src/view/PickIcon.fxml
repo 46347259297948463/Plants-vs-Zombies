@@ -248,7 +248,7 @@
       </Button>
       <ImageView fitHeight="288.0" fitWidth="195.0" layoutX="1302.0" layoutY="159.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@images/doorZambie.png" />
+            <Image url="@images/doorZombie.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="352.0" fitWidth="192.0" layoutX="1317.0" layoutY="415.0" pickOnBounds="true" preserveRatio="true">
@@ -258,7 +258,7 @@
       </ImageView>
       <ImageView fitHeight="352.0" fitWidth="237.0" layoutX="1621.0" layoutY="611.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@images/doorZambie.png" />
+            <Image url="@images/doorZombie.png" />
          </image>
       </ImageView>
       <Button fx:id="exitBTN" layoutX="1745.0" layoutY="26.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="150.0" style="-fx-background-color: #A0522D;" text="EXIT" textFill="#ffef0a" AnchorPane.topAnchor="26.0">

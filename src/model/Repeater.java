@@ -1,5 +1,8 @@
 package model;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 public class Repeater extends PeaPlants{
 
     private final static int HP = 4;
@@ -10,5 +13,12 @@ public class Repeater extends PeaPlants{
 
     public Repeater(int i, int j) {
         super(HP, i, j, price, bullets, rechargeTime);
+        Image image = new Image(getClass().getResource("/view/images/repeater.png").toString());
+        ImageView imageView = new ImageView(image);
+        setImage(imageView);
+    }
+
+    public Repeater(){
+
     }
 }
