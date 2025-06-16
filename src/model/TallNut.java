@@ -13,8 +13,8 @@ public class TallNut extends NutPlants{
     public TallNut(int i, int j) {
         super(HP, i, j, price, rechargeTime);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/tall nut.png").toString());
-        imageView.setFitWidth(140);
-        imageView.setFitHeight(140);
+        imageView.setFitWidth(145);
+        imageView.setFitHeight(200);
         setImage(imageView);
     }
     public TallNut(){

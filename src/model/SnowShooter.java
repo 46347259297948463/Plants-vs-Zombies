@@ -14,8 +14,8 @@ public class SnowShooter extends PeaPlants{
     public SnowShooter(int i, int j) {
         super(HP, i, j, price, bullets, rechargeTime);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/snow shooter.png").toString());
-        imageView.setFitWidth(140);
-        imageView.setFitHeight(140);
+        imageView.setFitWidth(125);
+        imageView.setFitHeight(125);
         setImage(imageView);
     }
     public SnowShooter(){

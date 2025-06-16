@@ -14,8 +14,8 @@ public class Repeater extends PeaPlants{
     public Repeater(int i, int j) {
         super(HP, i, j, price, bullets, rechargeTime);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/repeater.png").toString());
-        imageView.setFitWidth(140);
-        imageView.setFitHeight(140);
+        imageView.setFitWidth(125);
+        imageView.setFitHeight(125);
         setImage(imageView);
     }
 

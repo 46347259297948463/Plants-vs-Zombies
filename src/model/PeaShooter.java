@@ -13,8 +13,8 @@ public class PeaShooter extends PeaPlants{
     public PeaShooter(int i, int j) {
         super(HP, i, j, price, bullets, rechargeTime);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/pea shooter.png").toString());
-        imageView.setFitWidth(140);
-        imageView.setFitHeight(140);
+        imageView.setFitWidth(125);
+        imageView.setFitHeight(125);
         this.setImage(imageView);
     }
 

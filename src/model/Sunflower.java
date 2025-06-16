@@ -13,8 +13,8 @@ public class Sunflower extends Plants{
     public Sunflower(int i, int j) {
         super(HP, i, j, price, rechargeTime);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/sunflower.png").toString());
-        imageView.setFitWidth(140);
-        imageView.setFitHeight(140);
+        imageView.setFitWidth(125);
+        imageView.setFitHeight(125);
         setImage(imageView);
     }
 

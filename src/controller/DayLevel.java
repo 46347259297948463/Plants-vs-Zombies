@@ -206,6 +206,141 @@ public class DayLevel implements Initializable {
     @FXML
     private Button menuBTN;
 
+    @FXML
+    private Group group00;
+
+    @FXML
+    private Group group01;
+
+    @FXML
+    private Group group02;
+
+    @FXML
+    private Group group03;
+
+    @FXML
+    private Group group04;
+
+    @FXML
+    private Group group05;
+
+    @FXML
+    private Group group06;
+
+    @FXML
+    private Group group07;
+
+    @FXML
+    private Group group08;
+
+    @FXML
+    private Group group10;
+
+    @FXML
+    private Group group11;
+
+    @FXML
+    private Group group12;
+
+    @FXML
+    private Group group13;
+
+    @FXML
+    private Group group14;
+
+    @FXML
+    private Group group15;
+
+    @FXML
+    private Group group16;
+
+    @FXML
+    private Group group17;
+
+    @FXML
+    private Group group18;
+
+    @FXML
+    private Group group20;
+
+    @FXML
+    private Group group21;
+
+    @FXML
+    private Group group22;
+
+    @FXML
+    private Group group23;
+
+    @FXML
+    private Group group24;
+
+    @FXML
+    private Group group25;
+
+    @FXML
+    private Group group26;
+
+    @FXML
+    private Group group27;
+
+    @FXML
+    private Group group28;
+
+    @FXML
+    private Group group30;
+
+    @FXML
+    private Group group31;
+
+    @FXML
+    private Group group32;
+
+    @FXML
+    private Group group33;
+
+    @FXML
+    private Group group34;
+
+    @FXML
+    private Group group35;
+
+    @FXML
+    private Group group36;
+
+    @FXML
+    private Group group37;
+
+    @FXML
+    private Group group38;
+
+    @FXML
+    private Group group40;
+
+    @FXML
+    private Group group41;
+
+    @FXML
+    private Group group42;
+
+    @FXML
+    private Group group43;
+
+    @FXML
+    private Group group44;
+
+    @FXML
+    private Group group45;
+
+    @FXML
+    private Group group46;
+
+    @FXML
+    private Group group47;
+
+    @FXML
+    private Group group48;
+
     private ArrayList<String> names = new ArrayList<>();
 
     private ArrayList<Group> groupsOfPicked = new ArrayList<>(7);
@@ -218,8 +353,12 @@ public class DayLevel implements Initializable {
 
     private Button[][] board = new Button[5][9];
 
+    private Group[][] boardGroups = new Group[5][9];
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        
 
         setButtons();
         setGroups();
@@ -259,7 +398,8 @@ public class DayLevel implements Initializable {
                 board[i][j].setOnAction(event -> {
                     if (selectedPlant != null && board[row][column].getGraphic() == null){
                         Plants newPlant = selectedPlant.clonePlant(row , column);
-                        board[row][column].setGraphic(newPlant.getImage());
+                        boardGroups[row][column].getChildren().add(newPlant.getImage());
+                        selectedPlant = null;
                     }
                 });
             }
@@ -380,6 +520,21 @@ public class DayLevel implements Initializable {
 
         board[4][0] = cell40; board[4][1] = cell41; board[4][2] = cell42; board[4][3] = cell43; board[4][4] = cell44;
         board[4][5] = cell45; board[4][6] = cell46; board[4][7] = cell47; board[4][8] = cell48;
+
+        boardGroups[0][0] = group00; boardGroups[0][1] = group01; boardGroups[0][2] = group02; boardGroups[0][3] = group03; boardGroups[0][4] = group04;
+        boardGroups[0][5] = group05; boardGroups[0][6] = group06; boardGroups[0][7] = group07; boardGroups[0][8] = group08;
+
+        boardGroups[1][0] = group10; boardGroups[1][1] = group11; boardGroups[1][2] = group12; boardGroups[1][3] = group13; boardGroups[1][4] = group14;
+        boardGroups[1][5] = group15; boardGroups[1][6] = group16; boardGroups[1][7] = group17; boardGroups[1][8] = group18;
+
+        boardGroups[2][0] = group20; boardGroups[2][1] = group21; boardGroups[2][2] = group22; boardGroups[2][3] = group23; boardGroups[2][4] = group24;
+        boardGroups[2][5] = group25; boardGroups[2][6] = group26; boardGroups[2][7] = group27; boardGroups[2][8] = group28;
+
+        boardGroups[3][0] = group30; boardGroups[3][1] = group31; boardGroups[3][2] = group32; boardGroups[3][3] = group33; boardGroups[3][4] = group34;
+        boardGroups[3][5] = group35; boardGroups[3][6] = group36; boardGroups[3][7] = group37; boardGroups[3][8] = group38;
+
+        boardGroups[4][0] = group40; boardGroups[4][1] = group41; boardGroups[4][2] = group42; boardGroups[4][3] = group43; boardGroups[4][4] = group44;
+        boardGroups[4][5] = group45; boardGroups[4][6] = group46; boardGroups[4][7] = group47; boardGroups[4][8] = group48;
     }
 }
 
