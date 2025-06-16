@@ -355,10 +355,16 @@ public class DayLevel implements Initializable {
 
     private Group[][] boardGroups = new Group[5][9];
 
+    private GameTimer timer;
+
+    private static DayLevel instance;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        
+        timer = new GameTimer();
+
+        timer.start();
 
         setButtons();
         setGroups();
@@ -536,5 +542,14 @@ public class DayLevel implements Initializable {
         boardGroups[4][0] = group40; boardGroups[4][1] = group41; boardGroups[4][2] = group42; boardGroups[4][3] = group43; boardGroups[4][4] = group44;
         boardGroups[4][5] = group45; boardGroups[4][6] = group46; boardGroups[4][7] = group47; boardGroups[4][8] = group48;
     }
+
+    public static DayLevel getInstance() {
+        return instance;
+    }
+
+    public Group[][] getBoardGroups() {
+        return boardGroups;
+    }
+
 }
 

@@ -12,7 +12,7 @@ public class Bullet {
 
     public Bullet(){
         Image image = new Image(getClass().getResource("/view/images/green bullet.png").toString());
-        javafx.scene.image.ImageView imageV = new ImageView(image);
+        ImageView imageV = new ImageView(image);
         this.imageView = imageV;
     }
 
