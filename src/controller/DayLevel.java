@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
@@ -9,10 +11,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 import model.*;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class DayLevel implements Initializable {
@@ -349,11 +353,9 @@ public class DayLevel implements Initializable {
 
     private ArrayList<Plants> plants = new ArrayList<>(7);
 
+    private Cell[][] cells = new Cell[5][9];
+
     private Plants selectedPlant = null;
-
-    private Button[][] board = new Button[5][9];
-
-    private Group[][] boardGroups = new Group[5][9];
 
     private GameTimer timer;
 
@@ -361,6 +363,7 @@ public class DayLevel implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        DayLevel.setInstance(this);
 
         timer = new GameTimer();
 
@@ -371,7 +374,6 @@ public class DayLevel implements Initializable {
         fillBoard();
 
         plant1BTN.setOnAction(event -> {
-            selectedPlant = plants.get(0);
             selectedPlant = plants.get(0);
         });
         plant2BTN.setOnAction(event -> {
@@ -401,10 +403,10 @@ public class DayLevel implements Initializable {
             for (int j=0; j<9; j++){
                 final int row = i;
                 final int column = j;
-                board[i][j].setOnAction(event -> {
-                    if (selectedPlant != null && board[row][column].getGraphic() == null){
+                cells[i][j].getButton().setOnAction(event -> {
+                    if (selectedPlant != null ){
                         Plants newPlant = selectedPlant.clonePlant(row , column);
-                        boardGroups[row][column].getChildren().add(newPlant.getImage());
+                        cells[row][column].getGroup().getChildren().add(newPlant.getImage());
                         selectedPlant = null;
                     }
                 });
@@ -454,16 +456,6 @@ public class DayLevel implements Initializable {
         groupsOfPicked.add(group7);
     }
 
-//    public void setPlants(){
-//        for (String str : names){
-//            switch (str){
-//                case "pea shooter card":
-//                    plants.add(new PeaShooter());
-//
-//            }
-//        }
-//    }
-
     private void deleteCard$setPlants(){
         for (int i = 0; i < 7 ; i++){
             if (names.get(i) != null){
@@ -498,57 +490,93 @@ public class DayLevel implements Initializable {
         }
     }
 
-//    private void cellOnAction(Cell cell) {
-//        cell.setOnMouseClicked(event -> {
-//            if (event.getButton() == MouseButton.PRIMARY) {
-//
-//                cell.setClockwise(false); // پادساعتگرد
-//            } else if (event.getButton() == MouseButton.SECONDARY) {
-//
-//                cell.setClockwise(true);// ساعتگرد
-//            }
-//
-//        });
-//    }
-
     private void fillBoard(){
-        board[0][0] = cell00; board[0][1] = cell01; board[0][2] = cell02; board[0][3] = cell03; board[0][4] = cell04;
-        board[0][5] = cell05; board[0][6] = cell06; board[0][7] = cell07; board[0][8] = cell08;
+        cells[0][0] = new Cell(0, 0, cell00, group00);
+        cells[0][1] = new Cell(0, 1, cell01, group01);
+        cells[0][2] = new Cell(0, 2, cell02, group02);
+        cells[0][3] = new Cell(0, 3, cell03, group03);
+        cells[0][4] = new Cell(0, 4, cell04, group04);
+        cells[0][5] = new Cell(0, 5, cell05, group05);
+        cells[0][6] = new Cell(0, 6, cell06, group06);
+        cells[0][7] = new Cell(0, 7, cell07, group07);
+        cells[0][8] = new Cell(0, 8, cell08, group08);
 
-        board[1][0] = cell10; board[1][1] = cell11; board[1][2] = cell12; board[1][3] = cell13; board[1][4] = cell14;
-        board[1][5] = cell15; board[1][6] = cell16; board[1][7] = cell17; board[1][8] = cell18;
+        cells[1][0] = new Cell(1, 0, cell10, group10);
+        cells[1][1] = new Cell(1, 1, cell11, group11);
+        cells[1][2] = new Cell(1, 2, cell12, group12);
+        cells[1][3] = new Cell(1, 3, cell13, group13);
+        cells[1][4] = new Cell(1, 4, cell14, group14);
+        cells[1][5] = new Cell(1, 5, cell15, group15);
+        cells[1][6] = new Cell(1, 6, cell16, group16);
+        cells[1][7] = new Cell(1, 7, cell17, group17);
+        cells[1][8] = new Cell(1, 8, cell18, group18);
 
-        board[2][0] = cell20; board[2][1] = cell21; board[2][2] = cell22; board[2][3] = cell23; board[2][4] = cell24;
-        board[2][5] = cell25; board[2][6] = cell26; board[2][7] = cell27; board[2][8] = cell28;
+        cells[2][0] = new Cell(2, 0, cell20, group20);
+        cells[2][1] = new Cell(2, 1, cell21, group21);
+        cells[2][2] = new Cell(2, 2, cell22, group22);
+        cells[2][3] = new Cell(2, 3, cell23, group23);
+        cells[2][4] = new Cell(2, 4, cell24, group24);
+        cells[2][5] = new Cell(2, 5, cell25, group25);
+        cells[2][6] = new Cell(2, 6, cell26, group26);
+        cells[2][7] = new Cell(2, 7, cell27, group27);
+        cells[2][8] = new Cell(2, 8, cell28, group28);
 
-        board[3][0] = cell30; board[3][1] = cell31; board[3][2] = cell32; board[3][3] = cell33; board[3][4] = cell34;
-        board[3][5] = cell35; board[3][6] = cell36; board[3][7] = cell37; board[3][8] = cell38;
+        cells[3][0] = new Cell(3, 0, cell30, group30);
+        cells[3][1] = new Cell(3, 1, cell31, group31);
+        cells[3][2] = new Cell(3, 2, cell32, group32);
+        cells[3][3] = new Cell(3, 3, cell33, group33);
+        cells[3][4] = new Cell(3, 4, cell34, group34);
+        cells[3][5] = new Cell(3, 5, cell35, group35);
+        cells[3][6] = new Cell(3, 6, cell36, group36);
+        cells[3][7] = new Cell(3, 7, cell37, group37);
+        cells[3][8] = new Cell(3, 8, cell38, group38);
 
-        board[4][0] = cell40; board[4][1] = cell41; board[4][2] = cell42; board[4][3] = cell43; board[4][4] = cell44;
-        board[4][5] = cell45; board[4][6] = cell46; board[4][7] = cell47; board[4][8] = cell48;
-
-        boardGroups[0][0] = group00; boardGroups[0][1] = group01; boardGroups[0][2] = group02; boardGroups[0][3] = group03; boardGroups[0][4] = group04;
-        boardGroups[0][5] = group05; boardGroups[0][6] = group06; boardGroups[0][7] = group07; boardGroups[0][8] = group08;
-
-        boardGroups[1][0] = group10; boardGroups[1][1] = group11; boardGroups[1][2] = group12; boardGroups[1][3] = group13; boardGroups[1][4] = group14;
-        boardGroups[1][5] = group15; boardGroups[1][6] = group16; boardGroups[1][7] = group17; boardGroups[1][8] = group18;
-
-        boardGroups[2][0] = group20; boardGroups[2][1] = group21; boardGroups[2][2] = group22; boardGroups[2][3] = group23; boardGroups[2][4] = group24;
-        boardGroups[2][5] = group25; boardGroups[2][6] = group26; boardGroups[2][7] = group27; boardGroups[2][8] = group28;
-
-        boardGroups[3][0] = group30; boardGroups[3][1] = group31; boardGroups[3][2] = group32; boardGroups[3][3] = group33; boardGroups[3][4] = group34;
-        boardGroups[3][5] = group35; boardGroups[3][6] = group36; boardGroups[3][7] = group37; boardGroups[3][8] = group38;
-
-        boardGroups[4][0] = group40; boardGroups[4][1] = group41; boardGroups[4][2] = group42; boardGroups[4][3] = group43; boardGroups[4][4] = group44;
-        boardGroups[4][5] = group45; boardGroups[4][6] = group46; boardGroups[4][7] = group47; boardGroups[4][8] = group48;
+        cells[4][0] = new Cell(4, 0, cell40, group40);
+        cells[4][1] = new Cell(4, 1, cell41, group41);
+        cells[4][2] = new Cell(4, 2, cell42, group42);
+        cells[4][3] = new Cell(4, 3, cell43, group43);
+        cells[4][4] = new Cell(4, 4, cell44, group44);
+        cells[4][5] = new Cell(4, 5, cell45, group45);
+        cells[4][6] = new Cell(4, 6, cell46, group46);
+        cells[4][7] = new Cell(4, 7, cell47, group47);
+        cells[4][8] = new Cell(4, 8, cell48, group48);
     }
 
     public static DayLevel getInstance() {
         return instance;
     }
 
-    public Group[][] getBoardGroups() {
-        return boardGroups;
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public static void setInstance(DayLevel dayLevel) {
+        instance = dayLevel;
+    }
+
+    public void setSunPoints(int n){
+        sunPoints.setText((Integer.parseInt(sunPoints.getText()) + n) + "");
+    }
+
+    private int sunCol = 0;
+    private Timeline sunTime;
+    private Sun sun;
+    private int row;
+    private void randSun(){
+        row = (int)Math.random() * 1000;
+        double col = Math.random() * 500  + 70;
+        sunTime = new Timeline(new KeyFrame(Duration.millis(300), event -> moveSun(col)));
+        sunTime.setCycleCount(Timeline.INDEFINITE);
+        sunTime.play();
+    }
+    private void moveSun(double col){
+        if (sunCol <= col){
+            sun = new Sun(row, sunCol);
+            sunCol += 10;
+        }
+        else if(sunCol > col){
+            sunTime.stop();
+        }
     }
 
 }
