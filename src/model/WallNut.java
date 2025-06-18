@@ -7,13 +7,13 @@ public class WallNut extends NutPlants{
 
     private final static int HP = 10;
     private final static int price = 50;
-    private final static int rechargeTime = 10;
+    private final static int rechargeTime = 5;
     private static boolean available = true;
 
     public WallNut(int i, int j) {
         super(HP, i, j, price, rechargeTime);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/wall nut.png").toString());
-        imageView.setFitWidth(130);
+        imageView.setFitWidth(125);
         imageView.setFitHeight(130);
         setImage(imageView);
     }

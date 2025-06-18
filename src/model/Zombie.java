@@ -8,7 +8,7 @@ import javafx.util.Duration;
 
 public class Zombie {
     private double row;
-    private int column;
+    private double column;
     private int HP = 5;
     private int speed = 4;
     private ImageView image;
@@ -16,7 +16,7 @@ public class Zombie {
     private Timeline moveTimeline;
     private boolean isremoved = false;
 
-    public Zombie(int x, int y){
+    public Zombie(double x, double y){
         this.row = x;
         this.column = y;
         Image image = new Image(getClass().getResource("/view/images/normalZombies.png").toString());
