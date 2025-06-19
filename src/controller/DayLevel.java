@@ -16,7 +16,6 @@ import model.*;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 public class DayLevel implements Initializable {
@@ -366,8 +365,9 @@ public class DayLevel implements Initializable {
         DayLevel.setInstance(this);
 
         timer = new GameTimer();
-
         timer.start();
+
+        RandomSun randomSun = new RandomSun();
 
         setButtons();
         setGroups();
@@ -558,26 +558,26 @@ public class DayLevel implements Initializable {
         sunPoints.setText((Integer.parseInt(sunPoints.getText()) + n) + "");
     }
 
-    private int sunCol = 0;
-    private Timeline sunTime;
-    private Sun sun;
-    private int row;
-    private void randSun(){
-        row = (int)Math.random() * 1000;
-        double col = Math.random() * 500  + 70;
-        sunTime = new Timeline(new KeyFrame(Duration.millis(300), event -> moveSun(col)));
-        sunTime.setCycleCount(Timeline.INDEFINITE);
-        sunTime.play();
-    }
-    private void moveSun(double col){
-        if (sunCol <= col){
-            sun = new Sun(row, sunCol);
-            sunCol += 10;
-        }
-        else if(sunCol > col){
-            sunTime.stop();
-        }
-    }
+//    private int sunCol = 0;
+//    private Timeline sunTime;
+//    private Sun sun;
+//    private int row;
+//    private void randSun(){
+//        row = (int)Math.random() * 1000;
+//        double col = Math.random() * 500  + 70;
+//        sunTime = new Timeline(new KeyFrame(Duration.millis(300), event -> moveSun(col)));
+//        sunTime.setCycleCount(Timeline.INDEFINITE);
+//        sunTime.play();
+//    }
+//    private void moveSun(double col){
+//        if (sunCol <= col){
+//            sun = new Sun(row, sunCol);
+//            sunCol += 10;
+//        }
+//        else if(sunCol > col){
+//            sunTime.stop();
+//        }
+//    }
 
 }
 
