@@ -7,7 +7,8 @@ import javafx.scene.control.Button;
 import java.util.ArrayList;
 
 public class Cell {
-    private int row ,column;
+    private int row;
+    private int column;
     private Plants plant;
     private ArrayList<Zombie> zombies;
     private Group group;

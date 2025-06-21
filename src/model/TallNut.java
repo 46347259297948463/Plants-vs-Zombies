@@ -6,8 +6,11 @@ import javafx.scene.image.ImageView;
 public class TallNut extends NutPlants{
 
     private final static int HP = 16;
+
     private final static int price = 125;
+
     private final static double rechargeTime = 8;
+
     private static boolean available = true;
 
     public TallNut(int i, int j) {
@@ -20,6 +23,9 @@ public class TallNut extends NutPlants{
     public TallNut(){
 
     }
+
+    @Override
+    public void end() {}
 
     @Override
     public Plants clonePlant(int row, int column) {

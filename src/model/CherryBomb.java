@@ -24,6 +24,9 @@ public class CherryBomb extends BombPlants{
     }
 
     @Override
+    public void end() {}
+
+    @Override
     public Plants clonePlant(int row, int column) {
         return new CherryBomb(row, column);
     }

@@ -156,9 +156,6 @@ public class DayLevel implements Initializable {
     private Button cell48;
 
     @FXML
-    private AnchorPane dayAnc;
-
-    @FXML
     private Group group1;
 
     @FXML
@@ -344,6 +341,10 @@ public class DayLevel implements Initializable {
     @FXML
     private Group group48;
 
+    @FXML
+    private AnchorPane dayAnc;
+
+
     private ArrayList<String> names = new ArrayList<>();
 
     private ArrayList<Group> groupsOfPicked = new ArrayList<>(7);
@@ -360,9 +361,13 @@ public class DayLevel implements Initializable {
 
     private static DayLevel instance;
 
+    private Boolean isShovelMode = false;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DayLevel.setInstance(this);
+
+        sunPoints.setText("0");
 
         timer = new GameTimer();
         timer.start();
@@ -396,6 +401,9 @@ public class DayLevel implements Initializable {
         });
 
         cellOnAction();
+        shovelBTN.setOnAction(event -> {
+           isShovelMode = true;
+        });
     }
 
     private void cellOnAction(){
@@ -404,10 +412,26 @@ public class DayLevel implements Initializable {
                 final int row = i;
                 final int column = j;
                 cells[i][j].getButton().setOnAction(event -> {
-                    if (selectedPlant != null ){
+                    if (isShovelMode) {
+                        if (cells[row][column].getPlant() != null) {
+                            cells[row][column].getGroup().getChildren().remove(cells[row][column].getPlant().getImage());
+                            cells[row][column].getPlant().end();
+                            cells[row][column].setPlants(null);
+                        }
+                        isShovelMode = false;
+                    } else if (selectedPlant != null){
                         Plants newPlant = selectedPlant.clonePlant(row , column);
-                        cells[row][column].getGroup().getChildren().add(newPlant.getImage());
-                        selectedPlant = null;
+                        if (newPlant.getPrice() <= Integer.parseInt(sunPoints.getText())){
+                            newPlant.getImage().setMouseTransparent(true);
+                            cells[row][column].getGroup().getChildren().add(newPlant.getImage());
+                            cells[row][column].setPlants(newPlant);
+                            withdrawSunPoints(newPlant.getPrice());
+                            selectedPlant = null;
+
+                        } else {
+                            newPlant.end();
+                            newPlant = null;
+                        }
                     }
                 });
             }
@@ -554,30 +578,16 @@ public class DayLevel implements Initializable {
         instance = dayLevel;
     }
 
-    public void setSunPoints(int n){
+    public void withdrawSunPoints(int n){
+        sunPoints.setText(((Integer.parseInt(sunPoints.getText())) - n) + "");
+    }
+
+    public void depositSunPoints(int n){
         sunPoints.setText((Integer.parseInt(sunPoints.getText()) + n) + "");
     }
 
-//    private int sunCol = 0;
-//    private Timeline sunTime;
-//    private Sun sun;
-//    private int row;
-//    private void randSun(){
-//        row = (int)Math.random() * 1000;
-//        double col = Math.random() * 500  + 70;
-//        sunTime = new Timeline(new KeyFrame(Duration.millis(300), event -> moveSun(col)));
-//        sunTime.setCycleCount(Timeline.INDEFINITE);
-//        sunTime.play();
-//    }
-//    private void moveSun(double col){
-//        if (sunCol <= col){
-//            sun = new Sun(row, sunCol);
-//            sunCol += 10;
-//        }
-//        else if(sunCol > col){
-//            sunTime.stop();
-//        }
-//    }
-
+    public AnchorPane getDayAnc(){
+        return dayAnc;
+    }
 }
 

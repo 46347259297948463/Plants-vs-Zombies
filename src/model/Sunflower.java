@@ -10,10 +10,15 @@ import javafx.util.Duration;
 public class Sunflower extends Plants{
 
     private final static int HP = 4;
+
     private final static int price = 50;
+
     private final static double rechargeTime = 3;
+
     private static boolean available = true;
+
     private Timeline sunTimeline;
+
     public Sunflower(int i, int j){
         super(HP, i, j, price, rechargeTime);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/sunflower.png").toString());
@@ -45,12 +50,16 @@ public class Sunflower extends Plants{
             sunTimeline.stop();
         }
         else {
-            Sun sun = new Sun(row , column);
+            Sun sun = new Sun(row , column, true);
             DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
             sun.getButton().setOnAction(event -> {
-                DayLevel.getInstance().setSunPoints(25);
+                DayLevel.getInstance().depositSunPoints(25);
                 DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
             });
         }
+    }
+
+    public void end(){
+        sunTimeline.stop();
     }
 }

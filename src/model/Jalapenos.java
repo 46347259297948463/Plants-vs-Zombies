@@ -6,7 +6,9 @@ import javafx.scene.image.ImageView;
 public class Jalapenos extends BombPlants{
 
     private final static int price = 125;
+
     private final static double rechargeTime = 10;
+
     private static boolean available = true;
 
     public Jalapenos(int i, int j) {
@@ -20,6 +22,9 @@ public class Jalapenos extends BombPlants{
     public Jalapenos(){
 
     }
+
+    @Override
+    public void end() {}
 
     @Override
     public Plants clonePlant(int row, int column) {

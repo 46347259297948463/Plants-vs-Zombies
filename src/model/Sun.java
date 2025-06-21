@@ -11,19 +11,23 @@ import javafx.util.Duration;
 
 public class Sun {
 
-    private int row , col;
+    private int row;
+    private int column;
 
     private Group group = new Group();
 
     private ImageView imageView = new ImageView(getClass().getResource("/view/images/sun.png").toString());
 
-    private Timeline timeline;
+    public Timeline timeline;
 
     private Button button = new Button("");
 
-    public Sun(int row , int col){
+    private boolean isSunflower = false;
+
+    public Sun(int row , int column, boolean bool){
         this.row = row;
-        this.col = col;
+        this.column = column;
+        isSunflower = bool;
         fixSun();
         timeline = new Timeline(new KeyFrame(Duration.millis(5000), event -> endSun()));
         timeline.setCycleCount(3);
@@ -34,21 +38,32 @@ public class Sun {
         imageView.setFitHeight(85);
         imageView.setFitWidth(85);
         imageView.setOpacity(1);
-        imageView.setLayoutX(70);
-        imageView.setLayoutY(90);
 
         getButton().setOpacity(0);
-        getButton().setLayoutX(85);
-        getButton().setLayoutY(100);
         getButton().setPrefHeight(60);
         getButton().setPrefWidth(60);
 
-        getGroup().getChildren().addAll(imageView, getButton());
+        if (!isSunflower){
+            group.setLayoutX(row);
+            group.setLayoutY(column);
+        } else {
+            imageView.setLayoutX(70);
+            imageView.setLayoutY(90);
+            getButton().setLayoutX(85);
+            getButton().setLayoutY(100);
+        }
+
+
+            getGroup().getChildren().addAll(imageView, getButton());
 
     }
 
-    private void endSun(){
-        DayLevel.getInstance().getCells()[row][col].getGroup().getChildren().remove(getGroup());
+    public void endSun(){
+        if (isSunflower){
+            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(getGroup());
+        } else {
+            DayLevel.getInstance().getDayAnc().getChildren().remove(getGroup());
+        }
     }
 
     public Group getGroup() {

@@ -23,7 +23,7 @@ public abstract class Plants {
 
     }
 
-//    public abstract void act(); // shoot or make sun.
+    public abstract void end();
 
     public abstract Plants clonePlant(int row, int column);
 

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1203.0" prefWidth="2015.0" style="-fx-background-image: url('../images/chatgpt_bg_2025_06_08.png'); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DayLevel">
+<AnchorPane fx:id="dayAnc" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1203.0" prefWidth="2015.0" style="-fx-background-image: url('../images/chatgpt_bg_2025_06_08.png'); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8.0.441" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DayLevel">
     <children>
       <ImageView fitHeight="1158.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>

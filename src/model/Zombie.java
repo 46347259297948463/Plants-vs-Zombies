@@ -14,7 +14,7 @@ public class Zombie {
     private ImageView image;
     private boolean attack = false;
     private Timeline moveTimeline;
-    private boolean isremoved = false;
+    private boolean isRemoved = false;
 
     public Zombie(double x, double y){
         this.row = x;
@@ -24,14 +24,14 @@ public class Zombie {
         setImage(imageV);
     }
 
-    public void startmove(){
+    public void startMove(){
         if(moveTimeline == null){
             moveTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> move()));
             moveTimeline.setCycleCount(Timeline.INDEFINITE);
         }
     }
 
-    public void stopmove(){
+    public void stopMove(){
         if(moveTimeline != null){
             moveTimeline.stop();
         }
@@ -46,8 +46,8 @@ public class Zombie {
 
     public void update(){
         if(isDead()){
-            stopmove();
-            isremoved = true;
+            stopMove();
+            isRemoved = true;
             //باید روی زامبی ها فور بزنیم و اگر این بولین درست بود از روت عکس آن رو ریموو کنیم
             return;
         }
@@ -77,5 +77,21 @@ public class Zombie {
 
     public void setImage(ImageView image) {
         this.image = image;
+    }
+
+    public double getRow() {
+        return row;
+    }
+
+    public double getColumn() {
+        return column;
+    }
+
+    public int getHP() {
+        return HP;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 }
