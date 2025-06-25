@@ -30,7 +30,9 @@ public class Repeater extends PeaPlants{
 
     private Cell[][] cells;
 
-    private Timeline moveBulletTimer;
+    private Timeline moveBulletTimer1;
+
+    private Timeline moveBulletTimer2;
 
     private double bulletRow1 = row;
 
@@ -49,7 +51,7 @@ public class Repeater extends PeaPlants{
         imageView.setFitHeight(125);
         setImage(imageView);
         if (endRow1 != -1){
-            shootTimer = new Timeline(new KeyFrame(Duration.seconds(1) , event -> shoot(zombie1)));
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> shoot(zombie1)));
             shootTimer.setCycleCount(Timeline.INDEFINITE);
             shootTimer.play();
         }
@@ -62,33 +64,64 @@ public class Repeater extends PeaPlants{
     @Override
     public void shoot(Zombie zombie) {
         setZombie();
-        bulletRow1 = row;
-        bulletRow2 = row + 10;
-        moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> moveBullet()));
-        moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
-        moveBulletTimer.play();
+        if (endRow1 == -1 || zombie1 == null || zombie1.isDead()) {
+            return;
+        } else if (endRow1 != -1) {
+            bulletRow1 = row;
+            if (moveBulletTimer1 != null) {
+                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet1.getImageView());
+                moveBulletTimer1.stop();
+            }
+            bullet1 = new Bullet(bulletRow1, column);
+            DayLevel.getInstance().getDayAnc().getChildren().add(bullet1.getImageView());
+            moveBulletTimer1 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet1()));
+            moveBulletTimer1.setCycleCount(Timeline.INDEFINITE);
+            moveBulletTimer1.play();
+        }
+        if (endRow2 == -1 || zombie2 == null || zombie2.isDead()) {
+            return;
+        } else if (endRow2 != -1) {
+            bulletRow2 = row;
+            if (moveBulletTimer2 != null) {
+                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet2.getImageView());
+                moveBulletTimer2.stop();
+            }
+            bullet2 = new Bullet(bulletRow2, column + 0.5);
+            DayLevel.getInstance().getDayAnc().getChildren().add(bullet2.getImageView());
+            moveBulletTimer2 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet2()));
+            moveBulletTimer2.setCycleCount(Timeline.INDEFINITE);
+            moveBulletTimer2.play();
+        }
     }
 
-    public void moveBullet(){
-        if (bullet1 != null && bullet2 != null){
-            bullet1.endBullet();
-            bullet2.endBullet();
+    public void moveBullet1(){
+        if (bullet1 != null){
+            bullet1.move();
+            if (bullet1.getImageView().getLayoutX() >= endRow1 && zombie1 != null){
+                moveBulletTimer1.stop();
+                zombie1.takeDamage(1);
+                if (zombie1.isDead()){
+                    zombie1.dead();
+                    setZombie();
+                }
+                bullet1.endBullet();
+            }
         }
-        bullet1 = new Bullet(bulletRow1, column);
-        bullet2 = new Bullet(bulletRow2, column);
-        DayLevel.getInstance().getDayAnc().getChildren().add(bullet1.getImageView());
-        DayLevel.getInstance().getDayAnc().getChildren().add(bullet2.getImageView());
-        bulletRow1 += 15;
-        bulletRow2 += 15;
-        if (bulletRow1 >= endRow1){
-            moveBulletTimer.stop();
-            zombie1.takeDamage(1);
-            bullet1.endBullet();
-        }
-        if (bulletRow2 >= endRow2){
-            moveBulletTimer.stop();
-            zombie2.takeDamage(1);
-            bullet2.endBullet();
+    }
+
+    public void moveBullet2(){
+        if (bullet2 != null){
+            bullet2.move();
+            if (bullet2.getImageView().getLayoutX() >= endRow2 && zombie2 != null){
+                moveBulletTimer2.stop();
+                zombie2.takeDamage(1);
+                if (zombie2.isDead()){
+                    zombie2.dead();
+                    setZombie();
+                }
+                bullet2.endBullet();
+            }
+
         }
     }
 
@@ -98,33 +131,39 @@ public class Repeater extends PeaPlants{
     }
 
     private void setZombie(){
-        int i = row , j = column;
-        while (i < 9 && cells[j][i].getZombies() == null){
-            i++;
-        }
-        if (i == 9){
-            endRow1 = -1;
-            return;
-        }
-        ArrayList<Zombie> zombies = cells[j][i].getZombies();
-        double min1 = 9;
-        double min2 = 9;
-        for (Zombie z : zombies){
-            if (z.getRow() < min1){
-                zombie1 = z;
-                min2 = min1;
-                min1 = z.getRow();
-            } else if (z.getRow() < min2) {
-                zombie2 = z;
-                min2 = z.getRow();
+        int j = row;
+        zombie1 = null;
+        zombie2 = null;
+        double min1 = Double.MAX_VALUE;
+        double min2 = Double.MAX_VALUE;
+        for (int i = column; i < 9; i++) {
+            ArrayList<Zombie> zombies = cells[j][i].getZombies();
+            if (zombies != null && !zombies.isEmpty()) {
+                for (Zombie z : zombies) {
+                    if (z.isDead()) continue;
+                    if (z.getColumn() < min1) {
+                        zombie2 = zombie1;
+                        min2 = min1;
+                        zombie1 = z;
+                        min1 = z.getColumn();
+                    } else if (z.getColumn() < min2) {
+                        zombie2 = z;
+                        min2 = z.getColumn();
+                    }
+                }
             }
         }
 
-        if (zombie1.getHP() != 1){
-            zombie2 = zombie1;
-            min2 = min1;
+        if (zombie1 != null) {
+            endRow1 = min1;
+        } else {
+            endRow1 = -1;
         }
-        endRow1 = min1 * 80 + 250;
-        endRow2 = min2 * 80 + 250;
+
+        if (zombie2 != null) {
+            endRow2 = min2;
+        } else {
+            endRow2 = -1;
+        }
     }
 }

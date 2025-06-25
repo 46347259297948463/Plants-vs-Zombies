@@ -41,7 +41,7 @@ public class PeaShooter extends PeaPlants{
         imageView.setFitHeight(125);
         setImage(imageView);
         if (endRow != -1){
-            shootTimer = new Timeline(new KeyFrame(Duration.seconds(1) , event -> shoot(zombie)));
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> shoot(zombie)));
             shootTimer.setCycleCount(Timeline.INDEFINITE);
             shootTimer.play();
         }
@@ -54,24 +54,36 @@ public class PeaShooter extends PeaPlants{
     @Override
     public void shoot(Zombie zombie) {
         endRow = setZombie();
-        bulletRow = row;
-        moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> moveBullet(endRow)));
-        moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
-        moveBulletTimer.play();
+        if (endRow == -1 || zombie == null || zombie.isDead()) {
+            return;
+        } else if (endRow != -1) {
+            bulletRow = row;
+            if (moveBulletTimer != null){
+                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
+                moveBulletTimer.stop();
+            }
+            bullet = new Bullet(row,column);
+            DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
+            moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet(endRow)));
+            moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
+            moveBulletTimer.play();
+        }
     }
 
     public void moveBullet(double endRow){
         if (bullet != null){
-            bullet.endBullet();
+            bullet.move();
+            if (bullet.getImageView().getLayoutX() >= endRow && zombie != null){
+                moveBulletTimer.stop();
+                zombie.takeDamage(1);
+                if (zombie.isDead()){
+                    zombie.dead();
+                    setZombie();
+                }
+                bullet.endBullet();
+            }
         }
-        bullet = new Bullet(bulletRow, column);
-        DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
-        bulletRow += 15;
-        if (bulletRow >= endRow){
-            moveBulletTimer.stop();
-            zombie.takeDamage(1);
-            bullet.endBullet();
-        }
+
     }
 
     @Override
@@ -80,22 +92,27 @@ public class PeaShooter extends PeaPlants{
     }
 
     private double setZombie(){
-        int i = row , j = column;
-        while (i < 9 && cells[j][i].getZombies() == null){
-            i++;
-        }
-        if (i == 9){
-            return -1;
-        }
-        ArrayList<Zombie> zombies = cells[j][i].getZombies();
-        double min = 9;
-        for (Zombie z : zombies){
-            if (z.getRow() < min){
-                zombie = z;
-                min = z.getRow();
+        int j = row;
+        zombie = null;
+        double min = Double.MAX_VALUE;
+
+        for (int i = column; i < 9; i++){
+            ArrayList<Zombie> zombies = cells[j][i].getZombies();
+            if (zombies != null && !zombies.isEmpty()){
+                for (Zombie z : zombies){
+                    if (z.isDead()) continue;
+                    if (z.getColumn() < min){
+                        zombie = z;
+                        min = z.getColumn();
+                    }
+                }
             }
         }
-        return min * 80 + 250;
+
+        if (zombie != null){
+            return min;
+        }
+        return -1;
     }
 
 }

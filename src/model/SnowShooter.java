@@ -20,7 +20,7 @@ public class SnowShooter extends PeaPlants{
 
     private final static double rechargeTime = 6;
 
-    private Bullet bullet;
+    private SnowBullet bullet;
 
     private static boolean available = true;
 
@@ -45,11 +45,12 @@ public class SnowShooter extends PeaPlants{
         imageView.setFitHeight(125);
         setImage(imageView);
         if (endRow != -1){
-            shootTimer = new Timeline(new KeyFrame(Duration.seconds(1) , event -> shoot(zombie)));
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> shoot(zombie)));
             shootTimer.setCycleCount(Timeline.INDEFINITE);
             shootTimer.play();
         }
     }
+
     public SnowShooter(){
 
     }
@@ -57,38 +58,52 @@ public class SnowShooter extends PeaPlants{
     @Override
     public void shoot(Zombie zombie) {
         endRow = setZombie();
-        bulletRow = row;
-        moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> moveBullet(endRow)));
-        moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
-        moveBulletTimer.play();
+        if (endRow == -1 || zombie == null || zombie.isDead()) {
+            return;
+        } else if (endRow != -1) {
+            bulletRow = row;
+            if (moveBulletTimer != null){
+                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
+                moveBulletTimer.stop();
+            }
+            bullet = new SnowBullet(row,column);
+            DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
+            moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet()));
+            moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
+            moveBulletTimer.play();
+        }
     }
 
-    public void moveBullet(double endRow){
-        if (bullet != null){
-            bullet.endBullet();
+    public void moveBullet(){
+        if (bullet != null) {
+            bullet.move();
         }
-        bullet = new Bullet(bulletRow, column);
-        DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
-        bulletRow += 15;
-        if (bulletRow >= endRow){
+        if (bullet.getImageView().getLayoutX() >= endRow && zombie != null){
             moveBulletTimer.stop();
             zombie.takeDamage(1);
-            zombie.setSpeed(zombie.getSpeed() / 2);
-            halfSpeedTimer = new Timeline(new KeyFrame(Duration.millis(1500), event -> back()));
-            halfSpeedTimer.setCycleCount(Timeline.INDEFINITE);
-            halfSpeedTimer.play();
+            if (zombie.isDead()){
+                zombie.dead();
+                setZombie();
+            } else {
+                zombie.setSpeed(zombie.getSpeed() / 2);
+                halfSpeedTimer = new Timeline(new KeyFrame(Duration.millis(1000), event -> back()));
+                halfSpeedTimer.setCycleCount(Timeline.INDEFINITE);
+                halfSpeedTimer.play();
+            }
             bullet.endBullet();
         }
     }
 
     private void back(){
-        if (zombie instanceof ImpZombie){
-            zombie.setSpeed(8);
-        }
-        else {
-            zombie.setSpeed(4);
-        }
-        halfSpeedTimer.stop();
+       if (zombie != null){
+           if (zombie instanceof ImpZombie){
+               zombie.setSpeed(2);
+           }
+           else {
+               zombie.setSpeed(1);
+           }
+           halfSpeedTimer.stop();
+       }
     }
 
     @Override
@@ -97,21 +112,26 @@ public class SnowShooter extends PeaPlants{
     }
 
     private double setZombie(){
-        int i = row , j = column;
-        while (i < 9 && cells[j][i].getZombies() == null){
-            i++;
-        }
-        if (i == 9){
-            return -1;
-        }
-        ArrayList<Zombie> zombies = cells[j][i].getZombies();
-        double min = 9;
-        for (Zombie z : zombies){
-            if (z.getRow() < min){
-                zombie = z;
-                min = z.getRow();
+        int j = row;
+        zombie = null;
+        double min = Double.MAX_VALUE;
+
+        for (int i = column; i < 9; i++){
+            ArrayList<Zombie> zombies = cells[j][i].getZombies();
+            if (zombies != null && !zombies.isEmpty()){
+                for (Zombie z : zombies){
+                    if (z.isDead()) continue;
+                    if (z.getColumn() < min){
+                        zombie = z;
+                        min = z.getColumn();
+                    }
+                }
             }
         }
-        return min * 80 + 250;
+
+        if (zombie != null){
+            return min;
+        }
+        return -1;
     }
 }

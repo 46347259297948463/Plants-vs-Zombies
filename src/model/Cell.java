@@ -10,7 +10,7 @@ public class Cell {
     private int row;
     private int column;
     private Plants plant;
-    private ArrayList<Zombie> zombies;
+    private ArrayList<Zombie> zombies = null;
     private Group group;
     private Button button;
 
@@ -34,6 +34,9 @@ public class Cell {
     }
 
     public void setZombies(Zombie zombie){
+        if (zombies == null){
+            zombies = new ArrayList<>();
+        }
         zombies.add(zombie);
     }
 
@@ -43,6 +46,9 @@ public class Cell {
     }
 
     public void removeZombie(Zombie zombie){
+        if (zombies == null){
+            return;
+        }
         zombies.remove(zombie);
     }
 
@@ -59,10 +65,30 @@ public class Cell {
     }
 
     public ArrayList<Zombie> getZombies(){
+        if (zombies != null){
+            for (int i = 0; i < zombies.size(); i++){
+                if (zombies.get(i).isDead()){
+                    zombies.remove(i);
+                }
+            }
+        }
         return zombies;
     }
 
+    public void removeAllZombies(){
+        if (zombies != null){
+//            for (Zombie z : zombies){
+//                z.setHP(0);
+//                z.dead();
+//                this.removeZombie(z);
+//            }
 
-
+            for (int i = 0; i < zombies.size(); i++){
+                zombies.get(i).setHP(0);
+                zombies.get(i).dead();
+                this.removeZombie(zombies.get(i));
+            }
+        }
+    }
 
 }

@@ -2,6 +2,7 @@ package controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
@@ -16,6 +17,7 @@ import model.*;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class DayLevel implements Initializable {
@@ -357,7 +359,7 @@ public class DayLevel implements Initializable {
 
     private Plants selectedPlant = null;
 
-    private GameTimer timer;
+    private Timeline gameTimer;
 
     private static DayLevel instance;
 
@@ -369,8 +371,19 @@ public class DayLevel implements Initializable {
 
         sunPoints.setText("0");
 
-        timer = new GameTimer();
-        timer.start();
+        gameTimer = new Timeline(
+                new KeyFrame(Duration.seconds(5), e -> step1()),
+                new KeyFrame(Duration.seconds(20), e -> step2()),
+                new KeyFrame(Duration.seconds(35), e -> step3()),
+                new KeyFrame(Duration.seconds(50), e -> step4()),
+                new KeyFrame(Duration.seconds(60), event -> {
+                    gameTimer.stop();
+//                    DayLevel.getInstance().exitGame();
+                    System.out.println("end");
+                })
+        );
+        gameTimer.setCycleCount(1);
+        gameTimer.play();
 
         RandomSun randomSun = new RandomSun();
 
@@ -419,7 +432,7 @@ public class DayLevel implements Initializable {
                             cells[row][column].setPlants(null);
                         }
                         isShovelMode = false;
-                    } else if (selectedPlant != null){
+                    } else if (selectedPlant != null && cells[row][column].getPlant() == null){
                         Plants newPlant = selectedPlant.clonePlant(row , column);
                         if (newPlant.getPrice() <= Integer.parseInt(sunPoints.getText())){
                             newPlant.getImage().setMouseTransparent(true);
@@ -588,6 +601,92 @@ public class DayLevel implements Initializable {
 
     public AnchorPane getDayAnc(){
         return dayAnc;
+    }
+
+    private Timeline zombieTimer;
+
+    private Random random = new Random();
+
+    private void step1(){
+        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> basicZombie()));
+        zombieTimer.setCycleCount(Timeline.INDEFINITE);
+        zombieTimer.play();
+    }
+
+    private void step2(){
+        zombieTimer.stop();
+        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
+            int choose = random.nextInt(2);
+            if (choose == 0){
+                basicZombie();
+            } else {
+                coneHeadZombie();
+            }
+        }));
+        zombieTimer.setCycleCount(Timeline.INDEFINITE);
+        zombieTimer.play();
+    }
+
+    private void step3(){
+        zombieTimer.stop();
+        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
+            int choose = random.nextInt(3);
+            if (choose == 0){
+                basicZombie();
+            } else if (choose == 1) {
+                coneHeadZombie();
+            }else {
+                screenDoorZombie();
+            }
+        }));
+        zombieTimer.setCycleCount(Timeline.INDEFINITE);
+        zombieTimer.play();
+    }
+
+    private void step4(){
+        zombieTimer.stop();
+        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
+            int choose = random.nextInt(4);
+            if (choose == 0){
+                basicZombie();
+            } else if (choose == 1) {
+                coneHeadZombie();
+            }else if (choose == 2){
+                screenDoorZombie();
+            }else {
+                impZombie();
+            }
+        }));
+        zombieTimer.setCycleCount(Timeline.INDEFINITE);
+        zombieTimer.play();
+    }
+
+    private void basicZombie(){
+        int row = random.nextInt(5);
+        Zombie zombie = new Zombie( 1780, row * 185 + 130);
+        cells[row][8].setZombies(zombie);
+    }
+
+    private void coneHeadZombie(){
+        int row = random.nextInt(5);
+        ConeheadZombie zombie = new ConeheadZombie( 1780, row * 185 + 130);
+        cells[row][8].setZombies(zombie);
+    }
+
+    private void screenDoorZombie(){
+        int row = random.nextInt(5);
+        ScreenDoorZombie zombie = new ScreenDoorZombie( 1780, row * 185 + 130);
+        cells[row][8].setZombies(zombie);
+    }
+
+    private void impZombie(){
+        int row = random.nextInt(5);
+        ImpZombie zombie = new ImpZombie(1780, row * 185 + 130);
+        cells[row][8].setZombies(zombie);
+    }
+
+    public void exitGame(){
+        Platform.exit();
     }
 }
 
