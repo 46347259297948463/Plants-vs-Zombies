@@ -3,38 +3,43 @@ package model;
 import controller.DayLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.image.Image;
+import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 public class Jalapenos extends BombPlants{
 
-    private final static int price = 125;
-
     private final static double rechargeTime = 10;
-
-    private static boolean available = true;
 
     private Cell[][] cells = DayLevel.getInstance().getCells();
 
-    public Jalapenos(int i, int j) {
-        super(i, j, price, rechargeTime);
-        available = false;
+    private Timeline timer;
 
+    private Timeline jalopenosTimer;
+
+    public Jalapenos(int i, int j, Group group) {
+        super(i, j, 125, rechargeTime);
+        this.group = group;
+        DayLevel.getInstance().setAvailablePicked(false, DayLevel.getInstance().getAvailableNum());
         ImageView imageView = new ImageView(getClass().getResource("/view/images/jalapenos.png").toString());
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);
         setImage(imageView);
-        Timeline jalopenosTimer = new Timeline(
+        jalopenosTimer = new Timeline(
                 new KeyFrame(Duration.seconds(0), event -> increaseSize()),
                 new KeyFrame(Duration.seconds(2) , event -> BOMB())
         );
         jalopenosTimer.setCycleCount(1);
         jalopenosTimer.play();
+
+        group.setOpacity(0.7);
+        timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
+        timer.setCycleCount(1);
+        timer.play();
     }
 
     public Jalapenos(){
-
+        price = 125;
     }
 
     private void increaseSize(){
@@ -47,11 +52,16 @@ public class Jalapenos extends BombPlants{
     }
 
     @Override
-    public void end() {}
+    public void end() {
+        if (jalopenosTimer != null){
+            jalopenosTimer.stop();
+        }
+        group.setOpacity(1);
+    }
 
     @Override
-    public Plants clonePlant(int row, int column) {
-        return new Jalapenos(row, column);
+    public Plants clonePlant(int row, int column, Group group) {
+        return new Jalapenos(row, column, group);
     }
 
     @Override
@@ -63,4 +73,9 @@ public class Jalapenos extends BombPlants{
         cells[row][column].removePlant();
     }
 
+    @Override
+    protected void recharge() {
+        DayLevel.getInstance().setAvailablePicked(true, DayLevel.getInstance().getAvailableNum());
+        timer.stop();
+        group.setOpacity(1);}
 }

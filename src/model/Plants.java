@@ -1,16 +1,23 @@
 package model;
 
 
+import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 
 public abstract class Plants {
     protected int HP;
+
     protected int row;
+
     protected int column;
+
     protected int price;
+
     protected ImageView image;
+
     protected double rechargeTime;
-    protected boolean availabe = true;
+
+    protected Group group;
 
     public Plants(int hp, int i, int j, int price, double rechargeTime){
         HP = hp;
@@ -19,13 +26,14 @@ public abstract class Plants {
         this.price = price;
         this.rechargeTime = rechargeTime;
     }
+
     public Plants(){
 
     }
 
     public abstract void end();
 
-    public abstract Plants clonePlant(int row, int column);
+    public abstract Plants clonePlant(int row, int column, Group group);
 
     public String getName() {
         return this.getClass().getSimpleName().toLowerCase();
@@ -62,4 +70,7 @@ public abstract class Plants {
     public void setImage(ImageView image) {
         this.image = image;
     }
+
+    protected abstract void recharge();
+
 }

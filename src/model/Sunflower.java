@@ -3,6 +3,7 @@ package model;
 import controller.DayLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -11,21 +12,25 @@ public class Sunflower extends Plants{
 
     private final static int HP = 4;
 
-    private final static int price = 50;
-
     private final static double rechargeTime = 3;
-
-    private static boolean available = true;
 
     private Timeline sunTimeline;
 
-    public Sunflower(int i, int j){
-        super(HP, i, j, price, rechargeTime);
+    private Timeline timer;
+
+    public Sunflower(int i, int j, Group group){
+        super(HP, i, j, 50, rechargeTime);
+        this.group = group;
+        DayLevel.getInstance().setAvailablePicked(false, DayLevel.getInstance().getAvailableNum());
         ImageView imageView = new ImageView(getClass().getResource("/view/images/sunflower.png").toString());
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
         setImage(imageView);
         startTimer();
+        group.setOpacity(0.7);
+        timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
+        timer.setCycleCount(1);
+        timer.play();
     }
 
     private void startTimer(){
@@ -37,12 +42,12 @@ public class Sunflower extends Plants{
     }
 
     public Sunflower(){
-
+        price = 50;
     }
 
     @Override
-    public Plants clonePlant(int row, int column) {
-        return new Sunflower(row, column);
+    public Plants clonePlant(int row, int column, Group group) {
+        return new Sunflower(row, column, group);
     }
 
     public void makeSun(){
@@ -61,5 +66,14 @@ public class Sunflower extends Plants{
 
     public void end(){
         sunTimeline.stop();
+        group.setOpacity(1);
     }
+
+    @Override
+    protected void recharge() {
+        DayLevel.getInstance().setAvailablePicked(true, DayLevel.getInstance().getAvailableNum());
+        timer.stop();
+        group.setOpacity(1);
+    }
+
 }

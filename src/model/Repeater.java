@@ -3,6 +3,7 @@ package model;
 import controller.DayLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
@@ -12,8 +13,6 @@ public class Repeater extends PeaPlants{
 
     private final static int HP = 4;
 
-    private final static int price = 200;
-
     private final static int bullets = 2;
 
     private final static double rechargeTime = 7;
@@ -21,8 +20,6 @@ public class Repeater extends PeaPlants{
     private Bullet bullet1;
 
     private Bullet bullet2;
-
-    private static boolean available = true;
 
     private Zombie zombie1;
 
@@ -34,16 +31,16 @@ public class Repeater extends PeaPlants{
 
     private Timeline moveBulletTimer2;
 
-    private double bulletRow1 = row;
-
-    private double bulletRow2 = row;
-
     private double endRow1;
 
     private double endRow2;
 
-    public Repeater(int i, int j) {
-        super(HP, i, j, price, bullets, rechargeTime);
+    private Timeline timer;
+
+    public Repeater(int i, int j, Group group) {
+        super(HP, i, j, 200, bullets, rechargeTime);
+        this.group = group;
+        DayLevel.getInstance().setAvailablePicked(false, DayLevel.getInstance().getAvailableNum());
         cells = DayLevel.getInstance().getCells();
         setZombie();
         ImageView imageView = new ImageView(getClass().getResource("/view/images/repeater.png").toString());
@@ -55,10 +52,14 @@ public class Repeater extends PeaPlants{
             shootTimer.setCycleCount(Timeline.INDEFINITE);
             shootTimer.play();
         }
+        group.setOpacity(0.7);
+        timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
+        timer.setCycleCount(1);
+        timer.play();
     }
 
     public Repeater(){
-
+        price = 200;
     }
 
     @Override
@@ -67,12 +68,11 @@ public class Repeater extends PeaPlants{
         if (endRow1 == -1 || zombie1 == null || zombie1.isDead()) {
             return;
         } else if (endRow1 != -1) {
-            bulletRow1 = row;
             if (moveBulletTimer1 != null) {
                 DayLevel.getInstance().getDayAnc().getChildren().remove(bullet1.getImageView());
                 moveBulletTimer1.stop();
             }
-            bullet1 = new Bullet(bulletRow1, column);
+            bullet1 = new Bullet(row, column);
             DayLevel.getInstance().getDayAnc().getChildren().add(bullet1.getImageView());
             moveBulletTimer1 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet1()));
             moveBulletTimer1.setCycleCount(Timeline.INDEFINITE);
@@ -81,12 +81,11 @@ public class Repeater extends PeaPlants{
         if (endRow2 == -1 || zombie2 == null || zombie2.isDead()) {
             return;
         } else if (endRow2 != -1) {
-            bulletRow2 = row;
             if (moveBulletTimer2 != null) {
                 DayLevel.getInstance().getDayAnc().getChildren().remove(bullet2.getImageView());
                 moveBulletTimer2.stop();
             }
-            bullet2 = new Bullet(bulletRow2, column + 0.5);
+            bullet2 = new Bullet(row, column + 0.5);
             DayLevel.getInstance().getDayAnc().getChildren().add(bullet2.getImageView());
             moveBulletTimer2 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet2()));
             moveBulletTimer2.setCycleCount(Timeline.INDEFINITE);
@@ -126,8 +125,8 @@ public class Repeater extends PeaPlants{
     }
 
     @Override
-    public Plants clonePlant(int row, int column) {
-        return new Repeater(row, column);
+    public Plants clonePlant(int row, int column, Group group) {
+        return new Repeater(row, column, group);
     }
 
     private void setZombie(){
@@ -166,4 +165,12 @@ public class Repeater extends PeaPlants{
             endRow2 = -1;
         }
     }
+
+    @Override
+    protected void recharge() {
+        DayLevel.getInstance().setAvailablePicked(true, DayLevel.getInstance().getAvailableNum());
+        timer.stop();
+        group.setOpacity(1);
+    }
+
 }

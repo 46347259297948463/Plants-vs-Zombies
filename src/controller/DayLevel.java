@@ -359,11 +359,17 @@ public class DayLevel implements Initializable {
 
     private Plants selectedPlant = null;
 
+    private Group selectedGroup = null;
+
     private Timeline gameTimer;
 
     private static DayLevel instance;
 
     private Boolean isShovelMode = false;
+
+    private boolean[] availablePicked = {true, true, true, true, true, true, true};
+
+    private int availableNum = -1;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -379,7 +385,6 @@ public class DayLevel implements Initializable {
                 new KeyFrame(Duration.seconds(60), event -> {
                     gameTimer.stop();
 //                    DayLevel.getInstance().exitGame();
-                    System.out.println("end");
                 })
         );
         gameTimer.setCycleCount(1);
@@ -393,24 +398,38 @@ public class DayLevel implements Initializable {
 
         plant1BTN.setOnAction(event -> {
             selectedPlant = plants.get(0);
+            selectedGroup = groupsOfPicked.get(0);
+            availableNum = 0;
         });
         plant2BTN.setOnAction(event -> {
             selectedPlant = plants.get(1);
+            selectedGroup = groupsOfPicked.get(1);
+            availableNum = 1;
         });
         plant3BTN.setOnAction(event -> {
             selectedPlant = plants.get(2);
+            selectedGroup = groupsOfPicked.get(2);
+            availableNum = 2;
         });
         plant4BTN.setOnAction(event -> {
             selectedPlant = plants.get(3);
+            selectedGroup = groupsOfPicked.get(3);
+            availableNum = 3;
         });
         plant5BTN.setOnAction(event -> {
             selectedPlant = plants.get(4);
+            selectedGroup = groupsOfPicked.get(4);
+            availableNum = 4;
         });
         plant6BTN.setOnAction(event -> {
             selectedPlant = plants.get(5);
+            selectedGroup = groupsOfPicked.get(5);
+            availableNum = 5;
         });
         plant7BTN.setOnAction(event -> {
             selectedPlant = plants.get(6);
+            selectedGroup = groupsOfPicked.get(6);
+            availableNum = 6;
         });
 
         cellOnAction();
@@ -432,19 +451,18 @@ public class DayLevel implements Initializable {
                             cells[row][column].setPlants(null);
                         }
                         isShovelMode = false;
-                    } else if (selectedPlant != null && cells[row][column].getPlant() == null){
-                        Plants newPlant = selectedPlant.clonePlant(row , column);
-                        if (newPlant.getPrice() <= Integer.parseInt(sunPoints.getText())){
-                            newPlant.getImage().setMouseTransparent(true);
-                            cells[row][column].getGroup().getChildren().add(newPlant.getImage());
-                            cells[row][column].setPlants(newPlant);
-                            withdrawSunPoints(newPlant.getPrice());
-                            selectedPlant = null;
-
-                        } else {
-                            newPlant.end();
-                            newPlant = null;
+                    } else if (selectedPlant != null && cells[row][column].getPlant() == null && availableNum != -1){
+                        if (availablePicked[availableNum]){
+                            if (selectedPlant.getPrice() <= Integer.parseInt(sunPoints.getText())){
+                                Plants newPlant = selectedPlant.clonePlant(row , column, selectedGroup);
+                                newPlant.getImage().setMouseTransparent(true);
+                                cells[row][column].getGroup().getChildren().add(newPlant.getImage());
+                                cells[row][column].setPlants(newPlant);
+                                withdrawSunPoints(newPlant.getPrice());
+                            }
                         }
+                        selectedGroup = null;
+                        selectedPlant = null;
                     }
                 });
             }
@@ -688,5 +706,15 @@ public class DayLevel implements Initializable {
     public void exitGame(){
         Platform.exit();
     }
-}
 
+    public void setAvailablePicked(Boolean bool, int i){
+        if (i != -1){
+            availablePicked[i] = bool;
+        }
+    }
+
+    public int getAvailableNum() {
+        return availableNum;
+    }
+
+}

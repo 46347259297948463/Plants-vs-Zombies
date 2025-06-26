@@ -3,6 +3,7 @@ package model;
 import controller.DayLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -14,15 +15,11 @@ public class SnowShooter extends PeaPlants{
 
     private final static int HP = 4;
 
-    private final static int price = 175;
-
     private final static int bullets = 1;
 
     private final static double rechargeTime = 6;
 
     private SnowBullet bullet;
-
-    private static boolean available = true;
 
     private Zombie zombie;
 
@@ -30,14 +27,16 @@ public class SnowShooter extends PeaPlants{
 
     private Timeline moveBulletTimer;
 
-    private double bulletRow = row;
-
     private double endRow;
 
     private Timeline halfSpeedTimer;
 
-    public SnowShooter(int i, int j) {
-        super(HP, i, j, price, bullets, rechargeTime);
+    private Timeline timer;
+
+    public SnowShooter(int i, int j, Group group) {
+        super(HP, i, j, 175, bullets, rechargeTime);
+        this.group = group;
+        DayLevel.getInstance().setAvailablePicked(false, DayLevel.getInstance().getAvailableNum());
         cells = DayLevel.getInstance().getCells();
         endRow = setZombie();
         ImageView imageView = new ImageView(getClass().getResource("/view/images/snow shooter.png").toString());
@@ -49,10 +48,14 @@ public class SnowShooter extends PeaPlants{
             shootTimer.setCycleCount(Timeline.INDEFINITE);
             shootTimer.play();
         }
+        group.setOpacity(0.7);
+        timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
+        timer.setCycleCount(1);
+        timer.play();
     }
 
     public SnowShooter(){
-
+        price = 175;
     }
 
     @Override
@@ -61,7 +64,6 @@ public class SnowShooter extends PeaPlants{
         if (endRow == -1 || zombie == null || zombie.isDead()) {
             return;
         } else if (endRow != -1) {
-            bulletRow = row;
             if (moveBulletTimer != null){
                 DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
                 moveBulletTimer.stop();
@@ -107,8 +109,8 @@ public class SnowShooter extends PeaPlants{
     }
 
     @Override
-    public Plants clonePlant(int row, int column) {
-        return new SnowShooter(row, column);
+    public Plants clonePlant(int row, int column, Group group) {
+        return new SnowShooter(row, column, group);
     }
 
     private double setZombie(){
@@ -134,4 +136,12 @@ public class SnowShooter extends PeaPlants{
         }
         return -1;
     }
+
+    @Override
+    protected void recharge() {
+        DayLevel.getInstance().setAvailablePicked(true, DayLevel.getInstance().getAvailableNum());
+        timer.stop();
+        group.setOpacity(1);
+    }
+
 }

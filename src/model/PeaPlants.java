@@ -12,6 +12,7 @@ public abstract class PeaPlants extends Plants{
         super(hp, i, j, price, rechargeTime);
         this.bullets = bullets;
     }
+
     public PeaPlants(){
 
     }
@@ -23,6 +24,7 @@ public abstract class PeaPlants extends Plants{
         if (shootTimer != null){
             shootTimer.stop();
         }
+        group.setOpacity(1);
     }
 
 }
