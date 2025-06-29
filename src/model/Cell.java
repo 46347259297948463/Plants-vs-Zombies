@@ -41,7 +41,6 @@ public class Cell {
     }
 
     public void removePlant(){
-        //isRemoved = true;
         this.plant = null;
     }
 
@@ -71,24 +70,25 @@ public class Cell {
                     zombies.remove(i);
                 }
             }
+            if (zombies.size() == 0){
+                zombies = null;
+                return null;
+            }
         }
         return zombies;
     }
 
     public void removeAllZombies(){
         if (zombies != null){
-//            for (Zombie z : zombies){
-//                z.setHP(0);
-//                z.dead();
-//                this.removeZombie(z);
-//            }
-
-            for (int i = 0; i < zombies.size(); i++){
-                zombies.get(i).setHP(0);
-                zombies.get(i).dead();
-                this.removeZombie(zombies.get(i));
+            while (zombies.size() > 0){
+                zombies.get(0).setHP(0);
+                zombies.get(0).dead();
+                this.removeZombie(zombies.get(0));
+                System.out.println("zombie.rowBTN = " + zombies.get(0).rowBTN);
+                System.out.println("zombie.columnBTN = " + zombies.get(0).columnBTN);
             }
         }
+        zombies = null;
     }
 
 }

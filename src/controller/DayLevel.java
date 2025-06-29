@@ -11,7 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import model.*;
 
@@ -371,20 +373,52 @@ public class DayLevel implements Initializable {
 
     private int availableNum = -1;
 
+    public Label labelR;
+
+    public Label labelC;
+
+    public Label rowLBL;
+
+    public Label columnLBL;
+
+    public HBox hBoxRow;
+
+    public HBox hBoxColumn;
+
+    public VBox know;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DayLevel.setInstance(this);
 
         sunPoints.setText("0");
 
+        labelR = new Label("Row: ");
+        labelC = new Label("Column: ");
+        rowLBL = new Label("");
+        columnLBL = new Label("");
+        hBoxRow = new HBox(labelR, rowLBL);
+        hBoxColumn = new HBox(labelC, columnLBL);
+        know = new VBox(hBoxRow, hBoxColumn);
+        dayAnc.getChildren().add(know);
+
+
         gameTimer = new Timeline(
                 new KeyFrame(Duration.seconds(5), e -> step1()),
-                new KeyFrame(Duration.seconds(20), e -> step2()),
-                new KeyFrame(Duration.seconds(35), e -> step3()),
-                new KeyFrame(Duration.seconds(50), e -> step4()),
-                new KeyFrame(Duration.seconds(60), event -> {
-                    gameTimer.stop();
-//                    DayLevel.getInstance().exitGame();
+//                new KeyFrame(Duration.seconds(20), e -> step2()),
+//                new KeyFrame(Duration.seconds(35), e -> step3()),
+//                new KeyFrame(Duration.seconds(50), e -> step4()),
+                new KeyFrame(Duration.seconds(65), event -> {
+                    zombieTimer.stop();
+                    Timeline exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event1 -> {
+                        if (isGameFinish()){
+                            System.out.println("YOU WIN!!!");
+                            DayLevel.getInstance().exitGame();
+                            gameTimer.stop();
+                        }
+                    }));
+                    exitTimer.setCycleCount(Timeline.INDEFINITE);
+                    exitTimer.play();
                 })
         );
         gameTimer.setCycleCount(1);
@@ -627,7 +661,7 @@ public class DayLevel implements Initializable {
 
     private void step1(){
         zombieTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> basicZombie()));
-        zombieTimer.setCycleCount(Timeline.INDEFINITE);
+        zombieTimer.setCycleCount(1);
         zombieTimer.play();
     }
 
@@ -681,25 +715,25 @@ public class DayLevel implements Initializable {
 
     private void basicZombie(){
         int row = random.nextInt(5);
-        Zombie zombie = new Zombie( 1780, row * 185 + 130);
+        Zombie zombie = new Zombie( 1780, row * 185 + 130, row);
         cells[row][8].setZombies(zombie);
     }
 
     private void coneHeadZombie(){
         int row = random.nextInt(5);
-        ConeheadZombie zombie = new ConeheadZombie( 1780, row * 185 + 130);
+        ConeheadZombie zombie = new ConeheadZombie( 1780, row * 185 + 130, row);
         cells[row][8].setZombies(zombie);
     }
 
     private void screenDoorZombie(){
         int row = random.nextInt(5);
-        ScreenDoorZombie zombie = new ScreenDoorZombie( 1780, row * 185 + 130);
+        ScreenDoorZombie zombie = new ScreenDoorZombie( 1780, row * 185 + 130, row);
         cells[row][8].setZombies(zombie);
     }
 
     private void impZombie(){
         int row = random.nextInt(5);
-        ImpZombie zombie = new ImpZombie(1780, row * 185 + 130);
+        ImpZombie zombie = new ImpZombie(1780, row * 185 + 130, row);
         cells[row][8].setZombies(zombie);
     }
 
@@ -715,6 +749,17 @@ public class DayLevel implements Initializable {
 
     public int getAvailableNum() {
         return availableNum;
+    }
+
+    private boolean isGameFinish(){
+        for (int i = 0; i<5 ; i++){
+            for (int j = 0; j<9; j++){
+                if (cells[i][j].getZombies() != null){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }

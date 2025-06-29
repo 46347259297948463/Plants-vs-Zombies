@@ -1,6 +1,7 @@
 package model;
 
 
+import controller.DayLevel;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 

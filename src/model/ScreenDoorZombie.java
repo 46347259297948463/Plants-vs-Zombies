@@ -6,8 +6,8 @@ import javafx.scene.image.ImageView;
 
 public class ScreenDoorZombie extends Zombie{
 
-    public ScreenDoorZombie(int x, int y) {
-        super(x, y);
+    public ScreenDoorZombie(double x, double y, int rowBTN) {
+        super(x, y, rowBTN);
         setHP(10);
     }
 

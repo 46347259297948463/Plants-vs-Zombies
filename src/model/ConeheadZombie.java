@@ -6,8 +6,8 @@ import javafx.scene.image.ImageView;
 
 public class ConeheadZombie extends Zombie{
 
-    public ConeheadZombie(int x, int y) {
-        super(x, y);
+    public ConeheadZombie(double x, double y, int rowBTN) {
+        super(x, y, rowBTN);
         setHP(7);
     }
 

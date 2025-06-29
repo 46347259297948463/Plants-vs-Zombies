@@ -7,6 +7,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+import controller.DayLevel;
+
 public class Zombie {
     protected double row;
 
@@ -18,17 +20,26 @@ public class Zombie {
 
     private ImageView image;
 
-    private boolean attack = false;
-
     private Timeline moveTimeline;
 
     protected boolean isRemoved = false;
 
     private int i = 0;
 
-    public Zombie(double x, double y){
+    private double limitColumn;
+
+    private Timeline eatTimeline;
+
+    public int rowBTN;
+
+    public int columnBTN = 8;
+
+    private double currentWidthBTN;
+
+    public Zombie(double x, double y, int rowBTN){
         this.column = x;
         this.row = y;
+        this.rowBTN = rowBTN;
         setImageOnAnc();
         startMove();
     }
@@ -44,50 +55,83 @@ public class Zombie {
         DayLevel.getInstance().getDayAnc().getChildren().add(imageV);
     }
 
-    public void startMove(){
+    private void startMove(){
         if(moveTimeline == null){
+            currentWidthBTN = DayLevel.getInstance().getCells()[rowBTN][columnBTN].getButton().getWidth();
+            limitColumn = column - currentWidthBTN;
             moveTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> move()));
             moveTimeline.setCycleCount(Timeline.INDEFINITE);
             moveTimeline.play();
         }
     }
 
-    public void stopMove(){
+    private void stopMove(){
         if(moveTimeline != null){
             moveTimeline.stop();
         }
     }
 
     public void move(){
-        if (!attack){
-            column -= speed/2;
-            image.setLayoutX(column);
-        }
+       if (columnBTN > -1){
+           if (!eat()){
+               column -= speed/2;
+               image.setLayoutX(column);
+           } else {
+               moveTimeline.stop();
+               eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                   Plants plant = DayLevel.getInstance().getCells()[rowBTN][columnBTN].getPlant();
+                   if(plant != null){
+                       plant.takeDamage(1);
+                       if (plant.isDead()){
+                           DayLevel.getInstance().getCells()[rowBTN][columnBTN].getGroup().getChildren().remove(plant.getImage());
+                           DayLevel.getInstance().getCells()[rowBTN][columnBTN].removePlant();
+                           plant.end();
+                           eatTimeline.stop();
+                           moveTimeline = null;
+                           startMove();
+                       }
+                   } else {
+                       eatTimeline.stop();
+                       moveTimeline = null;
+                       startMove();
+                   }
+               }));
+               eatTimeline.setCycleCount(Timeline.INDEFINITE);
+               eatTimeline.play();
+           }
+       }
         update();
     }
 
-    public void update(){
-        int updateRow, updateColumn;
-        updateRow = (int) ((row - 130) / 185);
-        updateColumn = (int) ((column - 517) / 140);
-        if (updateColumn < 8){
-            DayLevel.getInstance().getCells()[updateRow][updateColumn + 1].removeZombie(this);
-        } else if (updateColumn == 9){
-            updateColumn -= 1;
+    private void update(){
+        if (limitColumn > column){
+
+            columnBTN--;
+            currentWidthBTN = DayLevel.getInstance().getCells()[rowBTN][columnBTN].getButton().getWidth();
+            limitColumn = column - currentWidthBTN;
         }
-        if(updateColumn < 0){
-            //بازیکن باخته و زامبی به انتهای زمین رسیده است
+        DayLevel.getInstance().columnLBL.setText(columnBTN + "");
+        DayLevel.getInstance().rowLBL.setText(rowBTN + "");
+        if (columnBTN < 8){
+            DayLevel.getInstance().getCells()[rowBTN][columnBTN + 1].removeZombie(this);
+        } else if (columnBTN == 9){
+            columnBTN -= 1;
+        }
+        if(columnBTN < 0){
             DayLevel.getInstance().exitGame();
         } else {
-            DayLevel.getInstance().getCells()[updateRow][updateColumn].setZombies(this);
+            DayLevel.getInstance().getCells()[rowBTN][columnBTN].setZombies(this);
         }
         if(isDead()){
             stopMove();
             isRemoved = true;
-            //باید روی زامبی ها فور بزنیم و اگر این بولین درست بود از روت عکس آن رو ریموو کنیم
             return;
         }
         image.setLayoutX(column);
+    }
+
+    private boolean eat(){
+        return DayLevel.getInstance().getCells()[rowBTN][columnBTN].getPlant() != null;
     }
 
     public void takeDamage(int damage){
@@ -127,6 +171,8 @@ public class Zombie {
     }
 
     public void dead(){
+        DayLevel.getInstance().getCells()[rowBTN][columnBTN].removeZombie(this);
         DayLevel.getInstance().getDayAnc().getChildren().remove(this.image);
     }
+
 }

@@ -5,8 +5,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class ImpZombie extends Zombie{
-    public ImpZombie(int x, int y) {
-        super(x, y);
+    public ImpZombie(double x, double y, int rowBTN) {
+        super(x, y, rowBTN);
         setHP(3);
         setSpeed(4);
     }
