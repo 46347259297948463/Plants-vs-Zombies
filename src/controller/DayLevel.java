@@ -4,19 +4,30 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.*;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
@@ -178,9 +189,6 @@ public class DayLevel implements Initializable {
     private Group group6;
 
     @FXML
-    private Group group7;
-
-    @FXML
     private Button plant1BTN;
 
     @FXML
@@ -199,16 +207,10 @@ public class DayLevel implements Initializable {
     private Button plant6BTN;
 
     @FXML
-    private Button plant7BTN;
-
-    @FXML
     private Button shovelBTN;
 
     @FXML
     private Label sunPoints;
-
-    @FXML
-    private Button menuBTN;
 
     @FXML
     private Group group00;
@@ -348,14 +350,16 @@ public class DayLevel implements Initializable {
     @FXML
     private AnchorPane dayAnc;
 
+    @FXML
+    private Button menuBTN;
 
     private ArrayList<String> names = new ArrayList<>();
 
-    private ArrayList<Group> groupsOfPicked = new ArrayList<>(7);
+    private ArrayList<Group> groupsOfPicked = new ArrayList<>(6);
 
-    private ArrayList<Button> buttonsOfPicked = new ArrayList<>(7);
+    private ArrayList<Button> buttonsOfPicked = new ArrayList<>(6);
 
-    private ArrayList<Plants> plants = new ArrayList<>(7);
+    private ArrayList<Plants> plants = new ArrayList<>(6);
 
     private Cell[][] cells = new Cell[5][9];
 
@@ -365,56 +369,119 @@ public class DayLevel implements Initializable {
 
     private Timeline gameTimer;
 
+    private Timeline exitTimer;
+
     private static DayLevel instance;
 
     private Boolean isShovelMode = false;
 
-    private boolean[] availablePicked = {true, true, true, true, true, true, true};
+    private boolean[] availablePicked = {true, true, true, true, true, true};
+
+    private int[] numberOfZombies = new int[5];
 
     private int availableNum = -1;
 
-    public Label labelR;
+    private RandomSun randomSun;
 
-    public Label labelC;
+    private Timeline zombieTimer;
 
-    public Label rowLBL;
+    private Random random = new Random();
 
-    public Label columnLBL;
+    private Timeline midTimer;
 
-    public HBox hBoxRow;
+    private Timeline finalTimer;
 
-    public HBox hBoxColumn;
+    private static Clip clip;
 
-    public VBox know;
+    private static int menu = 0;
+
+    public boolean isStopMod = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/day.wav")
+            );
+            clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         DayLevel.setInstance(this);
 
         sunPoints.setText("0");
 
-        labelR = new Label("Row: ");
-        labelC = new Label("Column: ");
-        rowLBL = new Label("");
-        columnLBL = new Label("");
-        hBoxRow = new HBox(labelR, rowLBL);
-        hBoxColumn = new HBox(labelC, columnLBL);
-        know = new VBox(hBoxRow, hBoxColumn);
-        dayAnc.getChildren().add(know);
+        menuBTN.setOnAction(event -> {
+            if (menu == 0 && !isStopMod) {
+                stop();
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
+                    Parent menuContent = loader.load();
+                    if (loader.getController() instanceof Menu) {
+                        ((Menu) loader.getController()).setCalled(this.getInstance());
+                    }
+                    AnchorPane root = (AnchorPane) menuBTN.getScene().getRoot();
+                    root.getChildren().add(menuContent);
 
+                    AnchorPane.setTopAnchor(menuContent, 260.0);
+                    AnchorPane.setLeftAnchor(menuContent, 710.0);
+
+                    menuContent.setOpacity(1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            menu++;
+        });
 
         gameTimer = new Timeline(
-                new KeyFrame(Duration.seconds(5), e -> step1()),
-//                new KeyFrame(Duration.seconds(20), e -> step2()),
-//                new KeyFrame(Duration.seconds(35), e -> step3()),
-//                new KeyFrame(Duration.seconds(50), e -> step4()),
-                new KeyFrame(Duration.seconds(65), event -> {
-                    zombieTimer.stop();
-                    Timeline exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event1 -> {
+                new KeyFrame(Duration.seconds(20), e -> step1()),
+                new KeyFrame(Duration.seconds(36), e -> step2()),
+                new KeyFrame(Duration.seconds(52), e -> midAttack()),
+                new KeyFrame(Duration.seconds(61), e -> step3()),
+                new KeyFrame(Duration.seconds(77), e -> step4()),
+                new KeyFrame(Duration.seconds(93), e -> finalAttack()),
+                new KeyFrame(Duration.seconds(107), e -> {
+                    finalTimer.stop();
+                    finalTimer = null;
+                    zombieTimer = null;
+                    gameTimer.stop();
+                    gameTimer = null;
+                    exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
                         if (isGameFinish()){
-                            System.out.println("YOU WIN!!!");
-                            DayLevel.getInstance().exitGame();
-                            gameTimer.stop();
+                            clip.stop();
+                            try {
+                                AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                        getClass().getResource("/view/audio/victory sound.wav")
+                                );
+                                Clip clip = AudioSystem.getClip();
+                                clip.open(audioStream);
+                                clip.start();
+                            } catch (Exception ev) {
+                                ev.printStackTrace();
+                            }
+
+                            try {
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
+                                Parent winContent = loader.load();
+
+                                WinPage.setObj(new DayLevel());
+                                dayAnc.getChildren().add(winContent);
+
+                                AnchorPane.setTopAnchor(winContent, 250.0);
+                                AnchorPane.setLeftAnchor(winContent, 690.0);
+
+                                winContent.setOpacity(1);
+                            } catch (IOException ev) {
+                                ev.printStackTrace();
+                            }
+                            stop();
+                            exitTimer.stop();
                         }
                     }));
                     exitTimer.setCycleCount(Timeline.INDEFINITE);
@@ -424,52 +491,63 @@ public class DayLevel implements Initializable {
         gameTimer.setCycleCount(1);
         gameTimer.play();
 
-        RandomSun randomSun = new RandomSun();
+         randomSun = new RandomSun();
 
         setButtons();
         setGroups();
         fillBoard();
 
         plant1BTN.setOnAction(event -> {
-            selectedPlant = plants.get(0);
-            selectedGroup = groupsOfPicked.get(0);
-            availableNum = 0;
+            if (!isStopMod) {
+                selectedPlant = plants.get(0);
+                selectedGroup = groupsOfPicked.get(0);
+                availableNum = 0;
+            }
         });
         plant2BTN.setOnAction(event -> {
-            selectedPlant = plants.get(1);
-            selectedGroup = groupsOfPicked.get(1);
-            availableNum = 1;
+            if (!isStopMod) {
+                selectedPlant = plants.get(1);
+                selectedGroup = groupsOfPicked.get(1);
+                availableNum = 1;
+            }
         });
         plant3BTN.setOnAction(event -> {
-            selectedPlant = plants.get(2);
-            selectedGroup = groupsOfPicked.get(2);
-            availableNum = 2;
+            if (!isStopMod) {
+                selectedPlant = plants.get(2);
+                selectedGroup = groupsOfPicked.get(2);
+                availableNum = 2;
+            }
         });
         plant4BTN.setOnAction(event -> {
-            selectedPlant = plants.get(3);
-            selectedGroup = groupsOfPicked.get(3);
-            availableNum = 3;
+            if (!isStopMod) {
+                selectedPlant = plants.get(3);
+                selectedGroup = groupsOfPicked.get(3);
+                availableNum = 3;
+            }
         });
         plant5BTN.setOnAction(event -> {
-            selectedPlant = plants.get(4);
-            selectedGroup = groupsOfPicked.get(4);
-            availableNum = 4;
+            if (!isStopMod) {
+                selectedPlant = plants.get(4);
+                selectedGroup = groupsOfPicked.get(4);
+                availableNum = 4;
+            }
         });
         plant6BTN.setOnAction(event -> {
-            selectedPlant = plants.get(5);
-            selectedGroup = groupsOfPicked.get(5);
-            availableNum = 5;
-        });
-        plant7BTN.setOnAction(event -> {
-            selectedPlant = plants.get(6);
-            selectedGroup = groupsOfPicked.get(6);
-            availableNum = 6;
+            if (!isStopMod) {
+                selectedPlant = plants.get(5);
+                selectedGroup = groupsOfPicked.get(5);
+                availableNum = 5;
+            }
         });
 
         cellOnAction();
+
         shovelBTN.setOnAction(event -> {
-           isShovelMode = true;
+            if (!isStopMod) {
+                isShovelMode = true;
+            }
         });
+
     }
 
     private void cellOnAction(){
@@ -478,25 +556,48 @@ public class DayLevel implements Initializable {
                 final int row = i;
                 final int column = j;
                 cells[i][j].getButton().setOnAction(event -> {
-                    if (isShovelMode) {
-                        if (cells[row][column].getPlant() != null) {
-                            cells[row][column].getGroup().getChildren().remove(cells[row][column].getPlant().getImage());
-                            cells[row][column].getPlant().end();
-                            cells[row][column].setPlants(null);
-                        }
-                        isShovelMode = false;
-                    } else if (selectedPlant != null && cells[row][column].getPlant() == null && availableNum != -1){
-                        if (availablePicked[availableNum]){
-                            if (selectedPlant.getPrice() <= Integer.parseInt(sunPoints.getText())){
-                                Plants newPlant = selectedPlant.clonePlant(row , column, selectedGroup);
-                                newPlant.getImage().setMouseTransparent(true);
-                                cells[row][column].getGroup().getChildren().add(newPlant.getImage());
-                                cells[row][column].setPlants(newPlant);
-                                withdrawSunPoints(newPlant.getPrice());
+                    if (!isStopMod) {
+                        if (isShovelMode) {
+                            if (cells[row][column].getPlant() != null) {
+                                try {
+                                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                            getClass().getResource("/view/audio/shovel sound.wav")
+                                    );
+                                    Clip clip = AudioSystem.getClip();
+                                    clip.open(audioStream);
+                                    clip.start();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                cells[row][column].getGroup().getChildren().remove(cells[row][column].getPlant().getImage());
+                                cells[row][column].getPlant().end();
+                                cells[row][column].setPlants(null);
                             }
+                            isShovelMode = false;
+                        } else if (selectedPlant != null && cells[row][column].getPlant() == null && availableNum != -1) {
+                            if (availablePicked[availableNum]) {
+                                if (selectedPlant.getPrice() <= Integer.parseInt(sunPoints.getText())) {
+                                    try {
+                                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                                getClass().getResource("/view/audio/planting sound.wav")
+                                        );
+                                        Clip clip = AudioSystem.getClip();
+                                        clip.open(audioStream);
+                                        clip.start();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    Plants newPlant = selectedPlant.clonePlant(row, column);
+                                    newPlant.getImage().setMouseTransparent(true);
+                                    cells[row][column].getGroup().getChildren().add(newPlant.getImage());
+                                    cells[row][column].setPlants(newPlant);
+                                    withdrawSunPoints(newPlant.getPrice());
+                                }
+                            }
+                            selectedGroup = null;
+                            selectedPlant = null;
+                            availableNum = -1;
                         }
-                        selectedGroup = null;
-                        selectedPlant = null;
                     }
                 });
             }
@@ -510,7 +611,7 @@ public class DayLevel implements Initializable {
     }
 
     private void fixCards(){
-        for (int i = 0 ; i < 7 ; i++) {
+        for (int i = 0 ; i < 6 ; i++) {
             if (names.get(i) != null) {
                 groupsOfPicked.get(i).getChildren().remove(buttonsOfPicked.get(i));
                 Image image = new Image(getClass().getResource("/view/images/" + names.get(i) + ".png").toString());
@@ -532,7 +633,6 @@ public class DayLevel implements Initializable {
         buttonsOfPicked.add(plant4BTN);
         buttonsOfPicked.add(plant5BTN);
         buttonsOfPicked.add(plant6BTN);
-        buttonsOfPicked.add(plant7BTN);
     }
 
     private void setGroups(){
@@ -542,37 +642,52 @@ public class DayLevel implements Initializable {
         groupsOfPicked.add(group4);
         groupsOfPicked.add(group5);
         groupsOfPicked.add(group6);
-        groupsOfPicked.add(group7);
     }
 
     private void deleteCard$setPlants(){
-        for (int i = 0; i < 7 ; i++){
+        for (int i = 0; i < 6 ; i++){
             if (names.get(i) != null){
                 names.set(i, names.get(i).substring(0, names.get(i).length()-5));
                 switch (names.get(i)){
                     case "pea shooter":
                         plants.add(new PeaShooter());
+                        PeaShooter.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        PeaShooter.setAvailableNum(plants.size() - 1);
                         break;
                     case "sunflower":
                         plants.add(new Sunflower());
+                        Sunflower.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        Sunflower.setAvailableNum(plants.size() - 1);
                         break;
                     case "repeater":
                         plants.add(new Repeater());
+                        Repeater.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        Repeater.setAvailableNum(plants.size() - 1);
                         break;
                     case "snow shooter":
                         plants.add(new SnowShooter());
+                        SnowShooter.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        SnowShooter.setAvailableNum(plants.size() - 1);
                         break;
                     case "wall nut":
                         plants.add(new WallNut());
+                        WallNut.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        WallNut.setAvailableNum(plants.size() - 1);
                         break;
                     case "tall nut":
                         plants.add(new TallNut());
+                        TallNut.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        TallNut.setAvailableNum(plants.size() - 1);
                         break;
                     case "cherry bomb":
                         plants.add(new CherryBomb());
+                        CherryBomb.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        CherryBomb.setAvailableNum(plants.size() - 1);
                         break;
                     case "jalapenos":
                         plants.add(new Jalapenos());
+                        Jalapenos.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        Jalapenos.setAvailableNum(plants.size() - 1);
                         break;
                 }
             }
@@ -655,13 +770,19 @@ public class DayLevel implements Initializable {
         return dayAnc;
     }
 
-    private Timeline zombieTimer;
-
-    private Random random = new Random();
-
     private void step1(){
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/zombies are coming sound.wav")
+            );
+            Clip coming = AudioSystem.getClip();
+            coming.open(audioStream);
+            coming.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         zombieTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> basicZombie()));
-        zombieTimer.setCycleCount(1);
+        zombieTimer.setCycleCount(Timeline.INDEFINITE);
         zombieTimer.play();
     }
 
@@ -680,6 +801,8 @@ public class DayLevel implements Initializable {
     }
 
     private void step3(){
+        midTimer.stop();
+        midTimer = null;
         zombieTimer.stop();
         zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
             int choose = random.nextInt(3);
@@ -697,7 +820,7 @@ public class DayLevel implements Initializable {
 
     private void step4(){
         zombieTimer.stop();
-        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
+        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(1) , event -> {
             int choose = random.nextInt(4);
             if (choose == 0){
                 basicZombie();
@@ -714,25 +837,33 @@ public class DayLevel implements Initializable {
     }
 
     private void basicZombie(){
-        int row = random.nextInt(5);
+        int row;
+        while (!setRandomZombies(row = random.nextInt(5)));
+        numberOfZombies[row]++;
         Zombie zombie = new Zombie( 1780, row * 185 + 130, row);
         cells[row][8].setZombies(zombie);
     }
 
     private void coneHeadZombie(){
-        int row = random.nextInt(5);
+        int row;
+        while (!setRandomZombies(row = random.nextInt(5)));
+        numberOfZombies[row]++;
         ConeheadZombie zombie = new ConeheadZombie( 1780, row * 185 + 130, row);
         cells[row][8].setZombies(zombie);
     }
 
     private void screenDoorZombie(){
-        int row = random.nextInt(5);
+        int row;
+        while (!setRandomZombies(row = random.nextInt(5)));
+        numberOfZombies[row]++;
         ScreenDoorZombie zombie = new ScreenDoorZombie( 1780, row * 185 + 130, row);
         cells[row][8].setZombies(zombie);
     }
 
     private void impZombie(){
-        int row = random.nextInt(5);
+        int row;
+        while (!setRandomZombies(row = random.nextInt(5)));
+        numberOfZombies[row]++;
         ImpZombie zombie = new ImpZombie(1780, row * 185 + 130, row);
         cells[row][8].setZombies(zombie);
     }
@@ -747,8 +878,8 @@ public class DayLevel implements Initializable {
         }
     }
 
-    public int getAvailableNum() {
-        return availableNum;
+    public Button getMenuBTN() {
+        return menuBTN;
     }
 
     private boolean isGameFinish(){
@@ -760,6 +891,157 @@ public class DayLevel implements Initializable {
             }
         }
         return true;
+    }
+
+    private boolean setRandomZombies(int k){
+        for (int i = 0 ; i < 5; i++){
+            if (numberOfZombies[k] - numberOfZombies[i] >=3){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void setMenu(int menu) {
+        DayLevel.menu = menu;
+    }
+
+    private void midAttack(){
+        zombieTimer.stop();
+        midTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
+            for (int i = 0; i < 5; i++){
+                int choose = random.nextInt(2);
+                if (choose == 0){
+                    basicZombie();
+                } else {
+                    coneHeadZombie();
+                }
+            }
+        } ));
+        midTimer.setCycleCount(4);
+        midTimer.play();
+    }
+
+    private void finalAttack(){
+        zombieTimer.stop();
+        zombieTimer = null;
+        finalTimer = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
+            for (int i = 0; i < 5; i++){
+                int choose = random.nextInt(4);
+                if (choose == 0){
+                    basicZombie();
+                } else if (choose == 1) {
+                    coneHeadZombie();
+                }else if (choose == 2){
+                    screenDoorZombie();
+                }else {
+                    impZombie();
+                }
+            }
+        }));
+        finalTimer.setCycleCount(8);
+        finalTimer.play();
+    }
+
+    public void stop(){
+        isStopMod = true;
+        if (gameTimer != null){
+            gameTimer.pause();
+        }
+        if (zombieTimer != null){
+            zombieTimer.pause();
+        }
+        if (randomSun != null){
+            randomSun.stop();
+        }
+        if (midTimer != null){
+            midTimer.pause();
+        }
+        if (finalTimer != null){
+            finalTimer.pause();
+        }
+        for (int i = 0; i < 5 ; i++){
+            for (int j = 0 ; j < 9; j++){
+                if (cells[i][j].getPlant() != null){
+                    cells[i][j].getPlant().stop();
+                }
+                if (cells[i][j].getZombies() != null){
+                    for (Zombie zombie : cells[i][j].getZombies()){
+                        zombie.stop();
+                    }
+                }
+            }
+        }
+    }
+
+    public void play(){
+        isStopMod = false;
+        if (gameTimer != null){
+            gameTimer.play();
+        }
+        if (zombieTimer != null){
+            zombieTimer.play();
+        }
+        if (randomSun != null){
+            randomSun.play();
+        }
+        if (midTimer != null){
+            midTimer.play();
+        }
+        if (finalTimer != null){
+            finalTimer.play();
+        }
+        for (int i = 0; i < 5 ; i++){
+            for (int j = 0 ; j < 9; j++){
+                if (cells[i][j].getPlant() != null){
+                    cells[i][j].getPlant().play();
+                }
+                if (cells[i][j].getZombies() != null){
+                    for (Zombie zombie : cells[i][j].getZombies()){
+                        zombie.play();
+                    }
+                }
+            }
+        }
+    }
+
+    public static void stopAudio(){
+        clip.stop();
+    }
+
+    public static void playAudio(){
+        clip.start();
+    }
+
+    public void lose(){
+        clip.stop();
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/lose sound.wav")
+            );
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception ev) {
+            ev.printStackTrace();
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/LosePage.fxml"));
+            Parent loseContent = loader.load();
+
+            LosePage.setObj(new DayLevel());
+            dayAnc.getChildren().add(loseContent);
+
+            AnchorPane.setTopAnchor(loseContent, 260.0);
+            AnchorPane.setLeftAnchor(loseContent, 690.0);
+
+            loseContent.setOpacity(1);
+        } catch (IOException ev) {
+            ev.printStackTrace();
+        }
+        stop();
+        exitTimer.stop();
     }
 
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="462.0" prefWidth="579.0" xmlns="http://javafx.com/javafx/8.0.441" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LosePage">
+    <children>
+        <ImageView fitHeight="587.0" fitWidth="596.0" layoutX="78.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@images/ChatGPT_Image_Jul_11__2025__12_32_26_AM-removebg-preview.png" />
+            </image>
+        </ImageView>
+        <Button fx:id="tryAgainBTN" layoutX="148.0" layoutY="396.0" mnemonicParsing="false" opacity="0.0" prefHeight="54.0" prefWidth="211.0" />
+        <Button fx:id="homeBTN" layoutX="387.0" layoutY="396.0" mnemonicParsing="false" opacity="0.0" prefHeight="54.0" prefWidth="211.0" />
+    </children>
+</AnchorPane>

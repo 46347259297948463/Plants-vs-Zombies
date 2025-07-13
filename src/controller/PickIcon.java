@@ -1,8 +1,6 @@
 package controller;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,11 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import controller.FirstPage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -50,9 +48,6 @@ public class PickIcon implements Initializable{
         private Group group6;
 
         @FXML
-        private Group group7;
-
-        @FXML
         private ImageView jalapenoImage;
 
         @FXML
@@ -81,9 +76,6 @@ public class PickIcon implements Initializable{
 
         @FXML
         private Button plant6BTN;
-
-        @FXML
-        private Button plant7BTN;
 
         @FXML
         private Button playBTN;
@@ -130,15 +122,17 @@ public class PickIcon implements Initializable{
         @FXML
         private VBox thrownVbox;
 
-        private ArrayList<ImageView> imageViews = new ArrayList<>(7);
+        private ArrayList<ImageView> imageViews = new ArrayList<>(6);
 
-        private ArrayList<String> plantsPicked = new ArrayList<>(7);
+        private ArrayList<String> plantsPicked = new ArrayList<>(6);
 
-        private ArrayList<Group> groupsOfPicked = new ArrayList<>(7);
+        private ArrayList<Group> groupsOfPicked = new ArrayList<>(6);
 
-        private ArrayList<Button> buttonsOfPicked = new ArrayList<>(7);
+        private ArrayList<Button> buttonsOfPicked = new ArrayList<>(6);
 
         private int choose = 0;
+
+        private static Object obj;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -167,6 +161,27 @@ public class PickIcon implements Initializable{
 
                     ((Stage)resetBTN.getScene().getWindow()).hide();
             });
+
+            homeBTN.setOnAction(event -> {
+                    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/HomePage.fxml"));
+                    try {
+                            loader.load();
+                    } catch (IOException e) {
+                            e.printStackTrace();
+                    }
+
+                    HomePage controller= loader.getController();
+                    Stage stage= new Stage();
+                    stage.setScene(new Scene(loader.getRoot()));
+
+                    stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                    stage.setFullScreen(true);
+                    stage.show();
+                    Stage oldStage = (Stage) homeBTN.getScene().getWindow();
+                    oldStage.close();
+            });
+
+            exitBTN.setOnAction(event -> Platform.exit());
 
             peashooterSelecterBTN.setOnAction(event -> {
                     if (selecter("pea shooter card", peaShooterImage))
@@ -201,8 +216,6 @@ public class PickIcon implements Initializable{
                         tallNutImage.setOpacity(0.45);
             });
 
-            exitBTN.setOnAction(event -> Platform.exit());
-
             plant1BTN.setOnAction(event -> {
                     playNButtton(group1, 0);
             });
@@ -221,29 +234,29 @@ public class PickIcon implements Initializable{
             plant6BTN.setOnAction(event -> {
                     playNButtton(group6, 5);
             });
-            plant7BTN.setOnAction(event -> {
-                    playNButtton(group7, 6);
-            });
 
             playBTN.setOnAction(event -> {
                     if (isFinish()){
-                            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/DayLevel.fxml"));
-                            try {
-                                    loader.load();
-                            } catch (IOException e) {
-                                    e.printStackTrace();
+                            if (obj instanceof DayLevel) {
+                                    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/DayLevel.fxml"));
+                                    try {
+                                            loader.load();
+                                    } catch (IOException e) {
+                                            e.printStackTrace();
+                                    }
+
+                                    DayLevel controller = loader.getController();
+                                    controller.setNames(plantsPicked);
+                                    Stage stage = new Stage();
+                                    stage.setScene(new Scene(loader.getRoot()));
+
+                                    stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                                    stage.setFullScreen(true);
+                                    stage.show();
+
+                                    ((Stage) resetBTN.getScene().getWindow()).hide();
+                                    FirstPage.stopAudio();
                             }
-
-                            DayLevel controller= loader.getController();
-                            controller.setNames(plantsPicked);
-                            Stage stage= new Stage();
-                            stage.setScene(new Scene(loader.getRoot()));
-
-                            stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
-                            stage.setFullScreen(true);
-                            stage.show();
-
-                            ((Stage)resetBTN.getScene().getWindow()).hide();
                     }
             });
     }
@@ -258,10 +271,10 @@ public class PickIcon implements Initializable{
             if (plantsPicked.contains(str)){
                     return false;
             }
-            if (choose == 7){
+            if (choose == 6){
                     return false;
             }
-            for (int i = 0 ; i < 7 ; i++){
+            for (int i = 0 ; i < 6 ; i++){
                     if(plantsPicked.get(i) == null){
                             plantsPicked.set(i, str);
                             groupsOfPicked.get(i).getChildren().remove(buttonsOfPicked.get(i));
@@ -291,7 +304,6 @@ public class PickIcon implements Initializable{
             buttonsOfPicked.add(plant4BTN);
             buttonsOfPicked.add(plant5BTN);
             buttonsOfPicked.add(plant6BTN);
-            buttonsOfPicked.add(plant7BTN);
     }
 
     public void setGroups(){
@@ -301,17 +313,16 @@ public class PickIcon implements Initializable{
             groupsOfPicked.add(group4);
             groupsOfPicked.add(group5);
             groupsOfPicked.add(group6);
-            groupsOfPicked.add(group7);
     }
 
     public void setPlants(){
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 6; i++) {
                     plantsPicked.add(null);
             }
     }
 
     public void setImages(){
-            for (int i = 0; i < 7; i++) {
+            for (int i = 0; i < 6; i++) {
                         imageViews .add(null);
             }
     }
@@ -341,8 +352,11 @@ public class PickIcon implements Initializable{
     }
 
     public boolean isFinish(){
-            return choose == 7;
+            return choose == 6;
     }
 
+    public static void setObj(Object object){
+            obj = object;
+    }
 
 }

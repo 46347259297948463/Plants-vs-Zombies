@@ -12,6 +12,7 @@ import javafx.util.Duration;
 public class Sun {
 
     private int row;
+
     private int column;
 
     private Group group = new Group();
@@ -73,4 +74,13 @@ public class Sun {
     public Button getButton() {
         return button;
     }
+
+    public void stop(){
+        timeline.stop();
+    }
+
+    public void play(){
+        timeline.play();
+    }
+
 }

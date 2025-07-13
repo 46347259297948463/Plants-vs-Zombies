@@ -12,14 +12,15 @@ public class WallNut extends NutPlants{
 
     private final static int HP = 10;
 
-    private final static int rechargeTime = 5;
-
     private Timeline timer;
 
-    public WallNut(int i, int j, Group group) {
-        super(HP, i, j, 50, rechargeTime);
-        this.group = group;
-        DayLevel.getInstance().setAvailablePicked(false, DayLevel.getInstance().getAvailableNum());
+    private static Group group;
+
+    private static int availableNum;
+
+    public WallNut(int i, int j) {
+        super(HP, i, j, 50, 8);
+        DayLevel.getInstance().setAvailablePicked(false, availableNum);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/wall nut.png").toString());
         imageView.setFitWidth(125);
         imageView.setFitHeight(130);
@@ -34,21 +35,39 @@ public class WallNut extends NutPlants{
         price = 50;
     }
 
-    @Override
-    public void end() {
-        group.setOpacity(1);
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
     }
 
     @Override
-    public Plants clonePlant(int row, int column, Group group) {
-        return new WallNut(row, column, group);
+    public void end() {
+
+    }
+
+    @Override
+    public Plants clonePlant(int row, int column) {
+        return new WallNut(row, column);
     }
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, DayLevel.getInstance().getAvailableNum());
+        DayLevel.getInstance().setAvailablePicked(true, availableNum);
         timer.stop();
         group.setOpacity(1);
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public void play() {
+
     }
 
 }

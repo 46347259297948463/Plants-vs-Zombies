@@ -7,9 +7,11 @@ import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-public class Jalapenos extends BombPlants{
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
-    private final static double rechargeTime = 10;
+public class Jalapenos extends BombPlants{
 
     private Cell[][] cells = DayLevel.getInstance().getCells();
 
@@ -17,10 +19,13 @@ public class Jalapenos extends BombPlants{
 
     private Timeline jalopenosTimer;
 
-    public Jalapenos(int i, int j, Group group) {
-        super(i, j, 125, rechargeTime);
-        this.group = group;
-        DayLevel.getInstance().setAvailablePicked(false, DayLevel.getInstance().getAvailableNum());
+    private static Group group;
+
+    private static int availableNum;
+
+    public Jalapenos(int i, int j) {
+        super(i, j, 125, 18);
+        DayLevel.getInstance().setAvailablePicked(false, availableNum);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/jalapenos.png").toString());
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);
@@ -31,7 +36,6 @@ public class Jalapenos extends BombPlants{
         );
         jalopenosTimer.setCycleCount(1);
         jalopenosTimer.play();
-
         group.setOpacity(0.7);
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
@@ -51,21 +55,38 @@ public class Jalapenos extends BombPlants{
         timer.play();
     }
 
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
+    }
+
     @Override
     public void end() {
         if (jalopenosTimer != null){
             jalopenosTimer.stop();
         }
-        group.setOpacity(1);
     }
 
     @Override
-    public Plants clonePlant(int row, int column, Group group) {
-        return new Jalapenos(row, column, group);
+    public Plants clonePlant(int row, int column) {
+        return new Jalapenos(row, column);
     }
 
     @Override
     public void BOMB() {
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/cherrybomb sound.wav")
+            );
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         for (int j = 0 ; j < 9 ; j++){
             cells[row][j].removeAllZombies();
         }
@@ -75,7 +96,20 @@ public class Jalapenos extends BombPlants{
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, DayLevel.getInstance().getAvailableNum());
+        DayLevel.getInstance().setAvailablePicked(true, availableNum);
         timer.stop();
-        group.setOpacity(1);}
+        group.setOpacity(1);
+    }
+
+    @Override
+    public void stop() {
+        jalopenosTimer.pause();
+
+    }
+
+    @Override
+    public void play() {
+        jalopenosTimer.play();
+    }
+
 }

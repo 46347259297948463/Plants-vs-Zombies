@@ -7,9 +7,11 @@ import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
-public class CherryBomb extends BombPlants{
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
-    private final static double rechargeTime = 8;
+public class CherryBomb extends BombPlants{
 
     private Timeline timer;
 
@@ -17,11 +19,13 @@ public class CherryBomb extends BombPlants{
 
     private Cell[][] cells = DayLevel.getInstance().getCells();
 
-    public CherryBomb(int i, int j, Group group) {
-        super(i, j, 150, rechargeTime);
-        this.group = group;
-        DayLevel.getInstance().setAvailablePicked(false, DayLevel.getInstance().getAvailableNum());
-//        System.out.println("availableNum = " + availableNum);;
+    private static Group group;
+
+    private static int availableNum;
+
+    public CherryBomb(int i, int j) {
+        super(i, j, 150, 15);
+        DayLevel.getInstance().setAvailablePicked(false, availableNum);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/cherry bomb.png").toString());
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);
@@ -51,79 +55,68 @@ public class CherryBomb extends BombPlants{
         timer.play();
     }
 
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
+    }
+
     @Override
     public void end() {
         if (cherryBombTimer != null){
             cherryBombTimer.stop();
         }
-        group.setOpacity(1);
     }
 
     @Override
-    public Plants clonePlant(int row, int column, Group group) {
-        return new CherryBomb(row, column, group);
+    public Plants clonePlant(int row, int column) {
+        return new CherryBomb(row, column);
     }
 
     @Override
     public void BOMB() {
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/cherrybomb sound.wav")
+            );
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int rows = cells.length;
+        int columns = cells[0].length;
 
-        if (column > 0 && row > 0){
-            cells[row-1][column-1].removeAllZombies();
-            System.out.println(1);
-        }
-        if (column > 0){
-            cells[row][column-1].removeAllZombies();
-            System.out.println(2);
-        }
-        if (column > 0 && row < 4){
-            cells[row + 1][column - 1].removeAllZombies();
-            System.out.println(3);
-        }
-        if (row > 0){
-            cells[row - 1][column].removeAllZombies();
-            System.out.println(4);
-        }
-        cells[row][column].removeAllZombies();
-        System.out.println(5);
-        if (row < 4){
-            cells[row + 1][column].removeAllZombies();
-            System.out.println(6);
-        }
-        if (column < 8 && row > 0){
-            cells[row -1][column + 1].removeAllZombies();
-            System.out.println(7);
-        }
-        if (column < 8){
-            cells[row][column + 1].removeAllZombies();
-            System.out.println(8);
-        }
-        if (column < 8 && row < 4){
-            cells[row + 1][column + 1].removeAllZombies();
-            System.out.println(9);
+        for (int i = row - 1; i <= row + 1; i++) {
+            for (int j = column - 1; j <= column + 1; j++) {
+                if (i >= 0 && i < rows && j >= 0 && j < columns) {
+                    cells[i][j].removeAllZombies();
+                }
+            }
         }
 
         DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
         cells[row][column].removePlant();
-        System.out.println("CherryBomb placed at row = " + row + ", column = " + column);
-//
-//        for (int dx = -1; dx <= 1; dx++) {
-//            for (int dy = -1; dy <= 1; dy++) {
-//                int newRow = row + dx;
-//                int newColumn = column + dy;
-//                if (newRow >= 0 && newRow < 5 && newColumn >= 0 && newColumn < 9) {
-//                    cells[newRow][newColumn].removeAllZombies();
-//                }
-//            }
-//        }
-//        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-//        cells[row][column].removePlant();
     }
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, DayLevel.getInstance().getAvailableNum());
+        DayLevel.getInstance().setAvailablePicked(true, availableNum);
         timer.stop();
         group.setOpacity(1);
+    }
+
+    @Override
+    public void stop(){
+        cherryBombTimer.pause();
+    }
+
+    @Override
+    public void play() {
+        cherryBombTimer.play();
     }
 
 }

@@ -24,7 +24,6 @@ public abstract class PeaPlants extends Plants{
         if (shootTimer != null){
             shootTimer.stop();
         }
-        group.setOpacity(1);
     }
 
 }

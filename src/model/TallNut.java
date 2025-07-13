@@ -4,7 +4,6 @@ import controller.DayLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
@@ -12,14 +11,15 @@ public class TallNut extends NutPlants{
 
     private final static int HP = 16;
 
-    private final static double rechargeTime = 8;
-
     private Timeline timer;
 
-    public TallNut(int i, int j, Group group) {
-        super(HP, i, j, 125, rechargeTime);
-        this.group = group;
-        DayLevel.getInstance().setAvailablePicked(false, DayLevel.getInstance().getAvailableNum());
+    private static Group group;
+
+    private static int availableNum;
+
+    public TallNut(int i, int j) {
+        super(HP, i, j, 125, 12);
+        DayLevel.getInstance().setAvailablePicked(false, availableNum);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/tall nut.png").toString());
         imageView.setFitWidth(140);
         imageView.setFitHeight(190);
@@ -34,21 +34,39 @@ public class TallNut extends NutPlants{
         price = 125;
     }
 
-    @Override
-    public void end() {
-        group.setOpacity(1);
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
     }
 
     @Override
-    public Plants clonePlant(int row, int column, Group group) {
-        return new TallNut(row, column, group);
+    public void end() {
+    }
+
+    @Override
+    public Plants clonePlant(int row, int column) {
+        return new TallNut(row, column);
     }
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, DayLevel.getInstance().getAvailableNum());
+        DayLevel.getInstance().setAvailablePicked(true, availableNum);
         timer.stop();
         group.setOpacity(1);
     }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public void play() {
+
+    }
+
 
 }

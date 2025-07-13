@@ -34,18 +34,19 @@ public class Cell {
     }
 
     public void setZombies(Zombie zombie){
-        if (zombies == null){
+        if (zombies == null || zombies.isEmpty()){
             zombies = new ArrayList<>();
         }
         zombies.add(zombie);
     }
 
     public void removePlant(){
+        plant.end();
         this.plant = null;
     }
 
     public void removeZombie(Zombie zombie){
-        if (zombies == null){
+        if (zombies == null || zombies.isEmpty()){
             return;
         }
         zombies.remove(zombie);
@@ -79,16 +80,14 @@ public class Cell {
     }
 
     public void removeAllZombies(){
-        if (zombies != null){
-            while (zombies.size() > 0){
-                zombies.get(0).setHP(0);
-                zombies.get(0).dead();
-                this.removeZombie(zombies.get(0));
-                System.out.println("zombie.rowBTN = " + zombies.get(0).rowBTN);
-                System.out.println("zombie.columnBTN = " + zombies.get(0).columnBTN);
+        if (zombies != null && !zombies.isEmpty()){
+            ArrayList<Zombie> temp = new ArrayList<>(zombies);
+            for (Zombie zombie : temp){
+                zombie.setHP(0);
+                zombie.dead();
             }
+            zombies.clear();
         }
         zombies = null;
     }
-
 }

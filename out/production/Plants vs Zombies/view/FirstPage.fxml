@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="1203.0" prefWidth="2384.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FirstPage">
+   <children>
+      <ImageView fitHeight="1133.0" fitWidth="2108.0" layoutX="38.0" layoutY="53.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@images/upscalemedia-transformed.jpeg" />
+         </image>
+      </ImageView>
+      <ProgressBar fx:id="progressBar" layoutX="405.0" layoutY="981.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="82.0" prefWidth="1257.0" progress="0.69" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="1325.0" prefWidth="1970.0" xmlns="http://javafx.com/javafx/8.0.441" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomePage">
+   <children>
+      <ImageView fitHeight="1344.0" fitWidth="1970.0" layoutX="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <image>
+            <Image url="@images/Copilot_20250706_173805.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="dayBTN" layoutX="309.0" layoutY="828.0" mnemonicParsing="false" opacity="0.0" prefHeight="108.0" prefWidth="202.0" />
+      <Button fx:id="nightBTN" layoutX="725.0" layoutY="749.0" mnemonicParsing="false" opacity="0.0" prefHeight="108.0" prefWidth="332.0" />
+      <Button fx:id="fogBTN" layoutX="1232.0" layoutY="816.0" mnemonicParsing="false" opacity="0.0" prefHeight="108.0" prefWidth="212.0" />
+      <ImageView fitHeight="247.0" fitWidth="713.0" layoutX="1595.0" layoutY="801.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/458716b16df090cca4dec4c5e233748c.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="exitBTN" layoutX="1643.0" layoutY="856.0" mnemonicParsing="false" opacity="0.0" prefHeight="94.0" prefWidth="173.0" />
+   </children>
+</AnchorPane>

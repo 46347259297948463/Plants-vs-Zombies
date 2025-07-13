@@ -7,6 +7,9 @@ import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.util.ArrayList;
 
 public class Repeater extends PeaPlants{
@@ -14,8 +17,6 @@ public class Repeater extends PeaPlants{
     private final static int HP = 4;
 
     private final static int bullets = 2;
-
-    private final static double rechargeTime = 7;
 
     private Bullet bullet1;
 
@@ -37,10 +38,13 @@ public class Repeater extends PeaPlants{
 
     private Timeline timer;
 
-    public Repeater(int i, int j, Group group) {
-        super(HP, i, j, 200, bullets, rechargeTime);
-        this.group = group;
-        DayLevel.getInstance().setAvailablePicked(false, DayLevel.getInstance().getAvailableNum());
+    private static Group group;
+
+    private static int availableNum;
+
+    public Repeater(int i, int j) {
+        super(HP, i, j, 200, bullets, 10);
+        DayLevel.getInstance().setAvailablePicked(false, availableNum);
         cells = DayLevel.getInstance().getCells();
         setZombie();
         ImageView imageView = new ImageView(getClass().getResource("/view/images/repeater.png").toString());
@@ -62,25 +66,43 @@ public class Repeater extends PeaPlants{
         price = 200;
     }
 
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
+    }
+
+
     @Override
     public void shoot(Zombie zombie) {
         setZombie();
-        if (endRow1 == -1 || zombie1 == null || zombie1.isDead()) {
-            return;
-        } else if (endRow1 != -1) {
+
+        if (zombie1 != null && !zombie1.isDead()) {
             if (moveBulletTimer1 != null) {
                 DayLevel.getInstance().getDayAnc().getChildren().remove(bullet1.getImageView());
                 moveBulletTimer1.stop();
             }
             bullet1 = new Bullet(row, column);
+            try {
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                        getClass().getResource("/view/audio/hit sound.wav")
+                );
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                clip.loop(1);
+                clip.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             DayLevel.getInstance().getDayAnc().getChildren().add(bullet1.getImageView());
             moveBulletTimer1 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet1()));
             moveBulletTimer1.setCycleCount(Timeline.INDEFINITE);
             moveBulletTimer1.play();
         }
-        if (endRow2 == -1 || zombie2 == null || zombie2.isDead()) {
-            return;
-        } else if (endRow2 != -1) {
+
+        if (zombie2 != null && !zombie2.isDead()) {
             if (moveBulletTimer2 != null) {
                 DayLevel.getInstance().getDayAnc().getChildren().remove(bullet2.getImageView());
                 moveBulletTimer2.stop();
@@ -125,29 +147,34 @@ public class Repeater extends PeaPlants{
     }
 
     @Override
-    public Plants clonePlant(int row, int column, Group group) {
-        return new Repeater(row, column, group);
+    public Plants clonePlant(int row, int column) {
+        return new Repeater(row, column);
     }
 
-    private void setZombie(){
+    private void setZombie() {
         int j = row;
         zombie1 = null;
         zombie2 = null;
         double min1 = Double.MAX_VALUE;
         double min2 = Double.MAX_VALUE;
+
         for (int i = column; i < 9; i++) {
             ArrayList<Zombie> zombies = cells[j][i].getZombies();
             if (zombies != null && !zombies.isEmpty()) {
                 for (Zombie z : zombies) {
                     if (z.isDead()) continue;
-                    if (z.getColumn() < min1) {
+
+                    double zombieX = z.getColumn();
+                    if (zombieX < min1) {
+                        // شیفت زامبی اول به دوم
                         zombie2 = zombie1;
                         min2 = min1;
+
                         zombie1 = z;
-                        min1 = z.getColumn();
-                    } else if (z.getColumn() < min2) {
+                        min1 = zombieX;
+                    } else if (zombieX < min2 && z != zombie1) {
                         zombie2 = z;
-                        min2 = z.getColumn();
+                        min2 = zombieX;
                     }
                 }
             }
@@ -159,18 +186,42 @@ public class Repeater extends PeaPlants{
             endRow1 = -1;
         }
 
-        if (zombie2 != null) {
+        if (zombie2 != null && zombie1.getHP() == 1) {
             endRow2 = min2;
         } else {
-            endRow2 = -1;
+            zombie2 = zombie1;
+            endRow2 = min1;
         }
     }
 
+
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, DayLevel.getInstance().getAvailableNum());
+        DayLevel.getInstance().setAvailablePicked(true, availableNum);
         timer.stop();
         group.setOpacity(1);
+    }
+
+    @Override
+    public void stop(){
+        if (moveBulletTimer1 != null){
+            moveBulletTimer1.pause();
+        }
+        if (moveBulletTimer2 != null){
+            moveBulletTimer2.pause();
+        }
+        shootTimer.pause();
+    }
+
+    @Override
+    public void play(){
+        if (moveBulletTimer1 != null){
+            moveBulletTimer1.play();
+        }
+        if (moveBulletTimer2 != null){
+            moveBulletTimer2.play();
+        }
+        shootTimer.play();
     }
 
 }

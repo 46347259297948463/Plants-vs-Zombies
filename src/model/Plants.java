@@ -1,7 +1,6 @@
 package model;
 
 
-import controller.DayLevel;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 
@@ -18,8 +17,6 @@ public abstract class Plants {
 
     protected double rechargeTime;
 
-    protected Group group;
-
     public Plants(int hp, int i, int j, int price, double rechargeTime){
         HP = hp;
         row = i;
@@ -34,7 +31,7 @@ public abstract class Plants {
 
     public abstract void end();
 
-    public abstract Plants clonePlant(int row, int column, Group group);
+    public abstract Plants clonePlant(int row, int column);
 
     public String getName() {
         return this.getClass().getSimpleName().toLowerCase();
@@ -73,5 +70,9 @@ public abstract class Plants {
     }
 
     protected abstract void recharge();
+
+    public abstract void stop();
+
+    public abstract void play();
 
 }

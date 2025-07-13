@@ -7,6 +7,9 @@ import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import java.util.ArrayList;
 
 public class PeaShooter extends PeaPlants {
@@ -14,8 +17,6 @@ public class PeaShooter extends PeaPlants {
     private final static int HP = 4;
 
     private final static int bullets = 1;
-
-    private final static double rechargeTime = 4;
 
     private Bullet bullet;
 
@@ -29,10 +30,13 @@ public class PeaShooter extends PeaPlants {
 
     private Timeline timer;
 
-    public PeaShooter(int i, int j, Group group) {
-        super(HP, i, j, 100, bullets, rechargeTime);
-        this.group = group;
-        DayLevel.getInstance().setAvailablePicked(false, DayLevel.getInstance().getAvailableNum());
+    private static Group group;
+
+    private static int availableNum;
+
+    public PeaShooter(int i, int j) {
+        super(HP, i, j, 100, bullets, 6);
+        DayLevel.getInstance().setAvailablePicked(false, availableNum);
         cells = DayLevel.getInstance().getCells();
         endRow = setZombie();
         ImageView imageView = new ImageView(getClass().getResource("/view/images/pea shooter.png").toString());
@@ -54,6 +58,14 @@ public class PeaShooter extends PeaPlants {
         price = 100;
     }
 
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
+    }
+
     @Override
     public void shoot(Zombie zombie) {
         endRow = setZombie();
@@ -65,6 +77,16 @@ public class PeaShooter extends PeaPlants {
                 moveBulletTimer.stop();
             }
             bullet = new Bullet(row, column);
+            try {
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                        getClass().getResource("/view/audio/hit sound.wav")
+                );
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                clip.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
             moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet(endRow)));
             moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
@@ -89,8 +111,8 @@ public class PeaShooter extends PeaPlants {
     }
 
     @Override
-    public Plants clonePlant(int row, int column, Group group) {
-        return new PeaShooter(row, column, group);
+    public Plants clonePlant(int row, int column) {
+        return new PeaShooter(row, column);
     }
 
     private double setZombie() {
@@ -119,9 +141,28 @@ public class PeaShooter extends PeaPlants {
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, DayLevel.getInstance().getAvailableNum());
+        DayLevel.getInstance().setAvailablePicked(true, availableNum);
         timer.stop();
         group.setOpacity(1);
     }
 
+    @Override
+    public void stop(){
+        if (moveBulletTimer != null){
+            moveBulletTimer.pause();
+        }
+        if (shootTimer != null) {
+            shootTimer.pause();
+        }
+    }
+
+    @Override
+    public void play(){
+        if (moveBulletTimer != null){
+            moveBulletTimer.play();
+        }
+        if (shootTimer != null) {
+            shootTimer.play();
+        }
+    }
 }

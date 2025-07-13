@@ -9,10 +9,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="dayAnc" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1203.0" prefWidth="2015.0" style="-fx-background-image: url('../images/chatgpt_bg_2025_06_08.png'); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8.0.441" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DayLevel">
+<AnchorPane fx:id="dayAnc" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1203.0" prefWidth="1920.0" style="-fx-background-image: url('../images/chatgpt_bg_2025_06_08.png'); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8.0.441" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DayLevel">
     <children>
-      <ImageView fitHeight="1158.0" fitWidth="1920.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ImageView fitHeight="1158.0" fitWidth="1920.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
             <Image url="@images/Frontyard%20(1).png" />
          </image>
@@ -28,7 +29,7 @@
                   </Group>
                   <Group fx:id="group01">
                      <children>
-                        <Button fx:id="cell01" mnemonicParsing="false" opacity="0.0" prefHeight="187.0" prefWidth="137.0" />
+                        <Button fx:id="cell01" mnemonicParsing="false" opacity="0.0" prefHeight="189.0" prefWidth="137.0" />
                      </children>
                   </Group>
                   <Group fx:id="group02">
@@ -59,6 +60,7 @@
                   <Group fx:id="group07">
                      <children>
                         <Button fx:id="cell07" mnemonicParsing="false" opacity="0.0" prefHeight="190.0" prefWidth="149.0" />
+                        <Button fx:id="menuBTN" layoutX="72.0" layoutY="-7.0" mnemonicParsing="false" opacity="0.0" prefHeight="44.0" prefWidth="154.0" />
                      </children>
                   </Group>
                   <Group fx:id="group08">
@@ -72,7 +74,7 @@
                <children>
                   <Group fx:id="group10">
                      <children>
-                        <Button fx:id="cell10" mnemonicParsing="false" opacity="0.0" prefHeight="178.0" prefWidth="149.0" />
+                        <Button fx:id="cell10" mnemonicParsing="false" opacity="0.0" prefHeight="178.0" prefWidth="146.0" />
                      </children>
                   </Group>
                   <Group fx:id="group11">
@@ -82,7 +84,7 @@
                   </Group>
                   <Group fx:id="group12">
                      <children>
-                        <Button fx:id="cell12" layoutX="14.0" layoutY="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="177.0" prefWidth="162.0" />
+                        <Button fx:id="cell12" layoutX="28.0" layoutY="3.0" mnemonicParsing="false" opacity="0.0" prefHeight="177.0" prefWidth="165.0" />
                      </children>
                   </Group>
                   <Group fx:id="group13">
@@ -92,17 +94,17 @@
                   </Group>
                   <Group fx:id="group14">
                      <children>
-                        <Button fx:id="cell14" mnemonicParsing="false" opacity="0.0" prefHeight="187.0" prefWidth="152.0" />
+                        <Button fx:id="cell14" mnemonicParsing="false" opacity="0.0" prefHeight="187.0" prefWidth="149.0" />
                      </children>
                   </Group>
                   <Group fx:id="group15">
                      <children>
-                        <Button fx:id="cell15" mnemonicParsing="false" opacity="0.0" prefHeight="187.0" prefWidth="163.0" />
+                        <Button fx:id="cell15" mnemonicParsing="false" opacity="0.0" prefHeight="189.0" prefWidth="163.0" />
                      </children>
                   </Group>
                   <Group fx:id="group16">
                      <children>
-                        <Button fx:id="cell16" mnemonicParsing="false" opacity="0.0" prefHeight="185.0" prefWidth="141.0" />
+                        <Button fx:id="cell16" mnemonicParsing="false" opacity="0.0" prefHeight="185.0" prefWidth="134.0" />
                      </children>
                   </Group>
                   <Group fx:id="group17">
@@ -112,7 +114,7 @@
                   </Group>
                   <Group fx:id="group18">
                      <children>
-                        <Button fx:id="cell18" mnemonicParsing="false" opacity="0.0" prefHeight="186.0" prefWidth="163.0" />
+                        <Button fx:id="cell18" mnemonicParsing="false" opacity="0.0" prefHeight="185.0" prefWidth="184.0" />
                      </children>
                   </Group>
                </children>
@@ -121,12 +123,12 @@
                <children>
                   <Group fx:id="group20">
                      <children>
-                        <Button fx:id="cell20" mnemonicParsing="false" opacity="0.0" prefHeight="188.0" prefWidth="153.0" />
+                        <Button fx:id="cell20" mnemonicParsing="false" opacity="0.0" prefHeight="188.0" prefWidth="147.0" />
                      </children>
                   </Group>
                   <Group fx:id="group21">
                      <children>
-                        <Button fx:id="cell21" mnemonicParsing="false" opacity="0.0" prefHeight="188.0" prefWidth="143.0" />
+                        <Button fx:id="cell21" mnemonicParsing="false" opacity="0.0" prefHeight="188.0" prefWidth="149.0" />
                      </children>
                   </Group>
                   <Group fx:id="group22">
@@ -180,7 +182,7 @@
                   </Group>
                   <Group fx:id="group32">
                      <children>
-                        <Button fx:id="cell32" mnemonicParsing="false" opacity="0.0" prefHeight="171.0" prefWidth="163.0" />
+                        <Button fx:id="cell32" mnemonicParsing="false" opacity="0.0" prefHeight="165.0" prefWidth="163.0" />
                      </children>
                   </Group>
                   <Group fx:id="group33">
@@ -190,12 +192,12 @@
                   </Group>
                   <Group fx:id="group34">
                      <children>
-                        <Button fx:id="cell34" mnemonicParsing="false" opacity="0.0" prefHeight="166.0" prefWidth="152.0" />
+                        <Button fx:id="cell34" mnemonicParsing="false" opacity="0.0" prefHeight="163.0" prefWidth="152.0" />
                      </children>
                   </Group>
                   <Group fx:id="group35">
                      <children>
-                        <Button fx:id="cell35" mnemonicParsing="false" opacity="0.0" prefHeight="168.0" prefWidth="163.0" />
+                        <Button fx:id="cell35" mnemonicParsing="false" opacity="0.0" prefHeight="161.0" prefWidth="163.0" />
                      </children>
                   </Group>
                   <Group fx:id="group36">
@@ -210,7 +212,7 @@
                   </Group>
                   <Group fx:id="group38">
                      <children>
-                        <Button fx:id="cell38" mnemonicParsing="false" opacity="0.0" prefHeight="163.0" prefWidth="181.0" />
+                        <Button fx:id="cell38" mnemonicParsing="false" opacity="0.0" prefHeight="156.0" prefWidth="181.0" />
                      </children>
                   </Group>
                </children>
@@ -254,50 +256,49 @@
                   </Group>
                   <Group fx:id="group47">
                      <children>
-                        <Button fx:id="cell47" mnemonicParsing="false" opacity="0.0" prefHeight="188.0" prefWidth="163.0" />
+                        <Button fx:id="cell47" mnemonicParsing="false" opacity="0.0" prefHeight="188.0" prefWidth="149.0" />
                      </children>
                   </Group>
                   <Group fx:id="group48">
                      <children>
-                        <Button fx:id="cell48" mnemonicParsing="false" opacity="0.0" prefHeight="181.0" prefWidth="163.0" />
+                        <Button fx:id="cell48" mnemonicParsing="false" opacity="0.0" prefHeight="181.0" prefWidth="182.0" />
                      </children>
                   </Group>
                </children>
             </HBox>
          </children>
       </VBox>
-        <HBox layoutX="283.2" layoutY="30.0" prefHeight="58.0" prefWidth="230.0" spacing="8.0" style="-fx-background-color: #A0522D;" AnchorPane.leftAnchor="283.0" AnchorPane.topAnchor="30.0">
+        <HBox layoutX="31.2" layoutY="28.8" prefHeight="66.0" prefWidth="230.0" spacing="5.0" style="-fx-background-color: #A0522D;" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="29.0">
             <children>
-                <ImageView fitHeight="75.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="67.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@images/Sun.png" />
                     </image>
                 </ImageView>
-                <Label fx:id="sunPoints" alignment="CENTER" contentDisplay="CENTER" prefHeight="44.0" prefWidth="145.0" style="-fx-background-color: #F0C878;" text="0" textAlignment="RIGHT">
+                <Label fx:id="sunPoints" alignment="CENTER" contentDisplay="CENTER" prefHeight="62.0" prefWidth="58.0" style="-fx-background-color: #F0C878;" text="0" textAlignment="RIGHT">
                <HBox.margin>
-                  <Insets top="10.0" />
+                  <Insets bottom="5.0" top="5.0" />
                </HBox.margin></Label>
-            <AnchorPane prefHeight="48.0" prefWidth="68.0" style="-fx-background-color: #7B3F1D;">
+            <AnchorPane prefHeight="37.0" prefWidth="75.0" style="-fx-background-color: #7B3F1D;">
                <children>
-                      <Group>
+                      <Group AnchorPane.topAnchor="0.0">
                           <children>
-                              <ImageView fitHeight="50.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="243.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
                                   <image>
                                       <Image url="@images/shovel.png" />
                                   </image>
                               </ImageView>
-                              <Button fx:id="shovelBTN" layoutY="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="44.0" prefWidth="73.0" />
+                              <Button fx:id="shovelBTN" layoutY="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="55.0" prefWidth="93.0" />
                           </children>
                       </Group>
                </children>
                <HBox.margin>
-                  <Insets bottom="8.0" right="8.0" top="8.0" />
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
                </HBox.margin>
             </AnchorPane>
             </children>
         </HBox>
-        <Button fx:id="menuBTN" layoutX="1208.0" layoutY="25.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="130.0" text="Menu" AnchorPane.rightAnchor="29.59999999999991" AnchorPane.topAnchor="25.0" />
-      <VBox layoutX="38.0" layoutY="65.0" prefHeight="815.0" prefWidth="178.0" spacing="5.0">
+      <VBox layoutX="38.0" layoutY="65.0" prefHeight="815.0" prefWidth="178.0" spacing="5.0" AnchorPane.leftAnchor="73.0" AnchorPane.topAnchor="123.0">
          <children>
             <Group fx:id="group1">
                <children>
@@ -329,15 +330,21 @@
                   <Button fx:id="plant6BTN" mnemonicParsing="false" opacity="0.45" prefHeight="111.0" prefWidth="177.0" />
                </children>
             </Group>
-            <Group fx:id="group7">
-               <children>
-                  <Button fx:id="plant7BTN" mnemonicParsing="false" opacity="0.45" prefHeight="111.0" prefWidth="177.0" />
-               </children>
-            </Group>
          </children>
          <opaqueInsets>
             <Insets top="50.0" />
          </opaqueInsets>
       </VBox>
+      <ImageView fx:id="box" fitHeight="55.0" fitWidth="121.0" layoutX="1597.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="40.0">
+         <image>
+            <Image url="@images/Copilot_20250708_122504-removebg-preview.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="1739.0" layoutY="46.0" prefHeight="31.0" prefWidth="166.0" text="       Menu" textAlignment="CENTER" textFill="#21ac09">
+         <font>
+            <Font name="Bauhaus 93" size="27.0" />
+         </font>
+      </Label>
+      <Button fx:id="menuBTN" layoutX="1758.0" layoutY="40.0" mnemonicParsing="false" opacity="0.0" prefHeight="46.0" prefWidth="121.0" textAlignment="CENTER" />
     </children>
 </AnchorPane>

@@ -9,6 +9,10 @@ import javafx.util.Duration;
 
 import controller.DayLevel;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 public class Zombie {
     protected double row;
 
@@ -36,12 +40,21 @@ public class Zombie {
 
     private double currentWidthBTN;
 
+    private Timeline updateTimer;
+
+    private Clip clip;
+
+    private static boolean lose = false;
+
     public Zombie(double x, double y, int rowBTN){
         this.column = x;
         this.row = y;
         this.rowBTN = rowBTN;
         setImageOnAnc();
         startMove();
+        updateTimer = new Timeline(new KeyFrame(Duration.millis(10), event -> update()));
+        updateTimer.setCycleCount(Timeline.INDEFINITE);
+        updateTimer.play();
     }
 
     protected void setImageOnAnc(){
@@ -67,62 +80,73 @@ public class Zombie {
 
     private void stopMove(){
         if(moveTimeline != null){
-            moveTimeline.stop();
+            moveTimeline.pause();
+            moveTimeline = null;
         }
     }
 
     public void move(){
-       if (columnBTN > -1){
-           if (!eat()){
-               column -= speed/2;
-               image.setLayoutX(column);
-           } else {
-               moveTimeline.stop();
-               eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-                   Plants plant = DayLevel.getInstance().getCells()[rowBTN][columnBTN].getPlant();
-                   if(plant != null){
-                       plant.takeDamage(1);
-                       if (plant.isDead()){
-                           DayLevel.getInstance().getCells()[rowBTN][columnBTN].getGroup().getChildren().remove(plant.getImage());
-                           DayLevel.getInstance().getCells()[rowBTN][columnBTN].removePlant();
-                           plant.end();
-                           eatTimeline.stop();
-                           moveTimeline = null;
-                           startMove();
-                       }
-                   } else {
-                       eatTimeline.stop();
-                       moveTimeline = null;
-                       startMove();
-                   }
-               }));
-               eatTimeline.setCycleCount(Timeline.INDEFINITE);
-               eatTimeline.play();
-           }
-       }
-        update();
+        if (columnBTN > -1){
+            if (!eat()){
+                column -= speed/2;
+                image.setLayoutX(column);
+            } else {
+                try {
+                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                            getClass().getResource("/view/audio/eating sound.wav")
+                    );
+                    clip = AudioSystem.getClip();
+                    clip.open(audioStream);
+                    clip.loop(Clip.LOOP_CONTINUOUSLY);
+                    clip.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                moveTimeline.stop();
+                eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                    Plants plant = DayLevel.getInstance().getCells()[rowBTN][columnBTN].getPlant();
+                    if(plant != null){
+                        plant.takeDamage(1);
+                        if (plant.isDead()){
+                            DayLevel.getInstance().getCells()[rowBTN][columnBTN].getGroup().getChildren().remove(plant.getImage());
+                            DayLevel.getInstance().getCells()[rowBTN][columnBTN].removePlant();
+                            plant.end();
+                            eatTimeline.stop();
+                            moveTimeline = null;
+                            clip.stop();
+                            startMove();
+                        }
+                    } else {
+                        eatTimeline.stop();
+                        moveTimeline = null;
+                        clip.stop();
+                        startMove();
+                    }
+                }));
+                eatTimeline.setCycleCount(Timeline.INDEFINITE);
+                eatTimeline.play();
+            }
+        }
     }
 
-    private void update(){
-        if (limitColumn > column){
-
+    private void update() {
+        if (limitColumn > column) {
+            if (columnBTN >= 0 && columnBTN < 9) {
+                DayLevel.getInstance().getCells()[rowBTN][columnBTN].removeZombie(this);
+            }
             columnBTN--;
+            if (columnBTN < 0) {
+                if (!lose){
+                    DayLevel.getInstance().lose();
+                    lose = true;
+                }
+                return;
+            }
             currentWidthBTN = DayLevel.getInstance().getCells()[rowBTN][columnBTN].getButton().getWidth();
             limitColumn = column - currentWidthBTN;
-        }
-        DayLevel.getInstance().columnLBL.setText(columnBTN + "");
-        DayLevel.getInstance().rowLBL.setText(rowBTN + "");
-        if (columnBTN < 8){
-            DayLevel.getInstance().getCells()[rowBTN][columnBTN + 1].removeZombie(this);
-        } else if (columnBTN == 9){
-            columnBTN -= 1;
-        }
-        if(columnBTN < 0){
-            DayLevel.getInstance().exitGame();
-        } else {
             DayLevel.getInstance().getCells()[rowBTN][columnBTN].setZombies(this);
         }
-        if(isDead()){
+        if (isDead()) {
             stopMove();
             isRemoved = true;
             return;
@@ -162,17 +186,27 @@ public class Zombie {
         return column;
     }
 
-    public int getHP() {
-        return HP;
-    }
-
     public int getSpeed() {
         return speed;
+    }
+
+    public int getHP() {
+        return HP;
     }
 
     public void dead(){
         DayLevel.getInstance().getCells()[rowBTN][columnBTN].removeZombie(this);
         DayLevel.getInstance().getDayAnc().getChildren().remove(this.image);
+        updateTimer.stop();
     }
 
+    public void stop() {
+        stopMove();
+//        updateTimer.stop();
+    }
+
+    public void play() {
+        startMove();
+//        updateTimer.play();
+    }
 }
