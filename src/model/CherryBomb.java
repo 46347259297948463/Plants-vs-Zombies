@@ -55,28 +55,13 @@ public class CherryBomb extends BombPlants{
         timer.play();
     }
 
-    public static void setAvailableNum(int a) {
-        availableNum = a;
-    }
-
-    public static void setGroup(Group g) {
-        group = g;
-    }
-
-    @Override
-    public void end() {
-        if (cherryBombTimer != null){
-            cherryBombTimer.stop();
-        }
-    }
-
     @Override
     public Plants clonePlant(int row, int column) {
         return new CherryBomb(row, column);
     }
 
     @Override
-    public void BOMB() {
+    protected void BOMB() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
                     getClass().getResource("/view/audio/cherrybomb sound.wav")
@@ -110,6 +95,13 @@ public class CherryBomb extends BombPlants{
     }
 
     @Override
+    public void end() {
+        if (cherryBombTimer != null){
+            cherryBombTimer.stop();
+        }
+    }
+
+    @Override
     public void stop(){
         cherryBombTimer.pause();
     }
@@ -117,6 +109,14 @@ public class CherryBomb extends BombPlants{
     @Override
     public void play() {
         cherryBombTimer.play();
+    }
+
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
     }
 
 }

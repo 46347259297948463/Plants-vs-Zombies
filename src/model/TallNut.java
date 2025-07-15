@@ -34,18 +34,6 @@ public class TallNut extends NutPlants{
         price = 125;
     }
 
-    public static void setAvailableNum(int a) {
-        availableNum = a;
-    }
-
-    public static void setGroup(Group g) {
-        group = g;
-    }
-
-    @Override
-    public void end() {
-    }
-
     @Override
     public Plants clonePlant(int row, int column) {
         return new TallNut(row, column);
@@ -59,6 +47,10 @@ public class TallNut extends NutPlants{
     }
 
     @Override
+    public void end() {
+    }
+
+    @Override
     public void stop() {
 
     }
@@ -66,6 +58,14 @@ public class TallNut extends NutPlants{
     @Override
     public void play() {
 
+    }
+
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
     }
 
 

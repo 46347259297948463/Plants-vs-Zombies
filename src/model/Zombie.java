@@ -7,8 +7,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-import controller.DayLevel;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -26,7 +24,7 @@ public class Zombie {
 
     private Timeline moveTimeline;
 
-    protected boolean isRemoved = false;
+//    protected boolean isRemoved = false;
 
     private int i = 0;
 
@@ -80,16 +78,17 @@ public class Zombie {
 
     private void stopMove(){
         if(moveTimeline != null){
-            moveTimeline.pause();
+            moveTimeline.stop();
             moveTimeline = null;
         }
     }
 
-    public void move(){
+    private void move(){
         if (columnBTN > -1){
             if (!eat()){
                 column -= speed/2;
                 image.setLayoutX(column);
+//                eatTimeline.pause();
             } else {
                 try {
                     AudioInputStream audioStream = AudioSystem.getAudioInputStream(
@@ -113,6 +112,7 @@ public class Zombie {
                             plant.end();
                             eatTimeline.stop();
                             moveTimeline = null;
+                            eatTimeline = null;
                             clip.stop();
                             startMove();
                         }
@@ -148,7 +148,7 @@ public class Zombie {
         }
         if (isDead()) {
             stopMove();
-            isRemoved = true;
+            dead();
             return;
         }
         image.setLayoutX(column);
@@ -164,6 +164,34 @@ public class Zombie {
 
     public boolean isDead(){
         return HP <= 0;
+    }
+
+    public void dead(){
+        DayLevel.getInstance().getCells()[rowBTN][columnBTN].removeZombie(this);
+        DayLevel.getInstance().getDayAnc().getChildren().remove(this.image);
+        if (updateTimer != null) {
+            updateTimer.stop();
+        }
+        if (moveTimeline != null) {
+            moveTimeline.stop();
+        }
+        if (eatTimeline != null) {
+            eatTimeline.stop();
+        }
+        if (clip != null) {
+            clip.stop();
+            clip.close();
+            clip = null;
+        }
+
+    }
+
+    public void stop() {
+        stopMove();
+    }
+
+    public void play() {
+        startMove();
     }
 
     public void setSpeed(int speed) {
@@ -194,19 +222,4 @@ public class Zombie {
         return HP;
     }
 
-    public void dead(){
-        DayLevel.getInstance().getCells()[rowBTN][columnBTN].removeZombie(this);
-        DayLevel.getInstance().getDayAnc().getChildren().remove(this.image);
-        updateTimer.stop();
-    }
-
-    public void stop() {
-        stopMove();
-//        updateTimer.stop();
-    }
-
-    public void play() {
-        startMove();
-//        updateTimer.play();
-    }
 }

@@ -22,4 +22,5 @@ public class ConeheadZombie extends Zombie{
         imageV.setFitWidth(190);
         DayLevel.getInstance().getDayAnc().getChildren().add(imageV);
     }
+
 }

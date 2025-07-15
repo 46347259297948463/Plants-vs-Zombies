@@ -1,11 +1,11 @@
 package model;
 
 
-import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 
 public abstract class Plants {
-    protected int HP;
+
+    private int HP;
 
     protected int row;
 
@@ -29,14 +29,6 @@ public abstract class Plants {
 
     }
 
-    public abstract void end();
-
-    public abstract Plants clonePlant(int row, int column);
-
-    public String getName() {
-        return this.getClass().getSimpleName().toLowerCase();
-    }
-
     public void takeDamage(int damage){
         HP -= damage;
     }
@@ -45,8 +37,18 @@ public abstract class Plants {
         return HP <= 0;
     }
 
-    public int getHP() {
-        return HP;
+    public abstract Plants clonePlant(int row, int column);
+
+    protected abstract void recharge();
+
+    public abstract void stop();
+
+    public abstract void play();
+
+    public abstract void end();
+
+    public void setImage(ImageView image) {
+        this.image = image;
     }
 
     public int getRow() {
@@ -65,14 +67,11 @@ public abstract class Plants {
         return image;
     }
 
-    public void setImage(ImageView image) {
-        this.image = image;
+    public int getHP() {
+        return HP;
     }
 
-    protected abstract void recharge();
-
-    public abstract void stop();
-
-    public abstract void play();
-
+    public void setHP(int HP) {
+        this.HP = HP;
+    }
 }

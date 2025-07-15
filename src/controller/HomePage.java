@@ -56,6 +56,6 @@ public class HomePage implements Initializable {
             Stage oldStage = (Stage) dayBTN.getScene().getWindow();
             oldStage.close();
         });
-
     }
+
 }

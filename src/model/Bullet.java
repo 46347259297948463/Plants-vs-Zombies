@@ -37,11 +37,12 @@ public class Bullet {
     }
 
     public void move(){
-        column += 20;
+        column += 35;
         imageView.setLayoutX(column);
     }
 
     public ImageView getImageView() {
         return imageView;
     }
+
 }

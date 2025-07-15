@@ -2,32 +2,24 @@ package controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import model.*;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
@@ -423,7 +415,7 @@ public class DayLevel implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
                     Parent menuContent = loader.load();
                     if (loader.getController() instanceof Menu) {
-                        ((Menu) loader.getController()).setCalled(this.getInstance());
+                        ((Menu) loader.getController()).setObj(DayLevel.getInstance());
                     }
                     AnchorPane root = (AnchorPane) menuBTN.getScene().getRoot();
                     root.getChildren().add(menuContent);
@@ -470,7 +462,7 @@ public class DayLevel implements Initializable {
                                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
                                 Parent winContent = loader.load();
 
-                                WinPage.setObj(new DayLevel());
+                                WinPage.setObj(DayLevel.getInstance());
                                 dayAnc.getChildren().add(winContent);
 
                                 AnchorPane.setTopAnchor(winContent, 250.0);
@@ -746,28 +738,12 @@ public class DayLevel implements Initializable {
         cells[4][8] = new Cell(4, 8, cell48, group48);
     }
 
-    public static DayLevel getInstance() {
-        return instance;
-    }
-
-    public Cell[][] getCells() {
-        return cells;
-    }
-
-    public static void setInstance(DayLevel dayLevel) {
-        instance = dayLevel;
-    }
-
     public void withdrawSunPoints(int n){
         sunPoints.setText(((Integer.parseInt(sunPoints.getText())) - n) + "");
     }
 
     public void depositSunPoints(int n){
         sunPoints.setText((Integer.parseInt(sunPoints.getText()) + n) + "");
-    }
-
-    public AnchorPane getDayAnc(){
-        return dayAnc;
     }
 
     private void step1(){
@@ -798,6 +774,22 @@ public class DayLevel implements Initializable {
         }));
         zombieTimer.setCycleCount(Timeline.INDEFINITE);
         zombieTimer.play();
+    }
+
+    private void midAttack(){
+        zombieTimer.stop();
+        midTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
+            for (int i = 0; i < 5; i++){
+                int choose = random.nextInt(2);
+                if (choose == 0){
+                    basicZombie();
+                } else {
+                    coneHeadZombie();
+                }
+            }
+        } ));
+        midTimer.setCycleCount(4);
+        midTimer.play();
     }
 
     private void step3(){
@@ -836,6 +828,27 @@ public class DayLevel implements Initializable {
         zombieTimer.play();
     }
 
+    private void finalAttack(){
+        zombieTimer.stop();
+        zombieTimer = null;
+        finalTimer = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
+            for (int i = 0; i < 5; i++){
+                int choose = random.nextInt(4);
+                if (choose == 0){
+                    basicZombie();
+                } else if (choose == 1) {
+                    coneHeadZombie();
+                }else if (choose == 2){
+                    screenDoorZombie();
+                }else {
+                    impZombie();
+                }
+            }
+        }));
+        finalTimer.setCycleCount(8);
+        finalTimer.play();
+    }
+
     private void basicZombie(){
         int row;
         while (!setRandomZombies(row = random.nextInt(5)));
@@ -868,20 +881,6 @@ public class DayLevel implements Initializable {
         cells[row][8].setZombies(zombie);
     }
 
-    public void exitGame(){
-        Platform.exit();
-    }
-
-    public void setAvailablePicked(Boolean bool, int i){
-        if (i != -1){
-            availablePicked[i] = bool;
-        }
-    }
-
-    public Button getMenuBTN() {
-        return menuBTN;
-    }
-
     private boolean isGameFinish(){
         for (int i = 0; i<5 ; i++){
             for (int j = 0; j<9; j++){
@@ -900,47 +899,6 @@ public class DayLevel implements Initializable {
             }
         }
         return true;
-    }
-
-    public static void setMenu(int menu) {
-        DayLevel.menu = menu;
-    }
-
-    private void midAttack(){
-        zombieTimer.stop();
-        midTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
-            for (int i = 0; i < 5; i++){
-                int choose = random.nextInt(2);
-                if (choose == 0){
-                    basicZombie();
-                } else {
-                    coneHeadZombie();
-                }
-            }
-        } ));
-        midTimer.setCycleCount(4);
-        midTimer.play();
-    }
-
-    private void finalAttack(){
-        zombieTimer.stop();
-        zombieTimer = null;
-        finalTimer = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
-            for (int i = 0; i < 5; i++){
-                int choose = random.nextInt(4);
-                if (choose == 0){
-                    basicZombie();
-                } else if (choose == 1) {
-                    coneHeadZombie();
-                }else if (choose == 2){
-                    screenDoorZombie();
-                }else {
-                    impZombie();
-                }
-            }
-        }));
-        finalTimer.setCycleCount(8);
-        finalTimer.play();
     }
 
     public void stop(){
@@ -1030,7 +988,8 @@ public class DayLevel implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/LosePage.fxml"));
             Parent loseContent = loader.load();
 
-            LosePage.setObj(new DayLevel());
+            LosePage.setObj(DayLevel.getInstance());
+
             dayAnc.getChildren().add(loseContent);
 
             AnchorPane.setTopAnchor(loseContent, 260.0);
@@ -1044,4 +1003,168 @@ public class DayLevel implements Initializable {
         exitTimer.stop();
     }
 
+    private static void setInstance(DayLevel dayLevel) {
+        instance = dayLevel;
+    }
+
+    public void setAvailablePicked(Boolean bool, int i){
+        if (i != -1){
+            availablePicked[i] = bool;
+        }
+    }
+
+    public static void setMenu(int menu) {
+        DayLevel.menu = menu;
+    }
+
+    public static DayLevel getInstance() {
+        return instance;
+    }
+
+    public Cell[][] getCells() {
+        return cells;
+    }
+
+    public AnchorPane getDayAnc(){
+        return dayAnc;
+    }
+
+    public Button getMenuBTN() {
+        return menuBTN;
+    }
+
+    public GameState buildGameState() {
+        GameState gameState = new GameState();
+
+        for (int i = 0 ; i < 5 ; i++){
+            for (int j = 0 ; j < 9 ; j++){
+                if(cells[i][j].getZombies() != null){
+                    for (Zombie zombie : cells[i][j].getZombies()){
+                        gameState.zombies.add(new ZombieData(
+                                zombie.getColumn(),
+                                zombie.getRow(),
+                                zombie.getHP(),
+                                zombie.rowBTN,
+                                zombie.columnBTN,
+                                zombie.getClass().getSimpleName()
+                        ));
+                    }
+                }
+                Plants plant = cells[i][j].getPlant();
+                if (plant != null){
+                    gameState.plants.add(new PlantData(i, j, plant.getHP(), plant.getClass().getSimpleName()));
+                }
+            }
+        }
+        gameState.sunPoints = Integer.parseInt(sunPoints.getText());
+        return gameState;
+    }
+
+    public void saveGame(GameState gameState) {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("save.dat"));
+            out.writeObject(gameState);
+            out.close();
+            System.out.println("GAME SAVED");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public GameState loadGame(){
+        try
+        {
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream("save.dat"));
+            GameState gameState = (GameState) input.readObject();
+            input.close();
+            System.out.println("GAME LOADED");
+            return gameState;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void ApplyGameState(){
+        GameState loadedState = loadGame();
+        if (loadedState != null){
+            sunPoints.setText(String.valueOf(loadedState.sunPoints));
+            this.setNames(loadedState.names);
+            this.gameTimer = loadedState.gameTimer;
+            for (ZombieData zombieData : loadedState.zombies){
+                switch (zombieData.type) {
+                    case "Zombie":
+                        Zombie zombie = new Zombie(zombieData.x, zombieData.y, zombieData.rowBTN);
+                        zombie.columnBTN = zombieData.columnBTN;
+                        cells[zombie.rowBTN][zombie.columnBTN].setZombies(zombie);
+                        zombie.setHP(zombieData.HP);
+                        break;
+                    case "ConeheadZombie":
+                        ConeheadZombie coneheadZombie = new ConeheadZombie(zombieData.x, zombieData.y, zombieData.rowBTN);
+                        coneheadZombie.columnBTN = zombieData.columnBTN;
+                        cells[coneheadZombie.rowBTN][coneheadZombie.columnBTN].setZombies(coneheadZombie);
+                        coneheadZombie.setHP(zombieData.HP);
+                        break;
+                    case "ScreenDoorZombie":
+                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(zombieData.x, zombieData.y, zombieData.rowBTN);
+                        screenDoorZombie.columnBTN = zombieData.columnBTN;
+                        cells[screenDoorZombie.rowBTN][screenDoorZombie.columnBTN].setZombies(screenDoorZombie);
+                        screenDoorZombie.setHP(zombieData.HP);
+                        break;
+                    case "ImpZombie":
+                        ImpZombie impZombie = new ImpZombie(zombieData.x, zombieData.y, zombieData.rowBTN);
+                        impZombie.columnBTN = zombieData.columnBTN;
+                        cells[impZombie.rowBTN][impZombie.columnBTN].setZombies(impZombie);
+                        impZombie.setHP(zombieData.HP);
+                        break;
+                }
+            }
+
+            for (PlantData plantData : loadedState.plants){
+                switch (plantData.type){
+                    case "CherryBomb" :
+                         CherryBomb cherryBomb = new CherryBomb(plantData.row , plantData.column);
+                         cherryBomb.setHP(plantData.HP);
+                         cells[plantData.row][plantData.column].setPlants(cherryBomb);
+                         break;
+                    case "Jalapenos" :
+                        Jalapenos jalapenos = new Jalapenos(plantData.row , plantData.column);
+                        jalapenos.setHP(plantData.HP);
+                        cells[plantData.row][plantData.column].setPlants(jalapenos);
+                        break;
+                    case "PeaShooter" :
+                        PeaShooter peaShooter = new PeaShooter(plantData.row , plantData.column);
+                        peaShooter.setHP(plantData.HP);
+                        cells[plantData.row][plantData.column].setPlants(peaShooter);
+                        break;
+                    case "Repeater" :
+                        Repeater repeater  = new Repeater(plantData.row , plantData.column);
+                        repeater.setHP(plantData.HP);
+                        cells[plantData.row][plantData.column].setPlants(repeater);
+                        break;
+                    case "SnowShooter" :
+                        SnowShooter snowShooter = new SnowShooter(plantData.row , plantData.column);
+                        snowShooter.setHP(plantData.HP);
+                        cells[plantData.row][plantData.column].setPlants(snowShooter);
+                        break;
+                    case "Sunflower" :
+                        Sunflower sunflower = new Sunflower(plantData.row , plantData.column);
+                        sunflower.setHP(plantData.HP);
+                        cells[plantData.row][plantData.column].setPlants(sunflower);
+                        break;
+                    case "TallNut" :
+                        TallNut tallNut = new TallNut(plantData.row , plantData.column);
+                        tallNut.setHP(plantData.HP);
+                        cells[plantData.row][plantData.column].setPlants(tallNut);
+                        break;
+                    case "WallNut" :
+                        WallNut wallNut = new WallNut(plantData.row , plantData.column);
+                        wallNut.setHP(plantData.HP);
+                        cells[plantData.row][plantData.column].setPlants(wallNut);
+                        break;
+                }
+            }
+
+        }
+    }
 }

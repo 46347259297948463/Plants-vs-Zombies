@@ -4,7 +4,6 @@ import controller.DayLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
@@ -12,7 +11,6 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class SnowShooter extends PeaPlants{
 
@@ -42,16 +40,13 @@ public class SnowShooter extends PeaPlants{
         super(HP, i, j, 175, bullets, 9);
         DayLevel.getInstance().setAvailablePicked(false, availableNum);
         cells = DayLevel.getInstance().getCells();
-        endRow = setZombie();
         ImageView imageView = new ImageView(getClass().getResource("/view/images/snow shooter.png").toString());
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
         setImage(imageView);
-        if (endRow != -1){
-            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> shoot(zombie)));
-            shootTimer.setCycleCount(Timeline.INDEFINITE);
-            shootTimer.play();
-        }
+        shootTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> shoot(zombie)));
+        shootTimer.setCycleCount(Timeline.INDEFINITE);
+        shootTimer.play();
         group.setOpacity(0.7);
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
@@ -62,17 +57,65 @@ public class SnowShooter extends PeaPlants{
         price = 175;
     }
 
-    public static void setAvailableNum(int a) {
-        availableNum = a;
+    private void moveBullet(){
+        if (bullet != null) {
+            bullet.move();
+        }
+        if (bullet.getImageView().getLayoutX() >= endRow && zombie != null){
+            moveBulletTimer.stop();
+            zombie.takeDamage(1);
+            if (zombie.isDead()){
+                zombie.dead();
+                findZombie();
+            } else {
+                zombie.setSpeed(zombie.getSpeed() / 2);
+                halfSpeedTimer = new Timeline(new KeyFrame(Duration.millis(1000), event -> back()));
+                halfSpeedTimer.setCycleCount(Timeline.INDEFINITE);
+                halfSpeedTimer.play();
+            }
+            bullet.endBullet();
+        }
     }
 
-    public static void setGroup(Group g) {
-        group = g;
+    private void back(){
+       if (zombie != null){
+           if (zombie instanceof ImpZombie){
+               zombie.setSpeed(4);
+           }
+           else {
+               zombie.setSpeed(2);
+           }
+           halfSpeedTimer.stop();
+       }
+    }
+
+    private double findZombie(){
+        int j = row;
+        zombie = null;
+        double min = Double.MAX_VALUE;
+
+        for (int i = column; i < 9; i++){
+            ArrayList<Zombie> zombies = cells[j][i].getZombies();
+            if (zombies != null && !zombies.isEmpty()){
+                for (Zombie z : zombies){
+                    if (z.isDead()) continue;
+                    if (z.getColumn() < min){
+                        zombie = z;
+                        min = z.getColumn();
+                    }
+                }
+            }
+        }
+
+        if (zombie != null){
+            return min;
+        }
+        return -1;
     }
 
     @Override
-    public void shoot(Zombie zombie) {
-        endRow = setZombie();
+    protected void shoot(Zombie zombie) {
+        endRow = findZombie();
         if (endRow == -1 || zombie == null || zombie.isDead()) {
             return;
         } else if (endRow != -1) {
@@ -98,65 +141,9 @@ public class SnowShooter extends PeaPlants{
         }
     }
 
-    public void moveBullet(){
-        if (bullet != null) {
-            bullet.move();
-        }
-        if (bullet.getImageView().getLayoutX() >= endRow && zombie != null){
-            moveBulletTimer.stop();
-            zombie.takeDamage(1);
-            if (zombie.isDead()){
-                zombie.dead();
-                setZombie();
-            } else {
-                zombie.setSpeed(zombie.getSpeed() / 2);
-                halfSpeedTimer = new Timeline(new KeyFrame(Duration.millis(1000), event -> back()));
-                halfSpeedTimer.setCycleCount(Timeline.INDEFINITE);
-                halfSpeedTimer.play();
-            }
-            bullet.endBullet();
-        }
-    }
-
-    private void back(){
-       if (zombie != null){
-           if (zombie instanceof ImpZombie){
-               zombie.setSpeed(4);
-           }
-           else {
-               zombie.setSpeed(2);
-           }
-           halfSpeedTimer.stop();
-       }
-    }
-
     @Override
     public Plants clonePlant(int row, int column) {
         return new SnowShooter(row, column);
-    }
-
-    private double setZombie(){
-        int j = row;
-        zombie = null;
-        double min = Double.MAX_VALUE;
-
-        for (int i = column; i < 9; i++){
-            ArrayList<Zombie> zombies = cells[j][i].getZombies();
-            if (zombies != null && !zombies.isEmpty()){
-                for (Zombie z : zombies){
-                    if (z.isDead()) continue;
-                    if (z.getColumn() < min){
-                        zombie = z;
-                        min = z.getColumn();
-                    }
-                }
-            }
-        }
-
-        if (zombie != null){
-            return min;
-        }
-        return -1;
     }
 
     @Override
@@ -180,6 +167,14 @@ public class SnowShooter extends PeaPlants{
             moveBulletTimer.play();
         }
         shootTimer.play();
+    }
+
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
     }
 
 }

@@ -8,10 +8,15 @@ import java.util.ArrayList;
 
 public class Cell {
     private int row;
+
     private int column;
+
     private Plants plant;
+
     private ArrayList<Zombie> zombies = null;
+
     private Group group;
+
     private Button button;
 
     public Cell(int row, int column, Button button, Group group) {
@@ -19,6 +24,31 @@ public class Cell {
         this.column = column;
         this.button = button;
         this.group = group;
+    }
+
+    public void removePlant(){
+        plant.end();
+        this.plant = null;
+    }
+
+    public void removeZombie(Zombie zombie){
+        if (zombies != null) {
+            zombies.remove(zombie);
+            if (zombies.isEmpty()) {
+                zombies = null;
+            }
+        }
+    }
+
+    public void removeAllZombies(){
+        if (zombies != null && !zombies.isEmpty()){
+            ArrayList<Zombie> temp = new ArrayList<>(zombies);
+            for (Zombie zombie : temp){
+                zombie.setHP(0);
+                zombie.dead();
+            }
+        }
+        zombies = null;
     }
 
     public boolean hasPlant(){
@@ -40,18 +70,6 @@ public class Cell {
         zombies.add(zombie);
     }
 
-    public void removePlant(){
-        plant.end();
-        this.plant = null;
-    }
-
-    public void removeZombie(Zombie zombie){
-        if (zombies == null || zombies.isEmpty()){
-            return;
-        }
-        zombies.remove(zombie);
-    }
-
     public Button getButton(){
         return button;
     }
@@ -65,29 +83,15 @@ public class Cell {
     }
 
     public ArrayList<Zombie> getZombies(){
-        if (zombies != null){
-            for (int i = 0; i < zombies.size(); i++){
-                if (zombies.get(i).isDead()){
-                    zombies.remove(i);
-                }
-            }
-            if (zombies.size() == 0){
+        if (zombies != null) {
+            zombies.removeIf(zombie -> zombie.isDead());
+            if (zombies.isEmpty()) {
                 zombies = null;
                 return null;
             }
         }
         return zombies;
+
     }
 
-    public void removeAllZombies(){
-        if (zombies != null && !zombies.isEmpty()){
-            ArrayList<Zombie> temp = new ArrayList<>(zombies);
-            for (Zombie zombie : temp){
-                zombie.setHP(0);
-                zombie.dead();
-            }
-            zombies.clear();
-        }
-        zombies = null;
-    }
 }

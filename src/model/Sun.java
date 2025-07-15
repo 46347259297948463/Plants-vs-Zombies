@@ -67,20 +67,20 @@ public class Sun {
         }
     }
 
-    public Group getGroup() {
-        return group;
-    }
-
-    public Button getButton() {
-        return button;
-    }
-
     public void stop(){
         timeline.stop();
     }
 
     public void play(){
         timeline.play();
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public Button getButton() {
+        return button;
     }
 
 }

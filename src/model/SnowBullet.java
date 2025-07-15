@@ -21,4 +21,5 @@ public class SnowBullet extends  Bullet{
         isSnow = true;
         color = "blue";
     }
+
 }

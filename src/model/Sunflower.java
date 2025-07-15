@@ -40,29 +40,16 @@ public class Sunflower extends Plants{
         timer.play();
     }
 
+    public Sunflower(){
+        price = 50;
+    }
+
     private void startTimer(){
         if(sunTimeline == null){
             sunTimeline = new Timeline(new KeyFrame(Duration.millis(7500), event -> makeSun() ));
             sunTimeline.setCycleCount(Timeline.INDEFINITE);
             sunTimeline.play();
         }
-    }
-
-    public Sunflower(){
-        price = 50;
-    }
-
-    public static void setAvailableNum(int a) {
-        availableNum = a;
-    }
-
-    public static void setGroup(Group g) {
-        group = g;
-    }
-
-    @Override
-    public Plants clonePlant(int row, int column) {
-        return new Sunflower(row, column);
     }
 
     public void makeSun(){
@@ -98,6 +85,11 @@ public class Sunflower extends Plants{
     }
 
     @Override
+    public Plants clonePlant(int row, int column) {
+        return new Sunflower(row, column);
+    }
+
+    @Override
     protected void recharge() {
         DayLevel.getInstance().setAvailablePicked(true, availableNum);
         timer.stop();
@@ -118,6 +110,14 @@ public class Sunflower extends Plants{
         if (sun != null){
             sun.play();
         }
+    }
+
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
     }
 
 }

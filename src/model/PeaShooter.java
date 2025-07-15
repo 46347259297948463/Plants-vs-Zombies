@@ -38,16 +38,13 @@ public class PeaShooter extends PeaPlants {
         super(HP, i, j, 100, bullets, 6);
         DayLevel.getInstance().setAvailablePicked(false, availableNum);
         cells = DayLevel.getInstance().getCells();
-        endRow = setZombie();
         ImageView imageView = new ImageView(getClass().getResource("/view/images/pea shooter.png").toString());
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
         setImage(imageView);
-        if (endRow != -1) {
-            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
-            shootTimer.setCycleCount(Timeline.INDEFINITE);
-            shootTimer.play();
-        }
+        shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
+        shootTimer.setCycleCount(Timeline.INDEFINITE);
+        shootTimer.play();
         group.setOpacity(0.7);
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
@@ -58,17 +55,51 @@ public class PeaShooter extends PeaPlants {
         price = 100;
     }
 
-    public static void setAvailableNum(int a) {
-        availableNum = a;
+    private void moveBullet(double endRow) {
+        if (bullet != null) {
+            bullet.move();
+            endRow = findZombie();
+            if (bullet.getImageView().getLayoutX() >= endRow && zombie != null) {
+                endRow = findZombie();
+                moveBulletTimer.stop();
+                zombie.takeDamage(1);
+                if (zombie.isDead()) {
+                    zombie.dead();
+                    endRow = findZombie();
+                }
+                bullet.endBullet();
+            }
+        }
+
     }
 
-    public static void setGroup(Group g) {
-        group = g;
+    private double findZombie() {
+        int j = row;
+        zombie = null;
+        double min = Double.MAX_VALUE;
+
+        for (int i = column; i < 9; i++) {
+            ArrayList<Zombie> zombies = cells[j][i].getZombies();
+            if (zombies != null && !zombies.isEmpty()) {
+                for (Zombie z : zombies) {
+                    if (z.isDead()) continue;
+                    if (z.getColumn() < min) {
+                        zombie = z;
+                        min = z.getColumn();
+                    }
+                }
+            }
+        }
+
+        if (zombie != null) {
+            return min;
+        }
+        return -1;
     }
 
     @Override
-    public void shoot(Zombie zombie) {
-        endRow = setZombie();
+    protected void shoot(Zombie zombie) {
+        endRow = findZombie();
         if (endRow == -1 || zombie == null || zombie.isDead()) {
             return;
         } else if (endRow != -1) {
@@ -94,49 +125,9 @@ public class PeaShooter extends PeaPlants {
         }
     }
 
-    public void moveBullet(double endRow) {
-        if (bullet != null) {
-            bullet.move();
-            if (bullet.getImageView().getLayoutX() >= endRow && zombie != null) {
-                moveBulletTimer.stop();
-                zombie.takeDamage(1);
-                if (zombie.isDead()) {
-                    zombie.dead();
-                    setZombie();
-                }
-                bullet.endBullet();
-            }
-        }
-
-    }
-
     @Override
     public Plants clonePlant(int row, int column) {
         return new PeaShooter(row, column);
-    }
-
-    private double setZombie() {
-        int j = row;
-        zombie = null;
-        double min = Double.MAX_VALUE;
-
-        for (int i = column; i < 9; i++) {
-            ArrayList<Zombie> zombies = cells[j][i].getZombies();
-            if (zombies != null && !zombies.isEmpty()) {
-                for (Zombie z : zombies) {
-                    if (z.isDead()) continue;
-                    if (z.getColumn() < min) {
-                        zombie = z;
-                        min = z.getColumn();
-                    }
-                }
-            }
-        }
-
-        if (zombie != null) {
-            return min;
-        }
-        return -1;
     }
 
     @Override
@@ -165,4 +156,13 @@ public class PeaShooter extends PeaPlants {
             shootTimer.play();
         }
     }
+
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
+    }
+
 }

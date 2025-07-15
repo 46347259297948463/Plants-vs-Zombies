@@ -46,16 +46,13 @@ public class Repeater extends PeaPlants{
         super(HP, i, j, 200, bullets, 10);
         DayLevel.getInstance().setAvailablePicked(false, availableNum);
         cells = DayLevel.getInstance().getCells();
-        setZombie();
         ImageView imageView = new ImageView(getClass().getResource("/view/images/repeater.png").toString());
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
         setImage(imageView);
-        if (endRow1 != -1){
-            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> shoot(zombie1)));
-            shootTimer.setCycleCount(Timeline.INDEFINITE);
-            shootTimer.play();
-        }
+        shootTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> shoot(zombie1)));
+        shootTimer.setCycleCount(Timeline.INDEFINITE);
+        shootTimer.play();
         group.setOpacity(0.7);
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
@@ -66,56 +63,7 @@ public class Repeater extends PeaPlants{
         price = 200;
     }
 
-    public static void setAvailableNum(int a) {
-        availableNum = a;
-    }
-
-    public static void setGroup(Group g) {
-        group = g;
-    }
-
-
-    @Override
-    public void shoot(Zombie zombie) {
-        setZombie();
-
-        if (zombie1 != null && !zombie1.isDead()) {
-            if (moveBulletTimer1 != null) {
-                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet1.getImageView());
-                moveBulletTimer1.stop();
-            }
-            bullet1 = new Bullet(row, column);
-            try {
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                        getClass().getResource("/view/audio/hit sound.wav")
-                );
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioStream);
-                clip.loop(1);
-                clip.start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            DayLevel.getInstance().getDayAnc().getChildren().add(bullet1.getImageView());
-            moveBulletTimer1 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet1()));
-            moveBulletTimer1.setCycleCount(Timeline.INDEFINITE);
-            moveBulletTimer1.play();
-        }
-
-        if (zombie2 != null && !zombie2.isDead()) {
-            if (moveBulletTimer2 != null) {
-                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet2.getImageView());
-                moveBulletTimer2.stop();
-            }
-            bullet2 = new Bullet(row, column + 0.5);
-            DayLevel.getInstance().getDayAnc().getChildren().add(bullet2.getImageView());
-            moveBulletTimer2 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet2()));
-            moveBulletTimer2.setCycleCount(Timeline.INDEFINITE);
-            moveBulletTimer2.play();
-        }
-    }
-
-    public void moveBullet1(){
+    private void moveBullet1(){
         if (bullet1 != null){
             bullet1.move();
             if (bullet1.getImageView().getLayoutX() >= endRow1 && zombie1 != null){
@@ -123,14 +71,14 @@ public class Repeater extends PeaPlants{
                 zombie1.takeDamage(1);
                 if (zombie1.isDead()){
                     zombie1.dead();
-                    setZombie();
+                    findZombie();
                 }
                 bullet1.endBullet();
             }
         }
     }
 
-    public void moveBullet2(){
+    private void moveBullet2(){
         if (bullet2 != null){
             bullet2.move();
             if (bullet2.getImageView().getLayoutX() >= endRow2 && zombie2 != null){
@@ -138,7 +86,7 @@ public class Repeater extends PeaPlants{
                 zombie2.takeDamage(1);
                 if (zombie2.isDead()){
                     zombie2.dead();
-                    setZombie();
+                    findZombie();
                 }
                 bullet2.endBullet();
             }
@@ -146,12 +94,7 @@ public class Repeater extends PeaPlants{
         }
     }
 
-    @Override
-    public Plants clonePlant(int row, int column) {
-        return new Repeater(row, column);
-    }
-
-    private void setZombie() {
+    private void findZombie() {
         int j = row;
         zombie1 = null;
         zombie2 = null;
@@ -194,6 +137,50 @@ public class Repeater extends PeaPlants{
         }
     }
 
+    @Override
+    public void shoot(Zombie zombie) {
+        findZombie();
+
+        if (zombie1 != null && !zombie1.isDead()) {
+            if (moveBulletTimer1 != null) {
+                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet1.getImageView());
+                moveBulletTimer1.stop();
+            }
+            bullet1 = new Bullet(row, column);
+            try {
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                        getClass().getResource("/view/audio/hit sound.wav")
+                );
+                Clip clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                clip.loop(1);
+                clip.start();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            DayLevel.getInstance().getDayAnc().getChildren().add(bullet1.getImageView());
+            moveBulletTimer1 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet1()));
+            moveBulletTimer1.setCycleCount(Timeline.INDEFINITE);
+            moveBulletTimer1.play();
+        }
+
+        if (zombie2 != null && !zombie2.isDead()) {
+            if (moveBulletTimer2 != null) {
+                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet2.getImageView());
+                moveBulletTimer2.stop();
+            }
+            bullet2 = new Bullet(row, column + 0.5);
+            DayLevel.getInstance().getDayAnc().getChildren().add(bullet2.getImageView());
+            moveBulletTimer2 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet2()));
+            moveBulletTimer2.setCycleCount(Timeline.INDEFINITE);
+            moveBulletTimer2.play();
+        }
+    }
+
+    @Override
+    public Plants clonePlant(int row, int column) {
+        return new Repeater(row, column);
+    }
 
     @Override
     protected void recharge() {
@@ -222,6 +209,14 @@ public class Repeater extends PeaPlants{
             moveBulletTimer2.play();
         }
         shootTimer.play();
+    }
+
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
     }
 
 }

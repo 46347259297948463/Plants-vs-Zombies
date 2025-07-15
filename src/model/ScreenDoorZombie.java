@@ -22,4 +22,5 @@ public class ScreenDoorZombie extends Zombie{
         imageV.setFitWidth(145);
         DayLevel.getInstance().getDayAnc().getChildren().add(imageV);
     }
+
 }

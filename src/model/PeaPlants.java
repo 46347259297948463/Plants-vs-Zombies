@@ -17,7 +17,7 @@ public abstract class PeaPlants extends Plants{
 
     }
 
-    public abstract void shoot(Zombie zombie);
+    protected abstract void shoot(Zombie zombie);
 
     @Override
     public void end(){

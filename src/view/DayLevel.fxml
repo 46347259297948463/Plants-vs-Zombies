@@ -60,7 +60,6 @@
                   <Group fx:id="group07">
                      <children>
                         <Button fx:id="cell07" mnemonicParsing="false" opacity="0.0" prefHeight="190.0" prefWidth="149.0" />
-                        <Button fx:id="menuBTN" layoutX="72.0" layoutY="-7.0" mnemonicParsing="false" opacity="0.0" prefHeight="44.0" prefWidth="154.0" />
                      </children>
                   </Group>
                   <Group fx:id="group08">
@@ -109,12 +108,12 @@
                   </Group>
                   <Group fx:id="group17">
                      <children>
-                        <Button fx:id="cell17" mnemonicParsing="false" opacity="0.0" prefHeight="188.0" prefWidth="153.0" />
+                        <Button fx:id="cell17" mnemonicParsing="false" opacity="0.0" prefHeight="188.0" prefWidth="164.0" />
                      </children>
                   </Group>
                   <Group fx:id="group18">
                      <children>
-                        <Button fx:id="cell18" mnemonicParsing="false" opacity="0.0" prefHeight="185.0" prefWidth="184.0" />
+                        <Button fx:id="cell18" layoutX="7.0" mnemonicParsing="false" opacity="0.0" prefHeight="185.0" prefWidth="174.0" />
                      </children>
                   </Group>
                </children>
@@ -128,7 +127,7 @@
                   </Group>
                   <Group fx:id="group21">
                      <children>
-                        <Button fx:id="cell21" mnemonicParsing="false" opacity="0.0" prefHeight="188.0" prefWidth="149.0" />
+                        <Button fx:id="cell21" layoutX="-7.0" layoutY="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="188.0" prefWidth="149.0" />
                      </children>
                   </Group>
                   <Group fx:id="group22">

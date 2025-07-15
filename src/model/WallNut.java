@@ -35,19 +35,6 @@ public class WallNut extends NutPlants{
         price = 50;
     }
 
-    public static void setAvailableNum(int a) {
-        availableNum = a;
-    }
-
-    public static void setGroup(Group g) {
-        group = g;
-    }
-
-    @Override
-    public void end() {
-
-    }
-
     @Override
     public Plants clonePlant(int row, int column) {
         return new WallNut(row, column);
@@ -61,6 +48,11 @@ public class WallNut extends NutPlants{
     }
 
     @Override
+    public void end() {
+
+    }
+
+    @Override
     public void stop() {
 
     }
@@ -68,6 +60,14 @@ public class WallNut extends NutPlants{
     @Override
     public void play() {
 
+    }
+
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
     }
 
 }

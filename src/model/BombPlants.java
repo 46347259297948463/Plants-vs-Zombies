@@ -7,10 +7,11 @@ public abstract class BombPlants extends Plants{
     public BombPlants(int i, int j, int price, double rechargeTime) {
         super(HP, i, j, price, rechargeTime);
     }
+
     public BombPlants(){
 
     }
 
-    public abstract void BOMB();
+    protected abstract void BOMB();
 
 }

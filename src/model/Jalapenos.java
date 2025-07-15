@@ -55,28 +55,13 @@ public class Jalapenos extends BombPlants{
         timer.play();
     }
 
-    public static void setAvailableNum(int a) {
-        availableNum = a;
-    }
-
-    public static void setGroup(Group g) {
-        group = g;
-    }
-
-    @Override
-    public void end() {
-        if (jalopenosTimer != null){
-            jalopenosTimer.stop();
-        }
-    }
-
     @Override
     public Plants clonePlant(int row, int column) {
         return new Jalapenos(row, column);
     }
 
     @Override
-    public void BOMB() {
+    protected void BOMB() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
                     getClass().getResource("/view/audio/cherrybomb sound.wav")
@@ -102,6 +87,13 @@ public class Jalapenos extends BombPlants{
     }
 
     @Override
+    public void end() {
+        if (jalopenosTimer != null){
+            jalopenosTimer.stop();
+        }
+    }
+
+    @Override
     public void stop() {
         jalopenosTimer.pause();
 
@@ -110,6 +102,14 @@ public class Jalapenos extends BombPlants{
     @Override
     public void play() {
         jalopenosTimer.play();
+    }
+
+    public static void setAvailableNum(int a) {
+        availableNum = a;
+    }
+
+    public static void setGroup(Group g) {
+        group = g;
     }
 
 }
