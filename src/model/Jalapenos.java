@@ -64,7 +64,7 @@ public class Jalapenos extends BombPlants{
     protected void BOMB() {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                    getClass().getResource("/view/audio/cherrybomb sound.wav")
+                    getClass().getResource("/view/audio/jalapeno sound.wav")
             );
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);

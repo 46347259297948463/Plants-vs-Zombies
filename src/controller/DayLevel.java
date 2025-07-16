@@ -410,6 +410,16 @@ public class DayLevel implements Initializable {
 
         menuBTN.setOnAction(event -> {
             if (menu == 0 && !isStopMod) {
+                try {
+                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                            getClass().getResource("/view/audio/pause sound.wav")
+                    );
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioStream);
+                    clip.start();
+                } catch (Exception ev) {
+                    ev.printStackTrace();
+                }
                 stop();
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
@@ -778,6 +788,16 @@ public class DayLevel implements Initializable {
 
     private void midAttack(){
         zombieTimer.stop();
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/wave sound.wav")
+            );
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception ev) {
+            ev.printStackTrace();
+        }
         midTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
             for (int i = 0; i < 5; i++){
                 int choose = random.nextInt(2);
@@ -831,6 +851,16 @@ public class DayLevel implements Initializable {
     private void finalAttack(){
         zombieTimer.stop();
         zombieTimer = null;
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/wave sound.wav")
+            );
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception ev) {
+            ev.printStackTrace();
+        }
         finalTimer = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
             for (int i = 0; i < 5; i++){
                 int choose = random.nextInt(4);
