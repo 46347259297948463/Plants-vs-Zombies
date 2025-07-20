@@ -34,7 +34,7 @@ public class IceShroom extends BombPlants{
         setImage(imageView);
         iceShroomTimer = new Timeline(
                 new KeyFrame(Duration.seconds(1),event -> BOMB()),
-                new KeyFrame(Duration.seconds(4),event -> afterBomb())
+                new KeyFrame(Duration.seconds(5),event -> afterBomb())
         );
         iceShroomTimer.setCycleCount(1);
         iceShroomTimer.play();
