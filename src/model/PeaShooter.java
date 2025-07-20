@@ -157,6 +157,11 @@ public class PeaShooter extends PeaPlants {
         }
     }
 
+    @Override
+    public Timeline getTimer() {
+        return timer;
+    }
+
     public static void setAvailableNum(int a) {
         availableNum = a;
     }

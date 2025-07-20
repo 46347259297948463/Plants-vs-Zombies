@@ -60,6 +60,11 @@ public class TallNut extends NutPlants{
 
     }
 
+    @Override
+    public Timeline getTimer() {
+        return timer;
+    }
+
     public static void setAvailableNum(int a) {
         availableNum = a;
     }
@@ -67,6 +72,4 @@ public class TallNut extends NutPlants{
     public static void setGroup(Group g) {
         group = g;
     }
-
-
 }

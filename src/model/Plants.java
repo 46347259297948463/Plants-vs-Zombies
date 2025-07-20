@@ -1,6 +1,7 @@
 package model;
 
 
+import javafx.animation.Timeline;
 import javafx.scene.image.ImageView;
 
 public abstract class Plants {
@@ -74,4 +75,6 @@ public abstract class Plants {
     public void setHP(int HP) {
         this.HP = HP;
     }
+
+    public abstract Timeline getTimer();
 }

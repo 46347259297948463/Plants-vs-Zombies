@@ -1,9 +1,9 @@
-package controller;
+package model;
 
+import controller.DayLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-import model.Sun;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

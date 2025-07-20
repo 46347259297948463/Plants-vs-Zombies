@@ -111,6 +111,11 @@ public class CherryBomb extends BombPlants{
         cherryBombTimer.play();
     }
 
+    @Override
+    public Timeline getTimer() {
+        return timer;
+    }
+
     public static void setAvailableNum(int a) {
         availableNum = a;
     }

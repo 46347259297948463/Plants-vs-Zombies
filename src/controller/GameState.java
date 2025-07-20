@@ -1,25 +1,25 @@
 package controller;
 
 import javafx.animation.Timeline;
-import model.PlantData;
-import model.Plants;
-import model.Zombie;
-import model.ZombieData;
+import model.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class GameState implements Serializable {
 
     public ArrayList<String> names;
 
-    public Timeline gameTimer;
+    public long gameTimer;
 
-    public ArrayList<ZombieData> zombies = new ArrayList<>();
+    public ArrayList<ZombieData> zombies;
 
-    public ArrayList<PlantData> plants = new ArrayList<>();
+    public ArrayList<PlantData> plants;
 
     public int sunPoints;
+
+    public ArrayList<Long> rechargeTime;
 
     private static final long serialVersionUID = 1L;
 

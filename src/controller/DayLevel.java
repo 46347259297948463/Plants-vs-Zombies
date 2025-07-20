@@ -389,6 +389,8 @@ public class DayLevel implements Initializable {
 
     public boolean isStopMod = false;
 
+    public static boolean isOnSaveMode = false;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -495,9 +497,11 @@ public class DayLevel implements Initializable {
 
          randomSun = new RandomSun();
 
-        setButtons();
-        setGroups();
-        fillBoard();
+        if (!isOnSaveMode) {
+            setButtons();
+            setGroups();
+            fillBoard();
+        }
 
         plant1BTN.setOnAction(event -> {
             if (!isStopMod) {
@@ -1092,6 +1096,13 @@ public class DayLevel implements Initializable {
 
     public void saveGame(GameState gameState) {
         try {
+            gameState.sunPoints = Integer.parseInt(sunPoints.getText());
+            gameState.zombies = getZombiesData();
+            gameState.plants = getPlantsData();
+            gameState.gameTimer = (long) gameTimer.getCurrentTime().toSeconds();
+            gameState.names = names;
+            gameState.rechargeTime = getRechargeTimer();
+
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("save.dat"));
             out.writeObject(gameState);
             out.close();
@@ -1101,7 +1112,7 @@ public class DayLevel implements Initializable {
         }
     }
 
-    public GameState loadGame(){
+    public GameState loadGame() {
         try
         {
             ObjectInputStream input = new ObjectInputStream(new FileInputStream("save.dat"));
@@ -1115,12 +1126,15 @@ public class DayLevel implements Initializable {
         }
     }
 
-    public void ApplyGameState(){
+    public void ApplyGameState() {
         GameState loadedState = loadGame();
         if (loadedState != null){
             sunPoints.setText(String.valueOf(loadedState.sunPoints));
             this.setNames(loadedState.names);
-            this.gameTimer = loadedState.gameTimer;
+            setButtons();
+            setGroups();
+            fillBoard();
+            gameTimer.stop();
             for (ZombieData zombieData : loadedState.zombies){
                 switch (zombieData.type) {
                     case "Zombie":
@@ -1197,4 +1211,46 @@ public class DayLevel implements Initializable {
 
         }
     }
+
+    private ArrayList<ZombieData> getZombiesData() {
+        ArrayList<ZombieData> zombieData = new ArrayList<>();
+        for (int i = 0 ; i < 5 ; i++){
+            for (int j = 0; j < 9 ; j++){
+                if (cells[i][j].getZombies() != null) {
+                    for (Zombie zombie : cells[i][j].getZombies()){
+                        ZombieData z = new ZombieData(zombie.getRow(), zombie.getColumn(), zombie.getHP(),
+                                zombie.rowBTN, zombie.columnBTN, zombie.getClass().getSimpleName());
+                        zombieData.add(z);
+                    }
+                }
+            }
+        }
+
+        return zombieData;
+    }
+
+    private ArrayList<PlantData> getPlantsData() {
+        ArrayList<PlantData> plantData = new ArrayList<>();
+        for (int i = 0 ; i < 5 ; i++){
+            for (int j = 0; j < 9 ; j++){
+                if (cells[i][j].getPlant() != null) {
+                    Plants plant = cells[i][j].getPlant();
+                    PlantData p = new PlantData(plant.getRow(), plant.getColumn(), plant.getHP(),
+                            plant.getClass().getSimpleName());
+                    plantData.add(p);
+                }
+            }
+        }
+
+        return plantData;
+    }
+
+    private ArrayList<Long> getRechargeTimer() {
+        ArrayList<Long> l = new ArrayList<>();
+        for (Plants plant : plants) {
+            l.add((long) plant.getTimer().getCurrentTime().toSeconds());
+        }
+        return l;
+    }
+
 }
