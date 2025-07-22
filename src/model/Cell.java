@@ -19,6 +19,8 @@ public class Cell {
 
     private Button button;
 
+    private boolean isAvailable = true;
+
     public Cell(int row, int column, Button button, Group group) {
         this.row = row;
         this.column = column;
@@ -60,7 +62,9 @@ public class Cell {
     }
 
     public void setPlants(Plants plant){
-        this.plant = plant;
+        if (isAvailable) {
+            this.plant = plant;
+        }
     }
 
     public void setZombies(Zombie zombie){
@@ -94,4 +98,7 @@ public class Cell {
 
     }
 
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
 }

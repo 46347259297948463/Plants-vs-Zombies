@@ -6,12 +6,13 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import java.util.ArrayList;
 
-public class Puffshroom extends PeaPlants{
+public class ScaredyShroom extends PeaPlants{
 
     private final static int HP = 4;
 
@@ -33,11 +34,11 @@ public class Puffshroom extends PeaPlants{
 
     private static int availableNum;
 
-    public Puffshroom(int i, int j) {
-        super(HP, i, j, 0 , bullets, 5);
-        DayLevel.getInstance().setAvailablePicked(false,availableNum);
+    public ScaredyShroom(int i, int j) {
+        super(HP, i, j, 25 , bullets, 10);
+        DayLevel.getInstance().setAvailablePicked(false, availableNum);
         cells = DayLevel.getInstance().getCells();
-        ImageView imageView = new ImageView(getClass().getResource("/view/images/pea shooter.png").toString());
+        ImageView imageView = new ImageView(getClass().getResource("/view/images/scaredy shroom.png").toString());
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
         setImage(imageView);
@@ -51,37 +52,16 @@ public class Puffshroom extends PeaPlants{
 
     }
 
-    public Puffshroom(){
-        price = 0;
+    public ScaredyShroom(){
+        price = 25;
     }
 
     @Override
     protected void shoot(Zombie zombie) {
         endrow = findZombie();
-        if(endrow == -1 || zombie == null ||  zombie.isDead()) {
-            return;
-        }else if(endrow != -1){
-            if(moveBulletTimer != null){
-                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
-                moveBulletTimer.stop();
-            }
-            bullet = new PuffBullet(row , column);
-            try {
-                AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                        getClass().getResource("/view/audio/hit sound.wav")
-                );
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioStream);
-                clip.start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
-            moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet(endrow)));
-            moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
-            moveBulletTimer.play();
+        if (zombie.columnBTN <= column + 1 && zombie.columnBTN >= column - 1){
+            
         }
-
     }
 
     private double findZombie() {
@@ -89,7 +69,7 @@ public class Puffshroom extends PeaPlants{
         zombie = null;
         double min = Double.MAX_VALUE;
 
-        for (int i = column; i < column + 5; i++) {
+        for (int i = column; i < column && i < 9; i++) {
             ArrayList<Zombie> zombies = cells[j][i].getZombies();
             if (zombies != null && !zombies.isEmpty()) {
                 for (Zombie z : zombies) {
@@ -108,7 +88,7 @@ public class Puffshroom extends PeaPlants{
         return -1;
     }
 
-    private void moveBullet(double endrow) {
+    private void moveBullet() {
         if (bullet != null){
             bullet.move();
             endrow = findZombie();
@@ -127,7 +107,7 @@ public class Puffshroom extends PeaPlants{
 
     @Override
     public Plants clonePlant(int row, int column) {
-        return new Puffshroom(row,column);
+        return new PuffShroom(row,column);
     }
 
     @Override
@@ -155,6 +135,11 @@ public class Puffshroom extends PeaPlants{
         if (shootTimer != null) {
             shootTimer.play();
         }
+    }
+
+    @Override
+    public void end() {
+
     }
 
     public Timeline getTimer() {

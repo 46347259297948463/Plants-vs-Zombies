@@ -194,9 +194,9 @@ public class Zombie {
         startMove();
     }
 
-    public void pause() {
-        moveTimeline.pause();
-    }
+//    public void pause() {
+//        moveTimeline.pause();
+//    }
 
     public void setSpeed(int speed) {
         this.speed = speed;

@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import java.awt.*;
 
 public class PuffBullet extends Bullet{
+
     public PuffBullet(double row, double column) {
             super(row, column);
     }

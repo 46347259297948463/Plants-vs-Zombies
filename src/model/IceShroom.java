@@ -26,8 +26,8 @@ public class IceShroom extends BombPlants{
     private static int availableNum;
 
     public IceShroom(int i, int j){
-        super(i, j, 75, 15);
-        DayLevel.getInstance().setAvailablePicked(false,availableNum);
+        super(i, j, 75, 25);
+        DayLevel.getInstance().setAvailablePicked(false, availableNum);
         ImageView imageView = new ImageView(getClass().getResource("/view/images/Ice shroom.png").toString());
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);
@@ -65,7 +65,7 @@ public class IceShroom extends BombPlants{
             for(int j=0; j<9; j++){
                 ArrayList<Zombie> zombies = cells[i][j].getZombies();
                 for(Zombie z : zombies){
-                    z.pause();
+                    z.stop();
                 }
             }
         }
@@ -75,8 +75,8 @@ public class IceShroom extends BombPlants{
     }
 
     private void afterBomb(){
-        for (int i=0; i<5; i++){
-            for(int j=0; j<9; j++){
+        for (int i = 0 ; i < 5; i++){
+            for(int j = 0; j < 9; j++){
                 ArrayList<Zombie> zombies = cells[i][j].getZombies();
                 for(Zombie z : zombies){
                     z.play();
