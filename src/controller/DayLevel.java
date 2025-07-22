@@ -387,9 +387,11 @@ public class DayLevel implements Initializable {
 
     private static int menu = 0;
 
-    public boolean isStopMod = false;
+    public static boolean isStopMod = false;
 
     public static boolean isOnSaveMode = false;
+
+    private static final String SAVE_FILE = "save.dat";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -500,8 +502,9 @@ public class DayLevel implements Initializable {
         if (!isOnSaveMode) {
             setButtons();
             setGroups();
-            fillBoard();
         }
+
+        fillBoard();
 
         plant1BTN.setOnAction(event -> {
             if (!isStopMod) {
@@ -1069,41 +1072,20 @@ public class DayLevel implements Initializable {
 
     public GameState buildGameState() {
         GameState gameState = new GameState();
-
-        for (int i = 0 ; i < 5 ; i++){
-            for (int j = 0 ; j < 9 ; j++){
-                if(cells[i][j].getZombies() != null){
-                    for (Zombie zombie : cells[i][j].getZombies()){
-                        gameState.zombies.add(new ZombieData(
-                                zombie.getColumn(),
-                                zombie.getRow(),
-                                zombie.getHP(),
-                                zombie.rowBTN,
-                                zombie.columnBTN,
-                                zombie.getClass().getSimpleName()
-                        ));
-                    }
-                }
-                Plants plant = cells[i][j].getPlant();
-                if (plant != null){
-                    gameState.plants.add(new PlantData(i, j, plant.getHP(), plant.getClass().getSimpleName()));
-                }
-            }
-        }
+        gameState.type = DayLevel.getInstance().getClass().getSimpleName();
         gameState.sunPoints = Integer.parseInt(sunPoints.getText());
+        gameState.zombies = getZombiesData();
+        gameState.plants = getPlantsData();
+        System.out.println("gameTimer: " + gameTimer);
+        gameState.gameTimer = (long) gameTimer.getCurrentTime().toSeconds();
+        gameState.names = names;
+        gameState.rechargeTime = getRechargeTimer();
         return gameState;
     }
 
     public void saveGame(GameState gameState) {
         try {
-            gameState.sunPoints = Integer.parseInt(sunPoints.getText());
-            gameState.zombies = getZombiesData();
-            gameState.plants = getPlantsData();
-            gameState.gameTimer = (long) gameTimer.getCurrentTime().toSeconds();
-            gameState.names = names;
-            gameState.rechargeTime = getRechargeTimer();
-
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("save.dat"));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(SAVE_FILE));
             out.writeObject(gameState);
             out.close();
             System.out.println("GAME SAVED");
@@ -1115,7 +1097,7 @@ public class DayLevel implements Initializable {
     public GameState loadGame() {
         try
         {
-            ObjectInputStream input = new ObjectInputStream(new FileInputStream("save.dat"));
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream(SAVE_FILE));
             GameState gameState = (GameState) input.readObject();
             input.close();
             System.out.println("GAME LOADED");
@@ -1126,15 +1108,74 @@ public class DayLevel implements Initializable {
         }
     }
 
-    public void ApplyGameState() {
+    public void applyGameState() {
         GameState loadedState = loadGame();
         if (loadedState != null){
+            isOnSaveMode = false;
             sunPoints.setText(String.valueOf(loadedState.sunPoints));
             this.setNames(loadedState.names);
             setButtons();
             setGroups();
-            fillBoard();
-            gameTimer.stop();
+            if (gameTimer != null){
+                gameTimer.stop();
+            }
+
+            for (ZombieData z : loadedState.zombies){
+                
+            }
+
+            gameTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(20), e -> step1()),
+                    new KeyFrame(Duration.seconds(36), e -> step2()),
+                    new KeyFrame(Duration.seconds(52), e -> midAttack()),
+                    new KeyFrame(Duration.seconds(61), e -> step3()),
+                    new KeyFrame(Duration.seconds(77), e -> step4()),
+                    new KeyFrame(Duration.seconds(93), e -> finalAttack()),
+                    new KeyFrame(Duration.seconds(107), e -> {
+                        finalTimer.stop();
+                        finalTimer = null;
+                        zombieTimer = null;
+                        gameTimer.stop();
+                        gameTimer = null;
+                        exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
+                            if (isGameFinish()){
+                                clip.stop();
+                                try {
+                                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                            getClass().getResource("/view/audio/victory sound.wav")
+                                    );
+                                    Clip clip = AudioSystem.getClip();
+                                    clip.open(audioStream);
+                                    clip.start();
+                                } catch (Exception ev) {
+                                    ev.printStackTrace();
+                                }
+
+                                try {
+                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
+                                    Parent winContent = loader.load();
+
+                                    WinPage.setObj(DayLevel.getInstance());
+                                    dayAnc.getChildren().add(winContent);
+
+                                    AnchorPane.setTopAnchor(winContent, 250.0);
+                                    AnchorPane.setLeftAnchor(winContent, 690.0);
+
+                                    winContent.setOpacity(1);
+                                } catch (IOException ev) {
+                                    ev.printStackTrace();
+                                }
+                                stop();
+                                exitTimer.stop();
+                            }
+                        }));
+                        exitTimer.setCycleCount(Timeline.INDEFINITE);
+                        exitTimer.play();
+                    })
+            );
+            gameTimer.setCycleCount(1);
+            gameTimer.playFrom(Duration.seconds(loadedState.gameTimer));
+
             for (ZombieData zombieData : loadedState.zombies){
                 switch (zombieData.type) {
                     case "Zombie":

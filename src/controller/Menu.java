@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -74,15 +75,30 @@ public class Menu implements Initializable {
 
         backToGameBTN.setOnAction(event -> {
             if (obj instanceof DayLevel){
-                AnchorPane root = (AnchorPane) ((DayLevel) obj).getInstance().getMenuBTN().getScene().getRoot();
+                AnchorPane root = (AnchorPane) ((DayLevel) obj).getMenuBTN().getScene().getRoot();
                 root.getChildren().remove(this.anchorPane);
-                ((DayLevel) obj).getInstance().play();
+                ((DayLevel) obj).play();
                 DayLevel.setMenu(0);
             }
         });
 
         exitBTN.setOnAction(event -> {
-            DayLevel.getInstance().saveGame(DayLevel.getInstance().buildGameState());
+            AnchorPane root = (AnchorPane) ((DayLevel) obj).getMenuBTN().getScene().getRoot();
+            root.getChildren().remove(this.anchorPane);
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SavePage.fxml"));
+                Parent loadContact = loader.load();
+                DayLevel.getInstance().getDayAnc().getChildren().add(loadContact);
+
+                AnchorPane.setTopAnchor(loadContact, 260.0);
+                AnchorPane.setLeftAnchor(loadContact, 710.0);
+
+                loadContact.setOpacity(1);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         });
 
@@ -110,28 +126,28 @@ public class Menu implements Initializable {
         });
 
         restartBTN.setOnAction(event -> {
-//            if (obj instanceof DayLevel){
-//                FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
-//                try {
-//                    loader.load();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                PickIcon controller= loader.getController();
-//                Stage stage= new Stage();
-//                stage.setScene(new Scene(loader.getRoot()));
-//
-//                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
-//                stage.setFullScreen(true);
-//                stage.show();
-//            }
-//            Stage oldStage = (Stage) restartBTN.getScene().getWindow();
-//            oldStage.close();
-//            DayLevel.setMenu(0);
-//            DayLevel.stopAudio();
-//            FirstPage.playAudio();
-            DayLevel.getInstance().loadGame();
+            if (obj instanceof DayLevel){
+                FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
+                try {
+                    loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                PickIcon controller= loader.getController();
+                PickIcon.setObj(obj);
+                Stage stage= new Stage();
+                stage.setScene(new Scene(loader.getRoot()));
+
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                stage.setFullScreen(true);
+                stage.show();
+            }
+            Stage oldStage = (Stage) restartBTN.getScene().getWindow();
+            oldStage.close();
+            DayLevel.setMenu(0);
+            DayLevel.stopAudio();
+            FirstPage.playAudio();
         });
 
     }

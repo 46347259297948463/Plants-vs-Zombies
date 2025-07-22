@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class GameState implements Serializable {
 
+    public String type;
+
     public ArrayList<String> names;
 
     public long gameTimer;
