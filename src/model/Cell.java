@@ -7,9 +7,6 @@ import javafx.scene.control.Button;
 import java.util.ArrayList;
 
 public class Cell {
-    private int row;
-
-    private int column;
 
     private Plants plant;
 
@@ -21,9 +18,7 @@ public class Cell {
 
     private boolean isAvailable = true;
 
-    public Cell(int row, int column, Button button, Group group) {
-        this.row = row;
-        this.column = column;
+    public Cell(Button button, Group group) {
         this.button = button;
         this.group = group;
     }
@@ -101,4 +96,10 @@ public class Cell {
     public void setAvailable(boolean available) {
         isAvailable = available;
     }
+
+    public void clear() {
+        zombies = null;
+        plant = null;
+    }
+
 }

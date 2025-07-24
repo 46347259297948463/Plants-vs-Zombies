@@ -429,6 +429,7 @@ public class DayLevel implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
                     Parent menuContent = loader.load();
                     if (loader.getController() instanceof Menu) {
+                        System.out.println(DayLevel.getInstance());
                         ((Menu) loader.getController()).setObj(DayLevel.getInstance());
                     }
                     AnchorPane root = (AnchorPane) menuBTN.getScene().getRoot();
@@ -441,8 +442,8 @@ public class DayLevel implements Initializable {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                menu++;
             }
-            menu++;
         });
 
         gameTimer = new Timeline(
@@ -703,56 +704,56 @@ public class DayLevel implements Initializable {
         }
     }
 
-    private void fillBoard(){
-        cells[0][0] = new Cell(0, 0, cell00, group00);
-        cells[0][1] = new Cell(0, 1, cell01, group01);
-        cells[0][2] = new Cell(0, 2, cell02, group02);
-        cells[0][3] = new Cell(0, 3, cell03, group03);
-        cells[0][4] = new Cell(0, 4, cell04, group04);
-        cells[0][5] = new Cell(0, 5, cell05, group05);
-        cells[0][6] = new Cell(0, 6, cell06, group06);
-        cells[0][7] = new Cell(0, 7, cell07, group07);
-        cells[0][8] = new Cell(0, 8, cell08, group08);
+    private void fillBoard() {
+        cells[0][0] = new Cell(cell00, group00);
+        cells[0][1] = new Cell(cell01, group01);
+        cells[0][2] = new Cell(cell02, group02);
+        cells[0][3] = new Cell(cell03, group03);
+        cells[0][4] = new Cell(cell04, group04);
+        cells[0][5] = new Cell(cell05, group05);
+        cells[0][6] = new Cell(cell06, group06);
+        cells[0][7] = new Cell(cell07, group07);
+        cells[0][8] = new Cell(cell08, group08);
 
-        cells[1][0] = new Cell(1, 0, cell10, group10);
-        cells[1][1] = new Cell(1, 1, cell11, group11);
-        cells[1][2] = new Cell(1, 2, cell12, group12);
-        cells[1][3] = new Cell(1, 3, cell13, group13);
-        cells[1][4] = new Cell(1, 4, cell14, group14);
-        cells[1][5] = new Cell(1, 5, cell15, group15);
-        cells[1][6] = new Cell(1, 6, cell16, group16);
-        cells[1][7] = new Cell(1, 7, cell17, group17);
-        cells[1][8] = new Cell(1, 8, cell18, group18);
+        cells[1][0] = new Cell(cell10, group10);
+        cells[1][1] = new Cell(cell11, group11);
+        cells[1][2] = new Cell(cell12, group12);
+        cells[1][3] = new Cell(cell13, group13);
+        cells[1][4] = new Cell(cell14, group14);
+        cells[1][5] = new Cell(cell15, group15);
+        cells[1][6] = new Cell(cell16, group16);
+        cells[1][7] = new Cell(cell17, group17);
+        cells[1][8] = new Cell(cell18, group18);
 
-        cells[2][0] = new Cell(2, 0, cell20, group20);
-        cells[2][1] = new Cell(2, 1, cell21, group21);
-        cells[2][2] = new Cell(2, 2, cell22, group22);
-        cells[2][3] = new Cell(2, 3, cell23, group23);
-        cells[2][4] = new Cell(2, 4, cell24, group24);
-        cells[2][5] = new Cell(2, 5, cell25, group25);
-        cells[2][6] = new Cell(2, 6, cell26, group26);
-        cells[2][7] = new Cell(2, 7, cell27, group27);
-        cells[2][8] = new Cell(2, 8, cell28, group28);
+        cells[2][0] = new Cell(cell20, group20);
+        cells[2][1] = new Cell(cell21, group21);
+        cells[2][2] = new Cell(cell22, group22);
+        cells[2][3] = new Cell(cell23, group23);
+        cells[2][4] = new Cell(cell24, group24);
+        cells[2][5] = new Cell(cell25, group25);
+        cells[2][6] = new Cell(cell26, group26);
+        cells[2][7] = new Cell(cell27, group27);
+        cells[2][8] = new Cell(cell28, group28);
 
-        cells[3][0] = new Cell(3, 0, cell30, group30);
-        cells[3][1] = new Cell(3, 1, cell31, group31);
-        cells[3][2] = new Cell(3, 2, cell32, group32);
-        cells[3][3] = new Cell(3, 3, cell33, group33);
-        cells[3][4] = new Cell(3, 4, cell34, group34);
-        cells[3][5] = new Cell(3, 5, cell35, group35);
-        cells[3][6] = new Cell(3, 6, cell36, group36);
-        cells[3][7] = new Cell(3, 7, cell37, group37);
-        cells[3][8] = new Cell(3, 8, cell38, group38);
+        cells[3][0] = new Cell(cell30, group30);
+        cells[3][1] = new Cell(cell31, group31);
+        cells[3][2] = new Cell(cell32, group32);
+        cells[3][3] = new Cell(cell33, group33);
+        cells[3][4] = new Cell(cell34, group34);
+        cells[3][5] = new Cell(cell35, group35);
+        cells[3][6] = new Cell(cell36, group36);
+        cells[3][7] = new Cell(cell37, group37);
+        cells[3][8] = new Cell(cell38, group38);
 
-        cells[4][0] = new Cell(4, 0, cell40, group40);
-        cells[4][1] = new Cell(4, 1, cell41, group41);
-        cells[4][2] = new Cell(4, 2, cell42, group42);
-        cells[4][3] = new Cell(4, 3, cell43, group43);
-        cells[4][4] = new Cell(4, 4, cell44, group44);
-        cells[4][5] = new Cell(4, 5, cell45, group45);
-        cells[4][6] = new Cell(4, 6, cell46, group46);
-        cells[4][7] = new Cell(4, 7, cell47, group47);
-        cells[4][8] = new Cell(4, 8, cell48, group48);
+        cells[4][0] = new Cell(cell40, group40);
+        cells[4][1] = new Cell(cell41, group41);
+        cells[4][2] = new Cell(cell42, group42);
+        cells[4][3] = new Cell(cell43, group43);
+        cells[4][4] = new Cell( cell44, group44);
+        cells[4][5] = new Cell(cell45, group45);
+        cells[4][6] = new Cell(cell46, group46);
+        cells[4][7] = new Cell(cell47, group47);
+        cells[4][8] = new Cell(cell48, group48);
     }
 
     public void withdrawSunPoints(int n){
@@ -1055,6 +1056,9 @@ public class DayLevel implements Initializable {
     }
 
     public static DayLevel getInstance() {
+        if (instance == null) {
+            instance = new DayLevel();
+        }
         return instance;
     }
 
@@ -1076,8 +1080,8 @@ public class DayLevel implements Initializable {
         gameState.sunPoints = Integer.parseInt(sunPoints.getText());
         gameState.zombies = getZombiesData();
         gameState.plants = getPlantsData();
-        System.out.println("gameTimer: " + gameTimer);
-        gameState.gameTimer = (long) gameTimer.getCurrentTime().toSeconds();
+        System.out.println("gameTimer: " + DayLevel.getInstance().gameTimer);
+        gameState.gameTimer = (long) DayLevel.getInstance().gameTimer.getCurrentTime().toSeconds();
         gameState.names = names;
         gameState.rechargeTime = getRechargeTimer();
         return gameState;
@@ -1110,6 +1114,7 @@ public class DayLevel implements Initializable {
 
     public void applyGameState() {
         GameState loadedState = loadGame();
+        System.out.println(loadedState);
         if (loadedState != null){
             isOnSaveMode = false;
             sunPoints.setText(String.valueOf(loadedState.sunPoints));
@@ -1292,6 +1297,25 @@ public class DayLevel implements Initializable {
             l.add((long) plant.getTimer().getCurrentTime().toSeconds());
         }
         return l;
+    }
+
+    public static void resetInstance() {
+        instance = new DayLevel();
+    }
+
+    public void restart() {
+        groupsOfPicked = new ArrayList<>();
+        buttonsOfPicked = new ArrayList<>();
+        plants = new ArrayList<>();
+        cells = new Cell[5][9];
+        isStopMod = false;
+
+        setButtons();
+        setGroups();
+        fillBoard();
+
+        gameTimer = null;
+        numberOfZombies = new int[5];
     }
 
 }

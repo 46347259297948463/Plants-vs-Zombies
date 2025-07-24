@@ -34,6 +34,10 @@ public class ScaredyShroom extends PeaPlants{
 
     private static int availableNum;
 
+    private boolean scared = false;
+
+    private ImageView scaredImg;
+
     public ScaredyShroom(int i, int j) {
         super(HP, i, j, 25 , bullets, 10);
         DayLevel.getInstance().setAvailablePicked(false, availableNum);
@@ -41,6 +45,9 @@ public class ScaredyShroom extends PeaPlants{
         ImageView imageView = new ImageView(getClass().getResource("/view/images/scaredy shroom.png").toString());
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
+        scaredImg = new ImageView(getClass().getResource("/view/images/scare scaredy.png").toString());
+        scaredImg.setFitWidth(120);
+        scaredImg.setFitHeight(125);
         setImage(imageView);
         shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
         shootTimer.setCycleCount(Timeline.INDEFINITE);
@@ -60,7 +67,39 @@ public class ScaredyShroom extends PeaPlants{
     protected void shoot(Zombie zombie) {
         endrow = findZombie();
         if (zombie.columnBTN <= column + 1 && zombie.columnBTN >= column - 1){
-            
+            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+            scared = true;
+            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(scaredImg);
+        }
+        else {
+            if (scared) {
+                DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(scaredImg);
+                DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(this.image);
+                scared = false;
+            }
+            if(endrow == -1 || zombie == null || zombie.isDead()) {
+                return;
+            }else if(endrow != -1) {
+                if (moveBulletTimer != null) {
+                    DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
+                    moveBulletTimer.stop();
+                }
+                bullet = new PuffBullet(row, column);
+                try {
+                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                            getClass().getResource("/view/audio/hit sound.wav")
+                    );
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioStream);
+                    clip.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
+                moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet()));
+                moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
+                moveBulletTimer.play();
+            }
         }
     }
 
@@ -69,7 +108,7 @@ public class ScaredyShroom extends PeaPlants{
         zombie = null;
         double min = Double.MAX_VALUE;
 
-        for (int i = column; i < column && i < 9; i++) {
+        for (int i = column; i < 9; i++) {
             ArrayList<Zombie> zombies = cells[j][i].getZombies();
             if (zombies != null && !zombies.isEmpty()) {
                 for (Zombie z : zombies) {
@@ -135,11 +174,6 @@ public class ScaredyShroom extends PeaPlants{
         if (shootTimer != null) {
             shootTimer.play();
         }
-    }
-
-    @Override
-    public void end() {
-
     }
 
     public Timeline getTimer() {

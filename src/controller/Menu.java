@@ -127,6 +127,15 @@ public class Menu implements Initializable {
 
         restartBTN.setOnAction(event -> {
             if (obj instanceof DayLevel){
+                DayLevel.getInstance().stop();
+                DayLevel.setMenu(0);
+                DayLevel.stopAudio();
+                FirstPage.playAudio();
+                Stage oldStage = (Stage) restartBTN.getScene().getWindow();
+                oldStage.close();
+
+                DayLevel.resetInstance();
+
                 FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
                 try {
                     loader.load();
@@ -135,19 +144,16 @@ public class Menu implements Initializable {
                 }
 
                 PickIcon controller= loader.getController();
-                PickIcon.setObj(obj);
+                controller.setObj(DayLevel.getInstance());
+                DayLevel.getInstance().restart();
+
                 Stage stage= new Stage();
                 stage.setScene(new Scene(loader.getRoot()));
-
                 stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
                 stage.setFullScreen(true);
                 stage.show();
             }
-            Stage oldStage = (Stage) restartBTN.getScene().getWindow();
-            oldStage.close();
-            DayLevel.setMenu(0);
-            DayLevel.stopAudio();
-            FirstPage.playAudio();
+
         });
 
     }

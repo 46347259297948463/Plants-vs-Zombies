@@ -132,7 +132,7 @@ public class PickIcon implements Initializable{
 
         private int choose = 0;
 
-        private static Object obj;
+        private Object obj;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -355,7 +355,7 @@ public class PickIcon implements Initializable{
             return choose == 6;
     }
 
-    public static void setObj(Object object){
+    public void setObj(Object object){
             obj = object;
     }
 

@@ -69,8 +69,8 @@ public class HomePage implements Initializable {
                 e.printStackTrace();
             }
 
-            PickIcon.setObj(new DayLevel());
             PickIcon controller= loader.getController();
+            controller.setObj(DayLevel.getInstance());
             Stage stage= new Stage();
             stage.setScene(new Scene(loader.getRoot()));
 
