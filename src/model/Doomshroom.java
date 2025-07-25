@@ -6,7 +6,6 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
