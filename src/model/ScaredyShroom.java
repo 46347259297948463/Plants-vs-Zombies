@@ -28,7 +28,7 @@ public class ScaredyShroom extends PeaPlants{
 
     private double endrow;
 
-    private Timeline timer;
+    private static Timeline timer;
 
     private static Group group;
 

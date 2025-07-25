@@ -10,8 +10,6 @@ public class ZombieData implements Serializable {
 
     public String type;
 
-    private static final long serialVersionUID = 1L;
-
     public ZombieData(double x, double y, int HP, int rowBTN, int columnBTN, String type){
         this.x = x;
         this.y = y;

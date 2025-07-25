@@ -22,6 +22,7 @@ import javax.sound.sampled.Clip;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -347,6 +348,8 @@ public class DayLevel implements Initializable {
 
     private ArrayList<String> names = new ArrayList<>();
 
+    private ArrayList<String> cardNames = new ArrayList<>();
+
     private ArrayList<Group> groupsOfPicked = new ArrayList<>(6);
 
     private ArrayList<Button> buttonsOfPicked = new ArrayList<>(6);
@@ -446,65 +449,64 @@ public class DayLevel implements Initializable {
             }
         });
 
-        gameTimer = new Timeline(
-                new KeyFrame(Duration.seconds(20), e -> step1()),
-                new KeyFrame(Duration.seconds(36), e -> step2()),
-                new KeyFrame(Duration.seconds(52), e -> midAttack()),
-                new KeyFrame(Duration.seconds(61), e -> step3()),
-                new KeyFrame(Duration.seconds(77), e -> step4()),
-                new KeyFrame(Duration.seconds(93), e -> finalAttack()),
-                new KeyFrame(Duration.seconds(107), e -> {
-                    finalTimer.stop();
-                    finalTimer = null;
-                    zombieTimer = null;
-                    gameTimer.stop();
-                    gameTimer = null;
-                    exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-                        if (isGameFinish()){
-                            clip.stop();
-                            try {
-                                AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                                        getClass().getResource("/view/audio/victory sound.wav")
-                                );
-                                Clip clip = AudioSystem.getClip();
-                                clip.open(audioStream);
-                                clip.start();
-                            } catch (Exception ev) {
-                                ev.printStackTrace();
-                            }
-
-                            try {
-                                FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
-                                Parent winContent = loader.load();
-
-                                WinPage.setObj(DayLevel.getInstance());
-                                dayAnc.getChildren().add(winContent);
-
-                                AnchorPane.setTopAnchor(winContent, 250.0);
-                                AnchorPane.setLeftAnchor(winContent, 690.0);
-
-                                winContent.setOpacity(1);
-                            } catch (IOException ev) {
-                                ev.printStackTrace();
-                            }
-                            stop();
-                            exitTimer.stop();
-                        }
-                    }));
-                    exitTimer.setCycleCount(Timeline.INDEFINITE);
-                    exitTimer.play();
-                })
-        );
-        gameTimer.setCycleCount(1);
-        gameTimer.play();
-
-         randomSun = new RandomSun();
-
         if (!isOnSaveMode) {
-            setButtons();
-            setGroups();
-        }
+             gameTimer = new Timeline(
+                     new KeyFrame(Duration.seconds(20), e -> step1()),
+                     new KeyFrame(Duration.seconds(36), e -> step2()),
+                     new KeyFrame(Duration.seconds(52), e -> midAttack()),
+                     new KeyFrame(Duration.seconds(61), e -> step3()),
+                     new KeyFrame(Duration.seconds(77), e -> step4()),
+                     new KeyFrame(Duration.seconds(93), e -> finalAttack()),
+                     new KeyFrame(Duration.seconds(107), e -> {
+                         finalTimer.stop();
+                         finalTimer = null;
+                         zombieTimer = null;
+                         gameTimer.stop();
+                         gameTimer = null;
+                         exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
+                             if (isGameFinish()){
+                                 clip.stop();
+                                 try {
+                                     AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                             getClass().getResource("/view/audio/victory sound.wav")
+                                     );
+                                     Clip clip = AudioSystem.getClip();
+                                     clip.open(audioStream);
+                                     clip.start();
+                                 } catch (Exception ev) {
+                                     ev.printStackTrace();
+                                 }
 
+                                 try {
+                                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
+                                     Parent winContent = loader.load();
+
+                                     WinPage.setObj(DayLevel.getInstance());
+                                     dayAnc.getChildren().add(winContent);
+
+                                     AnchorPane.setTopAnchor(winContent, 250.0);
+                                     AnchorPane.setLeftAnchor(winContent, 690.0);
+
+                                     winContent.setOpacity(1);
+                                 } catch (IOException ev) {
+                                     ev.printStackTrace();
+                                 }
+                                 stop();
+                                 exitTimer.stop();
+                             }
+                         }));
+                         exitTimer.setCycleCount(Timeline.INDEFINITE);
+                         exitTimer.play();
+                     })
+             );
+             gameTimer.setCycleCount(1);
+             gameTimer.play();
+         }
+
+        randomSun = new RandomSun();
+
+        setButtons();
+        setGroups();
         fillBoard();
 
         plant1BTN.setOnAction(event -> {
@@ -616,6 +618,7 @@ public class DayLevel implements Initializable {
 
     public void setNames(ArrayList<String> plants){
         names = plants;
+        cardNames = new ArrayList<>(names);
         fixCards();
         deleteCard$setPlants();
     }
@@ -781,7 +784,9 @@ public class DayLevel implements Initializable {
     }
 
     private void step2(){
-        zombieTimer.stop();
+        if (zombieTimer != null) {
+            zombieTimer.stop();
+        }
         zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
             int choose = random.nextInt(2);
             if (choose == 0){
@@ -795,7 +800,9 @@ public class DayLevel implements Initializable {
     }
 
     private void midAttack(){
-        zombieTimer.stop();
+        if (zombieTimer != null) {
+            zombieTimer.stop();
+        }
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
                     getClass().getResource("/view/audio/wave sound.wav")
@@ -821,9 +828,13 @@ public class DayLevel implements Initializable {
     }
 
     private void step3(){
-        midTimer.stop();
-        midTimer = null;
-        zombieTimer.stop();
+        if (midTimer != null) {
+            midTimer.stop();
+            midTimer = null;
+        }
+        if (zombieTimer != null) {
+            zombieTimer.stop();
+        }
         zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
             int choose = random.nextInt(3);
             if (choose == 0){
@@ -839,7 +850,9 @@ public class DayLevel implements Initializable {
     }
 
     private void step4(){
-        zombieTimer.stop();
+        if (zombieTimer != null) {
+            zombieTimer.stop();
+        }
         zombieTimer = new Timeline(new KeyFrame(Duration.seconds(1) , event -> {
             int choose = random.nextInt(4);
             if (choose == 0){
@@ -857,7 +870,9 @@ public class DayLevel implements Initializable {
     }
 
     private void finalAttack(){
-        zombieTimer.stop();
+        if (zombieTimer != null) {
+            zombieTimer.stop();
+        }
         zombieTimer = null;
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
@@ -1080,9 +1095,12 @@ public class DayLevel implements Initializable {
         gameState.sunPoints = Integer.parseInt(sunPoints.getText());
         gameState.zombies = getZombiesData();
         gameState.plants = getPlantsData();
-        System.out.println("gameTimer: " + DayLevel.getInstance().gameTimer);
-        gameState.gameTimer = (long) DayLevel.getInstance().gameTimer.getCurrentTime().toSeconds();
-        gameState.names = names;
+        if (gameTimer == null) {
+            gameState.isOnGameMode = false;
+        } else {
+            gameState.gameTimer = (long) DayLevel.getInstance().gameTimer.getCurrentTime().toSeconds();
+        }
+        gameState.names = cardNames;
         gameState.rechargeTime = getRechargeTimer();
         return gameState;
     }
@@ -1114,95 +1132,124 @@ public class DayLevel implements Initializable {
 
     public void applyGameState() {
         GameState loadedState = loadGame();
-        System.out.println(loadedState);
         if (loadedState != null){
             isOnSaveMode = false;
             sunPoints.setText(String.valueOf(loadedState.sunPoints));
             this.setNames(loadedState.names);
-            setButtons();
-            setGroups();
-            if (gameTimer != null){
-                gameTimer.stop();
-            }
+            System.out.println("timer: " + loadedState.gameTimer);
+            System.out.println("Game mode: " + loadedState.isOnGameMode);
+            System.out.println(zombieTimer);
+            if (loadedState.isOnGameMode) {
+                gameTimer = new Timeline(
+                        new KeyFrame(Duration.seconds(20), e -> step1()),
+                        new KeyFrame(Duration.seconds(36), e -> step2()),
+                        new KeyFrame(Duration.seconds(52), e -> midAttack()),
+                        new KeyFrame(Duration.seconds(61), e -> step3()),
+                        new KeyFrame(Duration.seconds(77), e -> step4()),
+                        new KeyFrame(Duration.seconds(93), e -> finalAttack()),
+                        new KeyFrame(Duration.seconds(107), e -> {
+                            finalTimer.stop();
+                            finalTimer = null;
+                            zombieTimer = null;
+                            gameTimer.stop();
+                            gameTimer = null;
+                            exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
+                                if (isGameFinish()) {
+                                    clip.stop();
+                                    try {
+                                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                                getClass().getResource("/view/audio/victory sound.wav")
+                                        );
+                                        Clip clip = AudioSystem.getClip();
+                                        clip.open(audioStream);
+                                        clip.start();
+                                    } catch (Exception ev) {
+                                        ev.printStackTrace();
+                                    }
 
-            for (ZombieData z : loadedState.zombies){
-                
-            }
+                                    try {
+                                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
+                                        Parent winContent = loader.load();
 
-            gameTimer = new Timeline(
-                    new KeyFrame(Duration.seconds(20), e -> step1()),
-                    new KeyFrame(Duration.seconds(36), e -> step2()),
-                    new KeyFrame(Duration.seconds(52), e -> midAttack()),
-                    new KeyFrame(Duration.seconds(61), e -> step3()),
-                    new KeyFrame(Duration.seconds(77), e -> step4()),
-                    new KeyFrame(Duration.seconds(93), e -> finalAttack()),
-                    new KeyFrame(Duration.seconds(107), e -> {
-                        finalTimer.stop();
-                        finalTimer = null;
-                        zombieTimer = null;
-                        gameTimer.stop();
-                        gameTimer = null;
-                        exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-                            if (isGameFinish()){
-                                clip.stop();
-                                try {
-                                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                                            getClass().getResource("/view/audio/victory sound.wav")
-                                    );
-                                    Clip clip = AudioSystem.getClip();
-                                    clip.open(audioStream);
-                                    clip.start();
-                                } catch (Exception ev) {
-                                    ev.printStackTrace();
+                                        WinPage.setObj(DayLevel.getInstance());
+                                        dayAnc.getChildren().add(winContent);
+
+                                        AnchorPane.setTopAnchor(winContent, 250.0);
+                                        AnchorPane.setLeftAnchor(winContent, 690.0);
+
+                                        winContent.setOpacity(1);
+                                    } catch (IOException ev) {
+                                        ev.printStackTrace();
+                                    }
+                                    stop();
+                                    exitTimer.stop();
                                 }
+                            }));
+                            exitTimer.setCycleCount(Timeline.INDEFINITE);
+                            exitTimer.play();
+                        })
+                );
+                gameTimer.setCycleCount(1);
+                gameTimer.playFrom(Duration.seconds(loadedState.gameTimer));
+            } else {
+                exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
+                    if (isGameFinish()){
+                        clip.stop();
+                        try {
+                            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                    getClass().getResource("/view/audio/victory sound.wav")
+                            );
+                            Clip clip = AudioSystem.getClip();
+                            clip.open(audioStream);
+                            clip.start();
+                        } catch (Exception ev) {
+                            ev.printStackTrace();
+                        }
 
-                                try {
-                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
-                                    Parent winContent = loader.load();
+                        try {
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
+                            Parent winContent = loader.load();
 
-                                    WinPage.setObj(DayLevel.getInstance());
-                                    dayAnc.getChildren().add(winContent);
+                            WinPage.setObj(DayLevel.getInstance());
+                            dayAnc.getChildren().add(winContent);
 
-                                    AnchorPane.setTopAnchor(winContent, 250.0);
-                                    AnchorPane.setLeftAnchor(winContent, 690.0);
+                            AnchorPane.setTopAnchor(winContent, 250.0);
+                            AnchorPane.setLeftAnchor(winContent, 690.0);
 
-                                    winContent.setOpacity(1);
-                                } catch (IOException ev) {
-                                    ev.printStackTrace();
-                                }
-                                stop();
-                                exitTimer.stop();
-                            }
-                        }));
-                        exitTimer.setCycleCount(Timeline.INDEFINITE);
-                        exitTimer.play();
-                    })
-            );
-            gameTimer.setCycleCount(1);
-            gameTimer.playFrom(Duration.seconds(loadedState.gameTimer));
+                            winContent.setOpacity(1);
+                        } catch (IOException ev) {
+                            ev.printStackTrace();
+                        }
+                        stop();
+                        exitTimer.stop();
+                    }
+                }));
+                exitTimer.setCycleCount(Timeline.INDEFINITE);
+                exitTimer.play();
+            }
 
             for (ZombieData zombieData : loadedState.zombies){
                 switch (zombieData.type) {
                     case "Zombie":
-                        Zombie zombie = new Zombie(zombieData.x, zombieData.y, zombieData.rowBTN);
+                        Zombie zombie = new Zombie(zombieData.y, zombieData.x, zombieData.rowBTN);
                         zombie.columnBTN = zombieData.columnBTN;
                         cells[zombie.rowBTN][zombie.columnBTN].setZombies(zombie);
                         zombie.setHP(zombieData.HP);
                         break;
                     case "ConeheadZombie":
-                        ConeheadZombie coneheadZombie = new ConeheadZombie(zombieData.x, zombieData.y, zombieData.rowBTN);
+                        ConeheadZombie coneheadZombie = new ConeheadZombie(zombieData.y, zombieData.x, zombieData.rowBTN);
                         coneheadZombie.columnBTN = zombieData.columnBTN;
                         cells[coneheadZombie.rowBTN][coneheadZombie.columnBTN].setZombies(coneheadZombie);
                         coneheadZombie.setHP(zombieData.HP);
                         break;
                     case "ScreenDoorZombie":
-                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(zombieData.x, zombieData.y, zombieData.rowBTN);
+                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(zombieData.y, zombieData.x, zombieData.rowBTN);
                         screenDoorZombie.columnBTN = zombieData.columnBTN;
                         cells[screenDoorZombie.rowBTN][screenDoorZombie.columnBTN].setZombies(screenDoorZombie);
                         screenDoorZombie.setHP(zombieData.HP);
                         break;
                     case "ImpZombie":
-                        ImpZombie impZombie = new ImpZombie(zombieData.x, zombieData.y, zombieData.rowBTN);
+                        ImpZombie impZombie = new ImpZombie(zombieData.y, zombieData.x, zombieData.rowBTN);
                         impZombie.columnBTN = zombieData.columnBTN;
                         cells[impZombie.rowBTN][impZombie.columnBTN].setZombies(impZombie);
                         impZombie.setHP(zombieData.HP);
@@ -1215,42 +1262,50 @@ public class DayLevel implements Initializable {
                     case "CherryBomb" :
                          CherryBomb cherryBomb = new CherryBomb(plantData.row , plantData.column);
                          cherryBomb.setHP(plantData.HP);
-                         cells[plantData.row][plantData.column].setPlants(cherryBomb);
+                         cells[cherryBomb.getRow()][cherryBomb.getColumn()].setPlants(cherryBomb);
+                         cells[cherryBomb.getRow()][cherryBomb.getColumn()].getGroup().getChildren().add(cherryBomb.getImage());
                          break;
                     case "Jalapenos" :
                         Jalapenos jalapenos = new Jalapenos(plantData.row , plantData.column);
                         jalapenos.setHP(plantData.HP);
-                        cells[plantData.row][plantData.column].setPlants(jalapenos);
+                        cells[jalapenos.getRow()][jalapenos.getColumn()].setPlants(jalapenos);
+                        cells[jalapenos.getRow()][jalapenos.getColumn()].getGroup().getChildren().add(jalapenos.getImage());
                         break;
                     case "PeaShooter" :
                         PeaShooter peaShooter = new PeaShooter(plantData.row , plantData.column);
                         peaShooter.setHP(plantData.HP);
-                        cells[plantData.row][plantData.column].setPlants(peaShooter);
+                        cells[peaShooter.getRow()][peaShooter.getColumn()].setPlants(peaShooter);
+                        cells[peaShooter.getRow()][peaShooter.getColumn()].getGroup().getChildren().add(peaShooter.getImage());
                         break;
                     case "Repeater" :
                         Repeater repeater  = new Repeater(plantData.row , plantData.column);
                         repeater.setHP(plantData.HP);
-                        cells[plantData.row][plantData.column].setPlants(repeater);
+                        cells[repeater.getRow()][repeater.getColumn()].setPlants(repeater);
+                        cells[repeater.getRow()][repeater.getColumn()].getGroup().getChildren().add(repeater.getImage());
                         break;
                     case "SnowShooter" :
                         SnowShooter snowShooter = new SnowShooter(plantData.row , plantData.column);
                         snowShooter.setHP(plantData.HP);
-                        cells[plantData.row][plantData.column].setPlants(snowShooter);
+                        cells[snowShooter.getRow()][snowShooter.getColumn()].setPlants(snowShooter);
+                        cells[snowShooter.getRow()][snowShooter.getColumn()].getGroup().getChildren().add(snowShooter.getImage());
                         break;
                     case "Sunflower" :
                         Sunflower sunflower = new Sunflower(plantData.row , plantData.column);
                         sunflower.setHP(plantData.HP);
-                        cells[plantData.row][plantData.column].setPlants(sunflower);
+                        cells[sunflower.getRow()][sunflower.getColumn()].setPlants(sunflower);
+                        cells[sunflower.getRow()][sunflower.getColumn()].getGroup().getChildren().add(sunflower.getImage());
                         break;
                     case "TallNut" :
                         TallNut tallNut = new TallNut(plantData.row , plantData.column);
                         tallNut.setHP(plantData.HP);
-                        cells[plantData.row][plantData.column].setPlants(tallNut);
+                        cells[tallNut.getRow()][tallNut.getColumn()].setPlants(tallNut);
+                        cells[tallNut.getRow()][tallNut.getColumn()].getGroup().getChildren().add(tallNut.getImage());
                         break;
                     case "WallNut" :
                         WallNut wallNut = new WallNut(plantData.row , plantData.column);
                         wallNut.setHP(plantData.HP);
-                        cells[plantData.row][plantData.column].setPlants(wallNut);
+                        cells[wallNut.getRow()][wallNut.getColumn()].setPlants(wallNut);
+                        cells[wallNut.getRow()][wallNut.getColumn()].getGroup().getChildren().add(wallNut.getImage());
                         break;
                 }
             }
@@ -1293,8 +1348,12 @@ public class DayLevel implements Initializable {
 
     private ArrayList<Long> getRechargeTimer() {
         ArrayList<Long> l = new ArrayList<>();
-        for (Plants plant : plants) {
-            l.add((long) plant.getTimer().getCurrentTime().toSeconds());
+        for (int i = 0 ; i < 6 ; i++) {
+            if (!availablePicked[i]) {
+                l.add((long) plants.get(i).getTimer().getCurrentTime().toSeconds());
+            } else {
+                l.add(-1L);
+            }
         }
         return l;
     }

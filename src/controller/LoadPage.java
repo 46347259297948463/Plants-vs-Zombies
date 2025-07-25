@@ -37,6 +37,7 @@ public class LoadPage implements Initializable {
 
         yesBTN.setOnAction(event -> {
             DayLevel.isOnSaveMode = true;
+            FirstPage.stopAudio();
             FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/DayLevel.fxml"));
             try {
                 loader.load();

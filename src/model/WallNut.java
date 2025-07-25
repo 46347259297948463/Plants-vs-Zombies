@@ -12,7 +12,7 @@ public class WallNut extends NutPlants{
 
     private final static int HP = 10;
 
-    private Timeline timer;
+    private static Timeline timer;
 
     private static Group group;
 

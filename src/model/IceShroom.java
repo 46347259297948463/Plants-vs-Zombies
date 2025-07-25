@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class IceShroom extends BombPlants{
 
-    private Timeline timer;
+    private static Timeline timer;
 
     private Cell[][] cells = DayLevel.getInstance().getCells();
 
@@ -126,4 +126,5 @@ public class IceShroom extends BombPlants{
     public static void setGroup(Group g) {
         group = g;
     }
+
 }

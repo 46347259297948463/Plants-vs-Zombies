@@ -176,7 +176,7 @@
                   </Group>
                   <Group fx:id="group31">
                      <children>
-                        <Button fx:id="cell31" mnemonicParsing="false" opacity="0.0" prefHeight="166.0" prefWidth="145.0" />
+                        <Button fx:id="cell31" layoutY="1.0" mnemonicParsing="false" opacity="0.0" prefHeight="166.0" prefWidth="145.0" />
                      </children>
                   </Group>
                   <Group fx:id="group32">

@@ -11,7 +11,7 @@ public class TallNut extends NutPlants{
 
     private final static int HP = 16;
 
-    private Timeline timer;
+    private static Timeline timer;
 
     private static Group group;
 

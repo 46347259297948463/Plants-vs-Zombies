@@ -18,7 +18,7 @@ public class Sunflower extends Plants{
 
     private Timeline sunTimeline;
 
-    private Timeline timer;
+    private static Timeline timer;
 
     private static Group group;
 

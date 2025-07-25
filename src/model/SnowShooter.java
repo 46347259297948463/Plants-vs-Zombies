@@ -30,7 +30,7 @@ public class SnowShooter extends PeaPlants{
 
     private Timeline halfSpeedTimer;
 
-    private Timeline timer;
+    private static Timeline timer;
 
     private static Group group;
 

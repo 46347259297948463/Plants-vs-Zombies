@@ -23,6 +23,6 @@ public class GameState implements Serializable {
 
     public ArrayList<Long> rechargeTime;
 
-    private static final long serialVersionUID = 1L;
+    public boolean isOnGameMode = true;
 
 }

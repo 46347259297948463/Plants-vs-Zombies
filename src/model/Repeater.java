@@ -36,7 +36,7 @@ public class Repeater extends PeaPlants{
 
     private double endRow2;
 
-    private Timeline timer;
+    private static Timeline timer;
 
     private static Group group;
 

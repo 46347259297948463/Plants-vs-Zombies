@@ -15,7 +15,7 @@ public class Jalapenos extends BombPlants{
 
     private Cell[][] cells = DayLevel.getInstance().getCells();
 
-    private Timeline timer;
+    private static Timeline timer;
 
     private Timeline jalopenosTimer;
 

@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1307.0" prefWidth="1929.0" xmlns="http://javafx.com/javafx/8.0.441" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PickIcon">
+<AnchorPane prefHeight="1307.0" prefWidth="1929.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PickIcon">
    <children>
       <ImageView fitHeight="1300.0" fitWidth="1922.0" layoutX="30.0" layoutY="-100.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="-100.0">
          <image>
@@ -131,46 +131,87 @@
                                        <children>
                                           <Group>
                                              <children>
-                                                <ImageView fx:id="puffImage" fitHeight="143.0" fitWidth="183.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fx:id="puffImage" fitHeight="139.0" fitWidth="182.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@images/puff%20shroom%20card.png" />
                                                    </image>
                                                 </ImageView>
-                                                <Button fx:id="puffSelecterBTN" layoutX="7.0" layoutY="2.0" mnemonicParsing="false" opacity="0.0" prefHeight="138.0" prefWidth="174.0" />
+                                                <Button fx:id="puffSelecterBTN" layoutX="5.0" layoutY="3.0" mnemonicParsing="false" opacity="0.0" prefHeight="129.0" prefWidth="173.0" />
                                              </children>
                                           </Group>
                                           <Group>
                                              <children>
-                                                <ImageView fx:id="sunImage" fitHeight="143.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fx:id="sunImage" fitHeight="138.0" fitWidth="186.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@images/sun%20shroom%20card.png" />
                                                    </image>
                                                 </ImageView>
-                                                <Button fx:id="sunSelecterBTN" layoutX="-6.0" layoutY="2.0" mnemonicParsing="false" opacity="0.0" prefHeight="136.0" prefWidth="191.0" />
+                                                <Button fx:id="sunSelecterBTN" layoutX="1.0" layoutY="3.0" mnemonicParsing="false" opacity="0.0" prefHeight="132.0" prefWidth="181.0" />
                                              </children>
                                           </Group>
                                           <Group>
                                              <children>
-                                                <ImageView fitHeight="139.0" fitWidth="192.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fx:id="busterImg" fitHeight="142.0" fitWidth="176.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@images/grave%20buster%20card.png" />
                                                    </image>
                                                 </ImageView>
-                                                <Button fx:id="snowshooterSelecterBTN153" mnemonicParsing="false" opacity="0.0" prefHeight="137.0" prefWidth="186.0" />
+                                                <Button fx:id="busterSelecterBTN" layoutY="-10.0" mnemonicParsing="false" opacity="0.0" prefHeight="141.0" prefWidth="171.0" />
                                              </children>
                                           </Group>
-                                          <Button fx:id="snowshooterSelecterBTN154" mnemonicParsing="false" opacity="0.4" prefHeight="106.0" prefWidth="172.0" />
+                                          <Group>
+                                             <children>
+                                                <ImageView fx:id="hypnoImg" fitHeight="150.0" fitWidth="187.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@images/hypno%20shroom%20card.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Button fx:id="hypnoSelecterBTN" mnemonicParsing="false" opacity="0.0" prefHeight="140.0" prefWidth="187.0" />
+                                             </children>
+                                          </Group>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="123.0" prefWidth="610.0" spacing="25.0">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="123.0" prefWidth="610.0" spacing="10.0">
                                        <padding>
                                           <Insets left="10.0" />
                                        </padding>
                                        <children>
-                                          <Button fx:id="snowshooterSelecterBTN151" mnemonicParsing="false" opacity="0.4" prefHeight="106.0" prefWidth="172.0" />
-                                          <Button fx:id="snowshooterSelecterBTN1511" mnemonicParsing="false" opacity="0.4" prefHeight="106.0" prefWidth="172.0" />
-                                          <Button fx:id="snowshooterSelecterBTN1532" mnemonicParsing="false" opacity="0.4" prefHeight="106.0" prefWidth="172.0" />
-                                          <Button fx:id="snowshooterSelecterBTN1542" mnemonicParsing="false" opacity="0.4" prefHeight="106.0" prefWidth="172.0" />
+                                          <Group>
+                                             <children>
+                                                <ImageView fx:id="scaredyImg" fitHeight="143.0" fitWidth="187.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@images/scaredy%20shroom%20card.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Button fx:id="scaredySelecterBTN" mnemonicParsing="false" opacity="0.0" prefHeight="137.0" prefWidth="182.0" />
+                                             </children>
+                                          </Group>
+                                          <Group>
+                                             <children>
+                                                <ImageView fx:id="iceImg" fitHeight="140.0" fitWidth="187.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@images/ice%20shroom%20card.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Button fx:id="iceSelecterBTN" mnemonicParsing="false" opacity="0.0" prefHeight="139.0" prefWidth="180.0" />
+                                             </children>
+                                          </Group>
+                                          <Group>
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@images/doom%20shroom%20card.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Button fx:id="snowshooterSelecterBTN1532" mnemonicParsing="false" opacity="0.4" prefHeight="106.0" prefWidth="172.0" />
+                                             </children>
+                                          </Group>
+                                          <Group>
+                                             <children>
+                                                <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                                                <Button fx:id="snowshooterSelecterBTN1542" mnemonicParsing="false" opacity="0.4" prefHeight="106.0" prefWidth="172.0" />
+                                             </children>
+                                          </Group>
                                        </children>
                                     </HBox>
                                  </children>
@@ -263,7 +304,7 @@
             <Insets top="50.0" />
          </opaqueInsets>
       </VBox>
-      <Button fx:id="playBTN" layoutX="625.0" layoutY="938.0" mnemonicParsing="false" opacity="0.8" prefHeight="56.0" prefWidth="143.0" style="-fx-background-color: #A0522D;" text="PLAY" textFill="#ffef0a">
+      <Button fx:id="playBTN" layoutX="625.0" layoutY="846.0" mnemonicParsing="false" opacity="0.8" prefHeight="56.0" prefWidth="143.0" style="-fx-background-color: #A0522D;" text="PLAY" textFill="#ffef0a">
          <font>
             <Font name="Bell MT Bold" size="28.0" />
          </font>

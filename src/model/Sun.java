@@ -59,11 +59,20 @@ public class Sun {
 
     }
 
-    public void endSun(){
-        if (isSunflower){
-            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(getGroup());
+    public void endSun() {
+        if (isSunflower) {
+            if (DayLevel.getInstance() != null &&
+                    DayLevel.getInstance().getCells() != null &&
+                    row >= 0 && column >= 0 &&
+                    DayLevel.getInstance().getCells()[row][column] != null &&
+                    DayLevel.getInstance().getCells()[row][column].getGroup() != null) {
+                DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(getGroup());
+            }
         } else {
-            DayLevel.getInstance().getDayAnc().getChildren().remove(getGroup());
+            if (DayLevel.getInstance() != null &&
+                    DayLevel.getInstance().getDayAnc() != null) {
+                DayLevel.getInstance().getDayAnc().getChildren().remove(getGroup());
+            }
         }
     }
 

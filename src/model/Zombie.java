@@ -24,8 +24,6 @@ public class Zombie {
 
     private Timeline moveTimeline;
 
-//    protected boolean isRemoved = false;
-
     private int i = 0;
 
     private double limitColumn;
@@ -226,4 +224,7 @@ public class Zombie {
         return HP;
     }
 
+    public ImageView getImage() {
+        return image;
+    }
 }

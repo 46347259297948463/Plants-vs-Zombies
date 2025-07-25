@@ -28,7 +28,7 @@ public class PeaShooter extends PeaPlants {
 
     private double endRow;
 
-    private Timeline timer;
+    private static Timeline timer;
 
     private static Group group;
 

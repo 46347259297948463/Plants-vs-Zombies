@@ -13,7 +13,7 @@ import javax.sound.sampled.Clip;
 
 public class CherryBomb extends BombPlants{
 
-    private Timeline timer;
+    private static Timeline timer;
 
     private Timeline cherryBombTimer;
 
