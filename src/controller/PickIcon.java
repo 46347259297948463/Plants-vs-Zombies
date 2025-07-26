@@ -21,13 +21,41 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class PickIcon implements Initializable{
+public class PickIcon implements Initializable {
+
+        @FXML
+        private ImageView beanImage;
+
+        @FXML
+        private Button beanSelecterBTN;
+
+
+        @FXML
+        private ImageView bloverImage;
+
+        @FXML
+        private Button bloverSelecterBTN;
+
+        @FXML
+        private ImageView busterImage;
+
+        @FXML
+        private Button busterSelecterBTN;
 
         @FXML
         private ImageView cherryBombImage;
 
         @FXML
         private Button cherrybombSelecterBTN;
+
+        @FXML
+        private ImageView doomImage;
+
+        @FXML
+        private Button doomSelecterBTN;
+
+        @FXML
+        private Button exitBTN;
 
         @FXML
         private Group group1;
@@ -46,6 +74,21 @@ public class PickIcon implements Initializable{
 
         @FXML
         private Group group6;
+
+        @FXML
+        private Button homeBTN;
+
+        @FXML
+        private ImageView hypnoImage;
+
+        @FXML
+        private Button hypnoSelecterBTN;
+
+        @FXML
+        private ImageView iceImage;
+
+        @FXML
+        private Button iceSelecterBTN;
 
         @FXML
         private ImageView jalapenoImage;
@@ -78,7 +121,19 @@ public class PickIcon implements Initializable{
         private Button plant6BTN;
 
         @FXML
+        private ImageView planternImage;
+
+        @FXML
+        private Button planternSelecterBTN;
+
+        @FXML
         private Button playBTN;
+
+        @FXML
+        private ImageView puffImage;
+
+        @FXML
+        private Button puffSelecterBTN;
 
         @FXML
         private ImageView repeaterImage;
@@ -87,10 +142,25 @@ public class PickIcon implements Initializable{
         private Button repeaterSelecterBTN;
 
         @FXML
+        private Button resetBTN;
+
+        @FXML
+        private ImageView scaredyImage;
+
+        @FXML
+        private Button scaredySelecterBTN;
+
+        @FXML
         private ImageView snowShooterImage;
 
         @FXML
         private Button snowshooterSelecterBTN;
+
+        @FXML
+        private ImageView sunImage;
+
+        @FXML
+        private Button sunSelecterBTN;
 
         @FXML
         private ImageView sunflowerImage;
@@ -110,18 +180,6 @@ public class PickIcon implements Initializable{
         @FXML
         private Button wallnutSelecterBTN;
 
-        @FXML
-        private Button resetBTN;
-
-        @FXML
-        private Button exitBTN;
-
-        @FXML
-        private Button homeBTN;
-
-        @FXML
-        private VBox thrownVbox;
-
         private ArrayList<ImageView> imageViews = new ArrayList<>(6);
 
         private ArrayList<String> plantsPicked = new ArrayList<>(6);
@@ -129,6 +187,10 @@ public class PickIcon implements Initializable{
         private ArrayList<Group> groupsOfPicked = new ArrayList<>(6);
 
         private ArrayList<Button> buttonsOfPicked = new ArrayList<>(6);
+
+        private boolean pickBean = false;
+
+        private boolean isDay = true;
 
         private int choose = 0;
 
@@ -215,6 +277,71 @@ public class PickIcon implements Initializable{
                     if (selecter("tall nut card", tallNutImage))
                         tallNutImage.setOpacity(0.45);
             });
+            puffSelecterBTN.setOnAction(event -> {
+                    if (!isDay || pickBean) {
+                            if (selecter("puff shroom card", puffImage)) {
+                                    puffImage.setOpacity(0.45);
+                            }
+                    }
+            });
+            sunSelecterBTN.setOnAction(event -> {
+                    if (!isDay || pickBean) {
+                            if (selecter("sun shroom card", sunImage)) {
+                                    sunImage.setOpacity(0.45);
+                            }
+                    }
+            });
+            busterSelecterBTN.setOnAction(event -> {
+                    if (!isDay || pickBean) {
+                            if (selecter("grave buster card", busterImage)) {
+                                    busterImage.setOpacity(0.45);
+                            }
+                    }
+            });
+            doomSelecterBTN.setOnAction(event -> {
+                    if (!isDay || pickBean) {
+                            if (selecter("doom shroom card", doomImage)) {
+                                    doomImage.setOpacity(0.45);
+                            }
+                    }
+            });
+            hypnoSelecterBTN.setOnAction(event -> {
+                    if (!isDay || pickBean) {
+                            if (selecter("hypno shroom card", hypnoImage)) {
+                                    hypnoImage.setOpacity(0.45);
+                            }
+                    }
+            });
+            scaredySelecterBTN.setOnAction(event -> {
+                    if (!isDay || pickBean) {
+                            if (selecter("scaredy shroom card", scaredyImage))
+                                    scaredyImage.setOpacity(0.45);
+                    }
+            });
+            iceSelecterBTN.setOnAction(event -> {
+                    if (!isDay || pickBean) {
+                            if (selecter("ice shroom card", iceImage))
+                                    iceImage.setOpacity(0.45);
+                    }
+            });
+            bloverSelecterBTN.setOnAction(event -> {
+                    if (!isDay || pickBean) {
+                            if (selecter("blover card", bloverImage))
+                                    bloverImage.setOpacity(0.45);
+                    }
+            });
+            planternSelecterBTN.setOnAction(event -> {
+                    if (!isDay || pickBean) {
+                            if (selecter("plantern card", planternImage))
+                                    planternImage.setOpacity(0.45);
+                    }
+            });
+            beanSelecterBTN.setOnAction(event -> {
+                    if (selecter("coffee bean card", beanImage)) {
+                            beanImage.setOpacity(0.45);
+                            beanState(1, true);
+                    }
+            });
 
             plant1BTN.setOnAction(event -> {
                     playNButtton(group1, 0);
@@ -261,13 +388,13 @@ public class PickIcon implements Initializable{
             });
     }
 
-    public void playNButtton(Group group, int i){
-            removePic(group);
-            plantsPicked.set(i, null);
+    private void playNButtton(Group group, int i){
             imageViews.get(i).setOpacity(1);
+            removePic(group, i);
+            plantsPicked.set(i, null);
     }
 
-    public boolean selecter(String str, ImageView im){
+    private boolean selecter(String str, ImageView im){
             if (plantsPicked.contains(str)){
                     return false;
             }
@@ -297,7 +424,7 @@ public class PickIcon implements Initializable{
             return true;
     }
 
-    public void setButtons(){
+    private void setButtons(){
             buttonsOfPicked.add(plant1BTN);
             buttonsOfPicked.add(plant2BTN);
             buttonsOfPicked.add(plant3BTN);
@@ -306,7 +433,7 @@ public class PickIcon implements Initializable{
             buttonsOfPicked.add(plant6BTN);
     }
 
-    public void setGroups(){
+    private void setGroups(){
             groupsOfPicked.add(group1);
             groupsOfPicked.add(group2);
             groupsOfPicked.add(group3);
@@ -315,27 +442,37 @@ public class PickIcon implements Initializable{
             groupsOfPicked.add(group6);
     }
 
-    public void setPlants(){
+    private void setPlants(){
             for (int i = 0; i < 6; i++) {
                     plantsPicked.add(null);
             }
     }
 
-    public void setImages(){
+    private void setImages(){
             for (int i = 0; i < 6; i++) {
                         imageViews .add(null);
             }
     }
 
-    public void removePic(Group group){
+    private void removePic(Group group, int i){
             Node toRemove = null;
 
             for (Node node : group.getChildren()) {
                     if (node instanceof StackPane) {
                             StackPane sp = (StackPane) node;
                             for (Node child : sp.getChildren()) {
+                                    boolean flag = true;
                                     if (child instanceof ImageView) {
                                             toRemove = child;
+                                            String str = new StringBuilder().append("").append(((ImageView) child).
+                                                    getImage().impl_getUrl()).toString();
+                                            if (str.contains("coffee%20bean%20card.png")) {
+                                                    beanState(0.8, false);
+                                            }
+                                            if ((str.contains("shroom") || str.contains("blover") ||
+                                                    str.contains("plantern") || str.contains("buster")) && !pickBean) {
+                                                    imageViews.get(i).setOpacity(0.8);
+                                            }
                                     } else if (child instanceof Button) {
                                             child.setOpacity(0.45);
                                     }
@@ -351,8 +488,21 @@ public class PickIcon implements Initializable{
             }
     }
 
-    public boolean isFinish(){
+    private boolean isFinish(){
             return choose == 6;
+    }
+
+    private void beanState(double i, boolean bol) {
+            pickBean = bol;
+            puffImage.setOpacity(i);
+            sunImage.setOpacity(i);
+            iceImage.setOpacity(i);
+            scaredyImage.setOpacity(i);
+            doomImage.setOpacity(i);
+            bloverImage.setOpacity(i);
+            hypnoImage.setOpacity(i);
+            busterImage.setOpacity(i);
+            planternImage.setOpacity(i);
     }
 
     public void setObj(Object object){
