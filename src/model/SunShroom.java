@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -31,7 +32,7 @@ public class SunShroom extends Plants {
     public SunShroom(int i, int j){
         super(HP, i, j, 25, 5);
         DayLevel.getInstance().setAvailablePicked(false,availableNum);
-        ImageView imageView = new ImageView(getClass().getResource("/images/sun shroom.png").toString());
+        ImageView imageView = new ImageView(getClass().getResource("/view/images/sun shroom.png").toString());
         imageView.setFitHeight(75);
         imageView.setFitWidth(75);
         setImage(imageView);
@@ -62,25 +63,47 @@ public class SunShroom extends Plants {
         }
         else {
             sun = new Sun(row , column, true);
-            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
-            sun.getButton().setOnAction(event -> {
-                if (!DayLevel.getInstance().isStopMod) {
-                    DayLevel.getInstance().depositSunPoints(15);
-                    DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
-                    try {
-                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                                getClass().getResource("/view/audio/sun sound.wav")
-                        );
-                        Clip clip = AudioSystem.getClip();
-                        clip.open(audioStream);
-                        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                        gainControl.setValue(6.0f);
-                        clip.start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
+            if (obj instanceof DayLevel) {
+                DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
+                sun.getButton().setOnAction(event -> {
+                    if (!DayLevel.getInstance().isStopMod) {
+                        DayLevel.getInstance().depositSunPoints(15);
+                        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
+                        try {
+                            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                    getClass().getResource("/view/audio/sun sound.wav")
+                            );
+                            Clip clip = AudioSystem.getClip();
+                            clip.open(audioStream);
+                            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                            gainControl.setValue(6.0f);
+                            clip.start();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-            });
+                });
+            } else if (obj instanceof NightLevel) {
+                NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
+                sun.getButton().setOnAction(event -> {
+                    if (!NightLevel.getInstance().isStopMod) {
+                        NightLevel.getInstance().depositSunPoints(15);
+                        NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
+                        try {
+                            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                    getClass().getResource("/view/audio/sun sound.wav")
+                            );
+                            Clip clip = AudioSystem.getClip();
+                            clip.open(audioStream);
+                            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                            gainControl.setValue(6.0f);
+                            clip.start();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            }
         }
     }
 

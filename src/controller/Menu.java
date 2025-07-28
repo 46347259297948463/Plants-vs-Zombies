@@ -74,30 +74,60 @@ public class Menu implements Initializable {
         });
 
         backToGameBTN.setOnAction(event -> {
+
             if (obj instanceof DayLevel){
                 AnchorPane root = (AnchorPane) ((DayLevel) obj).getMenuBTN().getScene().getRoot();
                 root.getChildren().remove(this.anchorPane);
                 ((DayLevel) obj).play();
                 DayLevel.setMenu(0);
+            } else if (obj instanceof  NightLevel) {
+                AnchorPane root = (AnchorPane) ((NightLevel) obj).getMenuBTN().getScene().getRoot();
+                root.getChildren().remove(this.anchorPane);
+                ((NightLevel) obj).play();
+                NightLevel.setMenu(0);
             }
+
         });
 
         exitBTN.setOnAction(event -> {
-            AnchorPane root = (AnchorPane) ((DayLevel) obj).getMenuBTN().getScene().getRoot();
-            root.getChildren().remove(this.anchorPane);
+            if (obj instanceof DayLevel) {
+                AnchorPane root = (AnchorPane) ((DayLevel) obj).getMenuBTN().getScene().getRoot();
+                root.getChildren().remove(this.anchorPane);
 
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SavePage.fxml"));
-                Parent loadContact = loader.load();
-                DayLevel.getInstance().getDayAnc().getChildren().add(loadContact);
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SavePage.fxml"));
+                    Parent loadContact = loader.load();
+                    DayLevel.getInstance().getDayAnc().getChildren().add(loadContact);
 
-                AnchorPane.setTopAnchor(loadContact, 260.0);
-                AnchorPane.setLeftAnchor(loadContact, 710.0);
+                    AnchorPane.setTopAnchor(loadContact, 260.0);
+                    AnchorPane.setLeftAnchor(loadContact, 710.0);
 
-                loadContact.setOpacity(1);
+                    loadContact.setOpacity(1);
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (obj instanceof NightLevel) {
+                AnchorPane root = (AnchorPane) ((NightLevel) obj).getMenuBTN().getScene().getRoot();
+                root.getChildren().remove(this.anchorPane);
+
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SavePage.fxml"));
+                    Parent loadContact = loader.load();
+                    NightLevel.getInstance().getNightAnc().getChildren().add(loadContact);
+
+                    AnchorPane.setTopAnchor(loadContact, 260.0);
+                    AnchorPane.setLeftAnchor(loadContact, 710.0);
+
+                    loadContact.setOpacity(1);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+
             }
 
         });
@@ -119,10 +149,16 @@ public class Menu implements Initializable {
             stage.show();
             Stage oldStage = (Stage) homeBTN.getScene().getWindow();
             oldStage.close();
-            DayLevel.setMenu(0);
             FirstPage.playAudio();
-            DayLevel.stopAudio();
-            FirstPage.playAudio();
+
+            if (obj instanceof DayLevel) {
+                DayLevel.setMenu(0);
+                DayLevel.stopAudio();
+            } else if (obj instanceof  NightLevel) {
+                NightLevel.setMenu(0);
+                NightLevel.stopAudio();
+            }
+
         });
 
         restartBTN.setOnAction(event -> {
@@ -146,6 +182,32 @@ public class Menu implements Initializable {
                 PickIcon controller= loader.getController();
                 controller.setObj(DayLevel.getInstance());
                 DayLevel.getInstance().restart();
+
+                Stage stage= new Stage();
+                stage.setScene(new Scene(loader.getRoot()));
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                stage.setFullScreen(true);
+                stage.show();
+            } else if (obj instanceof NightLevel) {
+                NightLevel.getInstance().stop();
+                NightLevel.setMenu(0);
+                NightLevel.stopAudio();
+                FirstPage.playAudio();
+                Stage oldStage = (Stage) restartBTN.getScene().getWindow();
+                oldStage.close();
+
+                NightLevel.resetInstance();
+
+                FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
+                try {
+                    loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                PickIcon controller= loader.getController();
+                controller.setObj(NightLevel.getInstance());
+                NightLevel.getInstance().restart();
 
                 Stage stage= new Stage();
                 stage.setScene(new Scene(loader.getRoot()));

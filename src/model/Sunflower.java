@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -58,11 +59,31 @@ public class Sunflower extends Plants{
         }
         else {
             sun = new Sun(row , column, true);
-            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
+            if (obj instanceof DayLevel) {
+                DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
+            } else if (obj instanceof NightLevel) {
+                NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
+            }
             sun.getButton().setOnAction(event -> {
-                if (!DayLevel.getInstance().isStopMod) {
+
+                if ((obj instanceof DayLevel) && (!DayLevel.getInstance().isStopMod)) {
                     DayLevel.getInstance().depositSunPoints(25);
                     DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
+                    try {
+                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                getClass().getResource("/view/audio/sun sound.wav")
+                        );
+                        Clip clip = AudioSystem.getClip();
+                        clip.open(audioStream);
+                        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                        gainControl.setValue(6.0f);
+                        clip.start();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if ((obj instanceof NightLevel) && (!NightLevel.getInstance().isStopMod)) {
+                    NightLevel.getInstance().depositSunPoints(25);
+                    NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
                     try {
                         AudioInputStream audioStream = AudioSystem.getAudioInputStream(
                                 getClass().getResource("/view/audio/sun sound.wav")

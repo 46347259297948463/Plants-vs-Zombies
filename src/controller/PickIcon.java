@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -180,6 +181,12 @@ public class PickIcon implements Initializable {
         @FXML
         private Button wallnutSelecterBTN;
 
+        @FXML
+        private ImageView imageView;
+
+        @FXML
+        private AnchorPane pickAnc;
+
         private ArrayList<ImageView> imageViews = new ArrayList<>(6);
 
         private ArrayList<String> plantsPicked = new ArrayList<>(6);
@@ -325,16 +332,12 @@ public class PickIcon implements Initializable {
                     }
             });
             bloverSelecterBTN.setOnAction(event -> {
-                    if (!isDay || pickBean) {
-                            if (selecter("blover card", bloverImage))
-                                    bloverImage.setOpacity(0.45);
-                    }
+                    if (selecter("blover card", bloverImage))
+                            bloverImage.setOpacity(0.45);
             });
             planternSelecterBTN.setOnAction(event -> {
-                    if (!isDay || pickBean) {
-                            if (selecter("plantern card", planternImage))
-                                    planternImage.setOpacity(0.45);
-                    }
+                    if (selecter("plantern card", planternImage))
+                            planternImage.setOpacity(0.45);
             });
             beanSelecterBTN.setOnAction(event -> {
                     if (selecter("coffee bean card", beanImage)) {
@@ -383,9 +386,29 @@ public class PickIcon implements Initializable {
 
                                     ((Stage) resetBTN.getScene().getWindow()).hide();
                                     FirstPage.stopAudio();
+                            } else if (obj instanceof NightLevel) {
+                                    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/NightLevel.fxml"));
+                                    try {
+                                            loader.load();
+                                    } catch (IOException e) {
+                                            e.printStackTrace();
+                                    }
+
+                                    NightLevel controller = loader.getController();
+                                    controller.setNames(plantsPicked);
+                                    Stage stage = new Stage();
+                                    stage.setScene(new Scene(loader.getRoot()));
+
+                                    stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                                    stage.setFullScreen(true);
+                                    stage.show();
+
+                                    ((Stage) resetBTN.getScene().getWindow()).hide();
+                                    FirstPage.stopAudio();
                             }
                     }
             });
+
     }
 
     private void playNButtton(Group group, int i){
@@ -466,11 +489,11 @@ public class PickIcon implements Initializable {
                                             toRemove = child;
                                             String str = new StringBuilder().append("").append(((ImageView) child).
                                                     getImage().impl_getUrl()).toString();
-                                            if (str.contains("coffee%20bean%20card.png")) {
+                                            if (str.contains("coffee%20bean%20card.png") && isDay) {
                                                     beanState(0.8, false);
                                             }
                                             if ((str.contains("shroom") || str.contains("blover") ||
-                                                    str.contains("plantern") || str.contains("buster")) && !pickBean) {
+                                                    str.contains("plantern") || str.contains("buster")) && !pickBean && isDay) {
                                                     imageViews.get(i).setOpacity(0.8);
                                             }
                                     } else if (child instanceof Button) {
@@ -494,19 +517,47 @@ public class PickIcon implements Initializable {
 
     private void beanState(double i, boolean bol) {
             pickBean = bol;
-            puffImage.setOpacity(i);
-            sunImage.setOpacity(i);
-            iceImage.setOpacity(i);
-            scaredyImage.setOpacity(i);
-            doomImage.setOpacity(i);
-            bloverImage.setOpacity(i);
-            hypnoImage.setOpacity(i);
-            busterImage.setOpacity(i);
-            planternImage.setOpacity(i);
+            if (!isPicked("puff")) {
+                    puffImage.setOpacity(i);
+            }
+            if (!isPicked("sun shroom")) {
+                    sunImage.setOpacity(i);
+            }
+            if (!isPicked("ice")) {
+                    iceImage.setOpacity(i);
+            }
+            if (!isPicked("scaredy")) {
+                    scaredyImage.setOpacity(i);
+            }
+            if (!isPicked("doom")) {
+                    doomImage.setOpacity(i);
+            }
+            if (!isPicked("hypno")) {
+                    hypnoImage.setOpacity(i);
+            }
+            if (!isPicked("buster")) {
+                    busterImage.setOpacity(i);
+            }
     }
 
     public void setObj(Object object){
             obj = object;
+            if (obj instanceof NightLevel) {
+                    isDay = false;
+                    imageView.setImage(new Image(getClass().getResource("/view/images/pick night.png").toString()));
+                    beanState(1, false);
+            }
+    }
+
+    private boolean isPicked(String str) {
+            if (plantsPicked != null) {
+                    for (String plant : plantsPicked) {
+                            if (plant != null && plant.contains(str)) {
+                                    return true;
+                            }
+                    }
+            }
+            return false;
     }
 
 }

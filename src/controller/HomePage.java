@@ -81,6 +81,26 @@ public class HomePage implements Initializable {
             oldStage.close();
         });
 
+        nightBTN.setOnAction(event -> {
+            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
+            try {
+                loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            PickIcon controller= loader.getController();
+            controller.setObj(NightLevel.getInstance());
+            Stage stage= new Stage();
+            stage.setScene(new Scene(loader.getRoot()));
+
+            stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+            stage.setFullScreen(true);
+            stage.show();
+            Stage oldStage = (Stage) nightBTN.getScene().getWindow();
+            oldStage.close();
+        });
+
     }
 
     public static void setInstance(HomePage instance) {

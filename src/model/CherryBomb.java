@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -25,7 +26,11 @@ public class CherryBomb extends BombPlants{
 
     public CherryBomb(int i, int j) {
         super(i, j, 150, 15);
-        DayLevel.getInstance().setAvailablePicked(false, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(false, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(false, availableNum);
+        }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/cherry bomb.png").toString());
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);

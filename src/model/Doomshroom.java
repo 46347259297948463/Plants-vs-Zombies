@@ -1,9 +1,11 @@
 package model;
 
 import controller.DayLevel;
+import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import javax.sound.sampled.AudioInputStream;
@@ -16,7 +18,7 @@ public class Doomshroom extends BombPlants{
 
     private Timeline doomshroomTimer;
 
-    private Cell[][] cells = DayLevel.getInstance().getCells();
+    private Cell[][] cells;
 
     private static Group group;
 
@@ -26,21 +28,37 @@ public class Doomshroom extends BombPlants{
 
     public Doomshroom(int i, int j) {
         super(i, j, 125, 20);
-        DayLevel.getInstance().setAvailablePicked(false, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = DayLevel.getInstance().getCells();
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = NightLevel.getInstance().getCells();
+        }
         ImageView imageView = new ImageView("/view/images/Doom shroom.png");
-        imageView.setFitWidth(135);
-        imageView.setFitHeight(140);
+        imageView.setFitWidth(110);
+        imageView.setFitHeight(115);
         setImage(imageView);
         doomshroomTimer = new Timeline(
                 new KeyFrame(Duration.seconds(1.5), event -> BOMB()),
                 new KeyFrame(Duration.seconds(16.5), event -> afterBOMB())
         );
+        doomshroomTimer.setCycleCount(1);
+        doomshroomTimer.play();
+    }
+
+    public Doomshroom() {
 
     }
 
     private void afterBOMB() {
-        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(soil);
-        DayLevel.getInstance().getCells()[row][column].setAvailable(true);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(image);
+            DayLevel.getInstance().getCells()[row][column].setAvailable(true);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(image);
+            NightLevel.getInstance().getCells()[row][column].setAvailable(true);
+        }
     }
 
     @Override
@@ -66,13 +84,10 @@ public class Doomshroom extends BombPlants{
             }
         }
 
-        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
         cells[row][column].removePlant();
-        soil = new ImageView("/view/images/after doom shroom bomb.png");
-        soil.setFitWidth(120);
-        soil.setFitHeight(130);
-        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(soil);
-        DayLevel.getInstance().getCells()[row][column].setAvailable(false);
+        image.setImage(new Image(getClass().getResource("/view/images/after doom shroom bomb.png").toString()));
+        image.setFitWidth(140);
+        image.setFitHeight(115);
     }
 
     @Override
@@ -82,7 +97,11 @@ public class Doomshroom extends BombPlants{
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        }
         timer.stop();
         group.setOpacity(1);
     }

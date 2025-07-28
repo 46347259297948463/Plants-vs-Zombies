@@ -18,6 +18,10 @@ public abstract class Plants {
 
     protected double rechargeTime;
 
+    private boolean needCoffee = true;
+
+    public static Object obj;
+
     public Plants(int hp, int i, int j, int price, double rechargeTime){
         HP = hp;
         row = i;
@@ -78,4 +82,11 @@ public abstract class Plants {
 
     public abstract Timeline getTimer();
 
+    public boolean isNeedCoffee() {
+        return needCoffee;
+    }
+
+    public void setNeedCoffee(boolean needCoffee) {
+        this.needCoffee = needCoffee;
+    }
 }

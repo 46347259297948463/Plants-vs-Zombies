@@ -90,13 +90,15 @@ public class PuffShroom extends PeaPlants{
         double min = Double.MAX_VALUE;
 
         for (int i = column; i < column + 5 && i < 9; i++) {
-            ArrayList<Zombie> zombies = cells[j][i].getZombies();
-            if (zombies != null && !zombies.isEmpty()) {
-                for (Zombie z : zombies) {
-                    if (z.isDead()) continue;
-                    if (z.getColumn() < min) {
-                        zombie = z;
-                        min = z.getColumn();
+            if (cells[j][i] != null && cells[j][i].getZombies() != null) {
+                ArrayList<Zombie> zombies = cells[j][i].getZombies();
+                if (!zombies.isEmpty()) {
+                    for (Zombie z : zombies) {
+                        if (z.isDead()) continue;
+                        if (z.getColumn() < min) {
+                            zombie = z;
+                            min = z.getColumn();
+                        }
                     }
                 }
             }

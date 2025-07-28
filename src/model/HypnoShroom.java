@@ -28,6 +28,10 @@ public class HypnoShroom extends Plants{
 
     }
 
+    public HypnoShroom() {
+
+    }
+
 
     @Override
     public Plants clonePlant(int row, int column) {

@@ -22,7 +22,6 @@ import javax.sound.sampled.Clip;
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -399,6 +398,9 @@ public class DayLevel implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        Plants.obj = DayLevel.getInstance();
+        Zombie.obj = DayLevel.getInstance();
+
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
                     getClass().getResource("/view/audio/day.wav")
@@ -432,7 +434,6 @@ public class DayLevel implements Initializable {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
                     Parent menuContent = loader.load();
                     if (loader.getController() instanceof Menu) {
-                        System.out.println(DayLevel.getInstance());
                         ((Menu) loader.getController()).setObj(DayLevel.getInstance());
                     }
                     AnchorPane root = (AnchorPane) menuBTN.getScene().getRoot();
@@ -701,6 +702,56 @@ public class DayLevel implements Initializable {
                         plants.add(new Jalapenos());
                         Jalapenos.setGroup(groupsOfPicked.get(plants.size() - 1));
                         Jalapenos.setAvailableNum(plants.size() - 1);
+                        break;
+                    case "blover":
+                        plants.add(new Blover());
+                        Blover.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        Blover.setAvailableNum(plants.size() - 1);
+                        break;
+                    case "coffee bean":
+                        plants.add(new CoffeeBean());
+                        CoffeeBean.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        CoffeeBean.setAvailableNum(plants.size() - 1);
+                        break;
+                    case "doom shroom":
+                        plants.add(new CoffeeBean());
+                        Doomshroom.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        Doomshroom.setAvailableNum(plants.size() - 1);
+                        break;
+                    case "grave buster":
+                        plants.add(new CoffeeBean());
+                        GraveBuster.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        GraveBuster.setAvailableNum(plants.size() - 1);
+                        break;
+                    case "hypno shroom":
+                        plants.add(new CoffeeBean());
+                        HypnoShroom.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        HypnoShroom.setAvailableNum(plants.size() - 1);
+                        break;
+                    case "ice shroom":
+                        plants.add(new CoffeeBean());
+                        IceShroom.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        IceShroom.setAvailableNum(plants.size() - 1);
+                        break;
+                    case "plantern":
+                        plants.add(new CoffeeBean());
+                        Plantern.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        Plantern.setAvailableNum(plants.size() - 1);
+                        break;
+                    case "puff shroom":
+                        plants.add(new CoffeeBean());
+                        PuffShroom.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        PuffShroom.setAvailableNum(plants.size() - 1);
+                        break;
+                    case "scaredy shroom":
+                        plants.add(new CoffeeBean());
+                        ScaredyShroom.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        ScaredyShroom.setAvailableNum(plants.size() - 1);
+                        break;
+                    case "sun shroom":
+                        plants.add(new CoffeeBean());
+                        SunShroom.setGroup(groupsOfPicked.get(plants.size() - 1));
+                        SunShroom.setAvailableNum(plants.size() - 1);
                         break;
                 }
             }
