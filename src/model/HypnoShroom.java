@@ -15,7 +15,7 @@ public class HypnoShroom extends Plants{
 
     private static int availableNum;
 
-    private final static int HP = 4;
+    private static int HP = 4;
 
     public HypnoShroom(int i, int j) {
         super(HP, i, j, 75, 20);
@@ -64,6 +64,13 @@ public class HypnoShroom extends Plants{
     public Timeline getTimer() {
         return timer;
     }
+
+    @Override
+    public void takeDamage(int damage){
+        HP -= damage;
+
+    }
+
 
     public static void setAvailableNum(int a) {
         availableNum = a;

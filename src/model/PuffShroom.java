@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -35,11 +36,18 @@ public class PuffShroom extends PeaPlants{
 
     public PuffShroom(int i, int j) {
         super(HP, i, j, 0 , bullets, 5);
-        DayLevel.getInstance().setAvailablePicked(false,availableNum);
-        cells = DayLevel.getInstance().getCells();
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(false,availableNum);
+            cells = DayLevel.getInstance().getCells();
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(false,availableNum);
+            cells = NightLevel.getInstance().getCells();
+        }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/puff shroom.png").toString());
-        imageView.setFitWidth(120);
-        imageView.setFitHeight(125);
+        imageView.setFitWidth(65);
+        imageView.setFitHeight(70);
+        imageView.setLayoutX(column + 40);
+        imageView.setLayoutY(row + 60);
         setImage(imageView);
         shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
         shootTimer.setCycleCount(Timeline.INDEFINITE);
@@ -62,7 +70,11 @@ public class PuffShroom extends PeaPlants{
             return;
         }else if(endrow != -1){
             if(moveBulletTimer != null){
-                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
+                if (obj instanceof DayLevel) {
+                    DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
+                } else if (obj instanceof NightLevel) {
+                    NightLevel.getInstance().getNightAnc().getChildren().remove(bullet.getImageView());
+                }
                 moveBulletTimer.stop();
             }
             bullet = new PuffBullet(row , column);
@@ -76,7 +88,11 @@ public class PuffShroom extends PeaPlants{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
+            if (obj instanceof DayLevel) {
+                DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
+            } else if (obj instanceof NightLevel) {
+                NightLevel.getInstance().getNightAnc().getChildren().add(bullet.getImageView());
+            }
             moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet()));
             moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
             moveBulletTimer.play();
@@ -117,7 +133,7 @@ public class PuffShroom extends PeaPlants{
             if(bullet.getImageView().getLayoutX() >= endrow && zombie != null){
                 endrow = findZombie();
                 moveBulletTimer.stop();
-                zombie.takeDamage(1);
+                zombie.takeDamage(0.5);
                 if(zombie.isDead()){
                     zombie.dead();
                     endrow = findZombie();
@@ -134,7 +150,11 @@ public class PuffShroom extends PeaPlants{
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        }
         timer.stop();
         group.setOpacity(1);
     }

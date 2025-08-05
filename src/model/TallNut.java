@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -19,7 +20,11 @@ public class TallNut extends NutPlants{
 
     public TallNut(int i, int j) {
         super(HP, i, j, 125, 12);
-        DayLevel.getInstance().setAvailablePicked(false, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(false, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(false, availableNum);
+        }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/tall nut.png").toString());
         imageView.setFitWidth(140);
         imageView.setFitHeight(190);
@@ -41,7 +46,11 @@ public class TallNut extends NutPlants{
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        }
         timer.stop();
         group.setOpacity(1);
     }

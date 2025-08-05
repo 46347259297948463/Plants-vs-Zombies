@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -36,8 +37,13 @@ public class PeaShooter extends PeaPlants {
 
     public PeaShooter(int i, int j) {
         super(HP, i, j, 100, bullets, 6);
-        DayLevel.getInstance().setAvailablePicked(false, availableNum);
-        cells = DayLevel.getInstance().getCells();
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = DayLevel.getInstance().getCells();
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = NightLevel.getInstance().getCells();
+        }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/pea shooter.png").toString());
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
@@ -104,7 +110,11 @@ public class PeaShooter extends PeaPlants {
             return;
         } else if (endRow != -1) {
             if (moveBulletTimer != null) {
-                DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
+                if (obj instanceof DayLevel) {
+                    DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
+                } else if (obj instanceof NightLevel) {
+                    NightLevel.getInstance().getNightAnc().getChildren().remove(bullet.getImageView());
+                }
                 moveBulletTimer.stop();
             }
             bullet = new Bullet(row, column);
@@ -118,7 +128,11 @@ public class PeaShooter extends PeaPlants {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
+            if (obj instanceof DayLevel) {
+                DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
+            } else if (obj instanceof NightLevel) {
+                NightLevel.getInstance().getNightAnc().getChildren().add(bullet.getImageView());
+            }
             moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet(endRow)));
             moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
             moveBulletTimer.play();
@@ -132,7 +146,11 @@ public class PeaShooter extends PeaPlants {
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        }
         timer.stop();
         group.setOpacity(1);
     }

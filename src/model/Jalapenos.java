@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -13,7 +14,7 @@ import javax.sound.sampled.Clip;
 
 public class Jalapenos extends BombPlants{
 
-    private Cell[][] cells = DayLevel.getInstance().getCells();
+    private Cell[][] cells;
 
     private static Timeline timer;
 
@@ -25,7 +26,13 @@ public class Jalapenos extends BombPlants{
 
     public Jalapenos(int i, int j) {
         super(i, j, 125, 18);
-        DayLevel.getInstance().setAvailablePicked(false, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = DayLevel.getInstance().getCells();
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = NightLevel.getInstance().getCells();
+        }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/jalapenos.png").toString());
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);
@@ -75,13 +82,21 @@ public class Jalapenos extends BombPlants{
         for (int j = 0 ; j < 9 ; j++){
             cells[row][j].removeAllZombies();
         }
-        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+        }
         cells[row][column].removePlant();
     }
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        }
         timer.stop();
         group.setOpacity(1);
     }

@@ -18,7 +18,7 @@ public class CherryBomb extends BombPlants{
 
     private Timeline cherryBombTimer;
 
-    private Cell[][] cells = DayLevel.getInstance().getCells();
+    private Cell[][] cells;
 
     private static Group group;
 
@@ -28,8 +28,10 @@ public class CherryBomb extends BombPlants{
         super(i, j, 150, 15);
         if (obj instanceof DayLevel) {
             DayLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = DayLevel.getInstance().getCells();
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = NightLevel.getInstance().getCells();
         }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/cherry bomb.png").toString());
         imageView.setFitWidth(135);
@@ -88,13 +90,21 @@ public class CherryBomb extends BombPlants{
             }
         }
 
-        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+        }
         cells[row][column].removePlant();
     }
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        }
         timer.stop();
         group.setOpacity(1);
     }

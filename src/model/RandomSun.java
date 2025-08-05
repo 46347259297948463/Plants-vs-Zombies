@@ -37,7 +37,7 @@ public class RandomSun {
         row = random.nextInt(650) + 345;
         stopColumn = random.nextInt(300) + 275;
         column = 0;
-        sun = new Sun(row, column, false);
+        sun = new Sun(row, column, 2, 0);
         DayLevel.getInstance().getDayAnc().getChildren().add(sun.getGroup());
         moveTimer = new Timeline(new KeyFrame(Duration.millis(65) , event -> moveSun()));
         moveTimer.setCycleCount(Timeline.INDEFINITE);

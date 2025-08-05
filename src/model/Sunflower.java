@@ -29,7 +29,11 @@ public class Sunflower extends Plants{
 
     public Sunflower(int i, int j){
         super(HP, i, j, 50, 5);
-        DayLevel.getInstance().setAvailablePicked(false, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(false, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(false, availableNum);
+        }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/sunflower.png").toString());
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
@@ -58,14 +62,13 @@ public class Sunflower extends Plants{
             sunTimeline.stop();
         }
         else {
-            sun = new Sun(row , column, true);
+            sun = new Sun(row , column, 1, 0);
             if (obj instanceof DayLevel) {
                 DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
             } else if (obj instanceof NightLevel) {
                 NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
             }
             sun.getButton().setOnAction(event -> {
-
                 if ((obj instanceof DayLevel) && (!DayLevel.getInstance().isStopMod)) {
                     DayLevel.getInstance().depositSunPoints(25);
                     DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());

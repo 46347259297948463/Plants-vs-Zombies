@@ -15,12 +15,19 @@ public class PuffBullet extends Bullet{
     protected void setting(){
         Image image = new Image(getClass().getResource("/view/images/purple bullet.png").toString());
         ImageView imageV = new ImageView(image);
-        imageV.setFitHeight(10);
-        imageV.setFitWidth(10);
+        imageV.setFitHeight(50);
+        imageV.setFitWidth(50);
         imageV.setLayoutX(this.column);
-        imageV.setLayoutY(this.row);
+        imageV.setLayoutY(this.row + 75);
         this.imageView = imageV;
         color = "purple";
         isSnow = false;
     }
+
+    @Override
+    public void move(){
+        column += 30;
+        imageView.setLayoutX(column);
+    }
+
 }

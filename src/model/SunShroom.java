@@ -12,6 +12,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
+import java.util.Arrays;
 
 public class SunShroom extends Plants {
 
@@ -19,7 +20,9 @@ public class SunShroom extends Plants {
 
     private Timeline sunTimeline;
 
-    private Timeline increasePointTimer;
+    private Timeline startTimer;
+
+    private Timeline increaseSizeTimer;
 
     private Timeline timer;
 
@@ -29,45 +32,78 @@ public class SunShroom extends Plants {
 
     private static int availableNum;
 
+    private boolean isStartTwo = false;
+
+    private  int n = 0;
+
     public SunShroom(int i, int j){
         super(HP, i, j, 25, 5);
-        DayLevel.getInstance().setAvailablePicked(false,availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(false,availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(false,availableNum);
+        }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/sun shroom.png").toString());
-        imageView.setFitHeight(75);
-        imageView.setFitWidth(75);
+        imageView.setFitHeight(50);
+        imageView.setFitWidth(50);
+        imageView.setLayoutX(column + 30);
+        imageView.setLayoutY(row + 50);
         setImage(imageView);
         group.setOpacity(0.7);
-        increasePointTimer = new Timeline(
-                new KeyFrame(Duration.seconds(0), event -> startTimer1()),
-                new KeyFrame(Duration.seconds(10), event -> increaseSize()),
-                new KeyFrame(Duration.seconds(12), event -> startTimer2())
+        startTimer = new Timeline(
+                new KeyFrame(Duration.seconds(0), event -> startTimer(false)),
+
+                new KeyFrame(Duration.seconds(20), event -> startTimer(true))
         );
-        increasePointTimer.setCycleCount(1);
-        increasePointTimer.play();
+        startTimer.setCycleCount(1);
+        startTimer.play();
+
+        increaseSizeTimer = new Timeline(new KeyFrame(Duration.millis(200), event -> {
+            if (isStartTwo) {
+                increaseSizeTimer.stop();
+            }
+            image.setFitHeight(image.getFitHeight() * 1.005 );
+            image.setFitWidth(image.getFitWidth() * 1.005);
+        }));
+        increaseSizeTimer.setCycleCount(Timeline.INDEFINITE);
+        increaseSizeTimer.play();
+
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
         timer.play();
     }
 
-    private void startTimer1(){
-        if(sunTimeline == null){
-            sunTimeline = new Timeline(new KeyFrame(Duration.millis(7500), event -> firstMakeSun() ));
-            sunTimeline.setCycleCount(Timeline.INDEFINITE);
-            sunTimeline.play();
-        }
+    public SunShroom(){
+        price = 25;
     }
 
-    public void firstMakeSun(){
-        if(isDead()){
+    private void startTimer(boolean bool){
+        isStartTwo = bool;
+        sunTimeline = new Timeline(new KeyFrame(Duration.millis(7500), event -> makeSun()));
+        sunTimeline.setCycleCount(Timeline.INDEFINITE);
+        sunTimeline.play();
+    }
+
+    public void makeSun() {
+        if (isDead()) {
             sunTimeline.stop();
-        }
-        else {
-            sun = new Sun(row , column, true);
+        } else {
+            n++;
+            sun = new Sun(row, column, 3, n);
+
             if (obj instanceof DayLevel) {
                 DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
+                System.out.println("row: " + row + ", column: " + column);
+                System.out.println("DayLevel: " + DayLevel.getInstance());
+                System.out.println("Cells: " + Arrays.deepToString(DayLevel.getInstance().getCells()));
+                System.out.println("Cell: " + DayLevel.getInstance().getCells()[row][column]);
                 sun.getButton().setOnAction(event -> {
                     if (!DayLevel.getInstance().isStopMod) {
-                        DayLevel.getInstance().depositSunPoints(15);
+                        if (isStartTwo) {
+                            DayLevel.getInstance().depositSunPoints(25);
+                        } else {
+                            DayLevel.getInstance().depositSunPoints(15);
+                        }
                         DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
                         try {
                             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
@@ -85,9 +121,17 @@ public class SunShroom extends Plants {
                 });
             } else if (obj instanceof NightLevel) {
                 NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
+                System.out.println("row: " + row + ", column: " + column);
+                System.out.println("NightLevel: " + NightLevel.getInstance());
+                System.out.println("Cells: " + Arrays.deepToString(NightLevel.getInstance().getCells()));
+                System.out.println("Cell: " + NightLevel.getInstance().getCells()[row][column]);
                 sun.getButton().setOnAction(event -> {
                     if (!NightLevel.getInstance().isStopMod) {
-                        NightLevel.getInstance().depositSunPoints(15);
+                        if (isStartTwo) {
+                            NightLevel.getInstance().depositSunPoints(25);
+                        } else {
+                            NightLevel.getInstance().depositSunPoints(15);
+                        }
                         NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
                         try {
                             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
@@ -107,56 +151,6 @@ public class SunShroom extends Plants {
         }
     }
 
-    private void increaseSize(){
-        sunTimeline.stop();
-        Timeline timer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-            image.setFitHeight(image.getFitHeight() + 1 );
-            image.setFitWidth(image.getFitWidth() + 1);
-        }));
-        timer.setCycleCount(20);
-        timer.play();
-    }
-
-    private void startTimer2(){
-        if(sunTimeline == null){
-            sunTimeline = new Timeline(new KeyFrame(Duration.millis(7500), event -> makeSun() ));
-            sunTimeline.setCycleCount(Timeline.INDEFINITE);
-            sunTimeline.play();
-        }
-    }
-
-    public void makeSun(){
-        if(isDead()){
-            sunTimeline.stop();
-        }
-        else {
-            sun = new Sun(row , column, true);
-            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
-            sun.getButton().setOnAction(event -> {
-                if (!DayLevel.getInstance().isStopMod) {
-                    DayLevel.getInstance().depositSunPoints(25);
-                    DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
-                    try {
-                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                                getClass().getResource("/view/audio/sun sound.wav")
-                        );
-                        Clip clip = AudioSystem.getClip();
-                        clip.open(audioStream);
-                        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                        gainControl.setValue(6.0f);
-                        clip.start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-    }
-
-    public SunShroom(){
-        price = 25;
-    }
-
     @Override
     public Plants clonePlant(int row, int column) {
         return new SunShroom(row, column);
@@ -164,25 +158,39 @@ public class SunShroom extends Plants {
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        }
         timer.stop();
         group.setOpacity(1);
     }
 
     @Override
     public void stop() {
-        increasePointTimer.pause();
+        startTimer.pause();
+        sunTimeline.pause();
+        increaseSizeTimer.pause();
     }
 
     @Override
     public void play() {
-        increasePointTimer.play();
+        startTimer.play();
+        sunTimeline.play();
+        increaseSizeTimer.play();
     }
 
     @Override
     public void end() {
-        if (increasePointTimer != null){
-            increasePointTimer.stop();
+        if (startTimer != null){
+            startTimer.stop();
+        }
+        if (sunTimeline != null) {
+            sunTimeline.stop();
+        }
+        if (increaseSizeTimer != null) {
+            increaseSizeTimer.stop();
         }
     }
 
@@ -198,4 +206,5 @@ public class SunShroom extends Plants {
     public static void setGroup(Group g) {
         group = g;
     }
+
 }

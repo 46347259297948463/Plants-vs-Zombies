@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.ImageView;
@@ -17,7 +18,7 @@ public class IceShroom extends BombPlants{
 
     private static Timeline timer;
 
-    private Cell[][] cells = DayLevel.getInstance().getCells();
+    private Cell[][] cells;
 
     private static Group group;
 
@@ -27,7 +28,14 @@ public class IceShroom extends BombPlants{
 
     public IceShroom(int i, int j){
         super(i, j, 75, 25);
-        DayLevel.getInstance().setAvailablePicked(false, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = DayLevel.getInstance().getCells();
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = NightLevel.getInstance().getCells();
+        }
+
         ImageView imageView = new ImageView(getClass().getResource("/view/images/Ice shroom.png").toString());
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);
@@ -39,6 +47,7 @@ public class IceShroom extends BombPlants{
         iceShroomTimer.setCycleCount(1);
         iceShroomTimer.play();
         group.setOpacity(0.7);
+
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
         timer.play();
@@ -61,17 +70,24 @@ public class IceShroom extends BombPlants{
             e.printStackTrace();
         }
 
-        for (int i=0; i<5; i++){
-            for(int j=0; j<9; j++){
+        for (int i = 0 ; i < 5 ; i++){
+            for(int j = 0 ; j < 9 ; j++){
                 ArrayList<Zombie> zombies = cells[i][j].getZombies();
-                for(Zombie z : zombies){
-                    z.stop();
+                if (zombies != null) {
+                    for(Zombie z : zombies){
+                        z.stop();
+                    }
                 }
             }
         }
 
-        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-        cells[row][column].removePlant();
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+            cells[row][column].removePlant();
+        } else if (obj instanceof NightLevel){
+            NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+            cells[row][column].removePlant();
+        }
     }
 
     private void afterBomb(){
@@ -92,7 +108,11 @@ public class IceShroom extends BombPlants{
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        }
         timer.stop();
         group.setOpacity(1);
     }

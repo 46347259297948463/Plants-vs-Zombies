@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.NightLevel;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -15,6 +16,8 @@ public class Bullet {
     protected boolean isSnow = false;
 
     protected ImageView imageView;
+
+    public static Object obj;
 
     public Bullet(double row, double column){
         this.row = row * 191.5 + 153;
@@ -33,7 +36,11 @@ public class Bullet {
     }
 
     public void endBullet(){
-        DayLevel.getInstance().getDayAnc().getChildren().remove(imageView);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().getDayAnc().getChildren().remove(imageView);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().getNightAnc().getChildren().remove(imageView);
+        }
     }
 
     public void move(){

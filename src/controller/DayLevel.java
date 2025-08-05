@@ -400,6 +400,12 @@ public class DayLevel implements Initializable {
 
         Plants.obj = DayLevel.getInstance();
         Zombie.obj = DayLevel.getInstance();
+        Bullet.obj = DayLevel.getInstance();
+        Menu.obj = DayLevel.getInstance();
+
+        setButtons();
+        setGroups();
+        fillBoard();
 
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
@@ -433,9 +439,6 @@ public class DayLevel implements Initializable {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
                     Parent menuContent = loader.load();
-                    if (loader.getController() instanceof Menu) {
-                        ((Menu) loader.getController()).setObj(DayLevel.getInstance());
-                    }
                     AnchorPane root = (AnchorPane) menuBTN.getScene().getRoot();
                     root.getChildren().add(menuContent);
 
@@ -505,10 +508,6 @@ public class DayLevel implements Initializable {
          }
 
         randomSun = new RandomSun();
-
-        setButtons();
-        setGroups();
-        fillBoard();
 
         plant1BTN.setOnAction(event -> {
             if (!isStopMod) {
@@ -714,42 +713,42 @@ public class DayLevel implements Initializable {
                         CoffeeBean.setAvailableNum(plants.size() - 1);
                         break;
                     case "doom shroom":
-                        plants.add(new CoffeeBean());
+                        plants.add(new Doomshroom());
                         Doomshroom.setGroup(groupsOfPicked.get(plants.size() - 1));
                         Doomshroom.setAvailableNum(plants.size() - 1);
                         break;
                     case "grave buster":
-                        plants.add(new CoffeeBean());
+                        plants.add(new GraveBuster());
                         GraveBuster.setGroup(groupsOfPicked.get(plants.size() - 1));
                         GraveBuster.setAvailableNum(plants.size() - 1);
                         break;
                     case "hypno shroom":
-                        plants.add(new CoffeeBean());
+                        plants.add(new HypnoShroom());
                         HypnoShroom.setGroup(groupsOfPicked.get(plants.size() - 1));
                         HypnoShroom.setAvailableNum(plants.size() - 1);
                         break;
                     case "ice shroom":
-                        plants.add(new CoffeeBean());
+                        plants.add(new IceShroom());
                         IceShroom.setGroup(groupsOfPicked.get(plants.size() - 1));
                         IceShroom.setAvailableNum(plants.size() - 1);
                         break;
                     case "plantern":
-                        plants.add(new CoffeeBean());
+                        plants.add(new Plantern());
                         Plantern.setGroup(groupsOfPicked.get(plants.size() - 1));
                         Plantern.setAvailableNum(plants.size() - 1);
                         break;
                     case "puff shroom":
-                        plants.add(new CoffeeBean());
+                        plants.add(new PuffShroom());
                         PuffShroom.setGroup(groupsOfPicked.get(plants.size() - 1));
                         PuffShroom.setAvailableNum(plants.size() - 1);
                         break;
                     case "scaredy shroom":
-                        plants.add(new CoffeeBean());
+                        plants.add(new ScaredyShroom());
                         ScaredyShroom.setGroup(groupsOfPicked.get(plants.size() - 1));
                         ScaredyShroom.setAvailableNum(plants.size() - 1);
                         break;
                     case "sun shroom":
-                        plants.add(new CoffeeBean());
+                        plants.add(new SunShroom());
                         SunShroom.setGroup(groupsOfPicked.get(plants.size() - 1));
                         SunShroom.setAvailableNum(plants.size() - 1);
                         break;
@@ -1055,6 +1054,7 @@ public class DayLevel implements Initializable {
         }
         for (int i = 0; i < 5 ; i++){
             for (int j = 0 ; j < 9; j++){
+                System.out.println("cells[i][j] = " + cells[i][j]);
                 if (cells[i][j].getPlant() != null){
                     cells[i][j].getPlant().play();
                 }

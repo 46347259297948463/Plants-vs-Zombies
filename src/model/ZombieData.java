@@ -6,11 +6,13 @@ public class ZombieData implements Serializable {
 
     public double x, y;
 
-    public int HP, rowBTN, columnBTN;
+    public double HP;
+
+    public int rowBTN, columnBTN;
 
     public String type;
 
-    public ZombieData(double x, double y, int HP, int rowBTN, int columnBTN, String type){
+    public ZombieData(double x, double y, double HP, int rowBTN, int columnBTN, String type){
         this.x = x;
         this.y = y;
         this.HP = HP;

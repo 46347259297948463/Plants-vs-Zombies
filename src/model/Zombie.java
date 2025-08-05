@@ -17,7 +17,7 @@ public class Zombie {
 
     protected double column;
 
-    private int HP = 5;
+    private double HP = 5;
 
     private int speed = 2;
 
@@ -208,7 +208,7 @@ public class Zombie {
         return false;
     }
 
-    public void takeDamage(int damage){
+    public void takeDamage(double damage){
         HP -= damage;
     }
 
@@ -249,15 +249,11 @@ public class Zombie {
         startMove();
     }
 
-//    public void pause() {
-//        moveTimeline.pause();
-//    }
-
     public void setSpeed(int speed) {
         this.speed = speed;
     }
 
-    public void setHP(int HP) {
+    public void setHP(double HP) {
         this.HP = HP;
     }
 
@@ -277,7 +273,7 @@ public class Zombie {
         return speed;
     }
 
-    public int getHP() {
+    public double getHP() {
         return HP;
     }
 

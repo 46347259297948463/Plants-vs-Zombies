@@ -24,8 +24,6 @@ public class Doomshroom extends BombPlants{
 
     private static int availableNum;
 
-    private ImageView soil;
-
     public Doomshroom(int i, int j) {
         super(i, j, 125, 20);
         if (obj instanceof DayLevel) {
@@ -36,8 +34,8 @@ public class Doomshroom extends BombPlants{
             cells = NightLevel.getInstance().getCells();
         }
         ImageView imageView = new ImageView("/view/images/Doom shroom.png");
-        imageView.setFitWidth(110);
-        imageView.setFitHeight(115);
+        imageView.setFitWidth(115);
+        imageView.setFitHeight(120);
         setImage(imageView);
         doomshroomTimer = new Timeline(
                 new KeyFrame(Duration.seconds(1.5), event -> BOMB()),
@@ -45,10 +43,14 @@ public class Doomshroom extends BombPlants{
         );
         doomshroomTimer.setCycleCount(1);
         doomshroomTimer.play();
+        group.setOpacity(0.7);
+        timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
+        timer.setCycleCount(1);
+        timer.play();
     }
 
     public Doomshroom() {
-
+        price = 125;
     }
 
     private void afterBOMB() {
@@ -86,7 +88,7 @@ public class Doomshroom extends BombPlants{
 
         cells[row][column].removePlant();
         image.setImage(new Image(getClass().getResource("/view/images/after doom shroom bomb.png").toString()));
-        image.setFitWidth(140);
+        image.setFitWidth(145);
         image.setFitHeight(115);
     }
 

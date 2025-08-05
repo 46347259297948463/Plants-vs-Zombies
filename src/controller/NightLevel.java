@@ -404,6 +404,8 @@ public class NightLevel implements Initializable {
 
         Plants.obj = NightLevel.getInstance();
         Zombie.obj = NightLevel.getInstance();
+        Bullet.obj = NightLevel.getInstance();
+        Menu.obj = NightLevel.getInstance();
 
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
@@ -437,9 +439,6 @@ public class NightLevel implements Initializable {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/Menu.fxml"));
                     Parent menuContent = loader.load();
-                    if (loader.getController() instanceof Menu) {
-                        ((Menu) loader.getController()).setObj(NightLevel.getInstance());
-                    }
                     AnchorPane root = (AnchorPane) menuBTN.getScene().getRoot();
                     root.getChildren().add(menuContent);
 
@@ -486,6 +485,7 @@ public class NightLevel implements Initializable {
                                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
                                     Parent winContent = loader.load();
 
+                                    NightLevel.resetInstance();
                                     WinPage.setObj(NightLevel.getInstance());
                                     nightAnc.getChildren().add(winContent);
 
