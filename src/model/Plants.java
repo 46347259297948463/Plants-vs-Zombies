@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 
 public abstract class Plants {
 
-    private int HP;
+    protected int HP;
 
     protected int row;
 
@@ -18,7 +18,9 @@ public abstract class Plants {
 
     protected double rechargeTime;
 
-    private boolean needCoffee = true;
+    protected boolean needCoffee = false;
+
+    protected boolean coffee = false;
 
     public static Object obj;
 
@@ -88,5 +90,13 @@ public abstract class Plants {
 
     public void setNeedCoffee(boolean needCoffee) {
         this.needCoffee = needCoffee;
+    }
+
+    public boolean isCoffee() {
+        return coffee;
+    }
+
+    public void setCoffee(boolean coffee) {
+        this.coffee = coffee;
     }
 }

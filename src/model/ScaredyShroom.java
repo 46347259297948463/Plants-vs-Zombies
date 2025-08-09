@@ -44,21 +44,32 @@ public class ScaredyShroom extends PeaPlants{
         if (obj instanceof DayLevel) {
             DayLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = DayLevel.getInstance().getCells();
+            needCoffee = true;
+            coffee = false;
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = NightLevel.getInstance().getCells();
+            needCoffee = false;
+            coffee = true;
         }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/scaredy shroom.png").toString());
         imageView.setFitWidth(95);
         imageView.setFitHeight(120);
         scaredImg = new ImageView(getClass().getResource("/view/images/scare scaredy.png").toString());
-        scaredImg.setFitWidth(120);
-        scaredImg.setFitHeight(125);
+        scaredImg.setLayoutY(50);
+        scaredImg.setLayoutX(25);
+        scaredImg.setFitWidth(75);
+        scaredImg.setFitHeight(50);
         setImage(imageView);
-        shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
-        shootTimer.setCycleCount(Timeline.INDEFINITE);
-        shootTimer.play();
+
+        if (obj instanceof NightLevel /*|| obj instanceof FogLevel*/) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event1 -> shoot(zombie)));
+            shootTimer.setCycleCount(Timeline.INDEFINITE);
+            shootTimer.play();
+        }
+
         group.setOpacity(0.7);
+
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
         timer.play();
@@ -72,79 +83,66 @@ public class ScaredyShroom extends PeaPlants{
     @Override
     protected void shoot(Zombie zombie) {
         endrow = findZombie();
-        if (obj instanceof DayLevel) {
-            if (zombie != null && zombie.columnBTN <= column + 1 && zombie.columnBTN >= column - 1){
-                DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-                scared = true;
-                DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(scaredImg);
-            }
-            else {
-                if (scared) {
-                    DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(scaredImg);
-                    DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(this.image);
-                    scared = false;
+        if (zombie != null && zombie.columnBTN <= column + 1 && zombie.columnBTN >= column - 1){
+            scared = true;
+            if (obj instanceof DayLevel) {
+                if (!DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().contains(this.scaredImg)) {
+                    DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                    DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(this.scaredImg);
                 }
-                if(endrow == -1 || zombie == null || zombie.isDead()) {
-                    return;
-                }else if(endrow != -1) {
-                    if (moveBulletTimer != null) {
-                        DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
-                        moveBulletTimer.stop();
-                    }
-                    bullet = new PuffBullet(row, column);
-                    try {
-                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                                getClass().getResource("/view/audio/hit sound.wav")
-                        );
-                        Clip clip = AudioSystem.getClip();
-                        clip.open(audioStream);
-                        clip.start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
-                    moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet()));
-                    moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
-                    moveBulletTimer.play();
-                }
-            }
-        } else if (obj instanceof NightLevel) {
-            if (zombie != null && zombie.columnBTN <= column + 1 && zombie.columnBTN >= column - 1){
-                NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-                scared = true;
-                NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(scaredImg);
-            }
-            else {
-                if (scared) {
-                    NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(scaredImg);
-                    NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(this.image);
-                    scared = false;
-                }
-                if(endrow == -1 || zombie == null || zombie.isDead()) {
-                    return;
-                }else if(endrow != -1) {
-                    if (moveBulletTimer != null) {
-                        NightLevel.getInstance().getNightAnc().getChildren().remove(bullet.getImageView());
-                        moveBulletTimer.stop();
-                    }
-                    bullet = new PuffBullet(row, column);
-                    try {
-                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                                getClass().getResource("/view/audio/hit sound.wav")
-                        );
-                        Clip clip = AudioSystem.getClip();
-                        clip.open(audioStream);
-                        clip.start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    NightLevel.getInstance().getNightAnc().getChildren().add(bullet.getImageView());
-                    moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet()));
-                    moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
-                    moveBulletTimer.play();
+            } else if (obj instanceof NightLevel){
+                if (!NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().contains(this.scaredImg)) {
+                    NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                    NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(this.scaredImg);
                 }
             }
         }
+        else {
+            scared = false;
+            if (!scared) {
+                if (obj instanceof DayLevel) {
+                    if (DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().contains(this.scaredImg)) {
+                        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.scaredImg);
+                        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(this.image);}
+                    } else if (obj instanceof NightLevel){
+                        if (NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().contains(this.scaredImg)) {
+                            NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.scaredImg);
+                            NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(this.image);
+                        }
+                    }
+                }
+                if(endrow == -1 || zombie == null || zombie.isDead()) {
+                    return;
+                }else if(endrow != -1) {
+                    if (moveBulletTimer != null) {
+                        if (obj instanceof DayLevel) {
+                            DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
+                        } else if (obj instanceof NightLevel) {
+                            NightLevel.getInstance().getNightAnc().getChildren().remove(bullet.getImageView());
+                        }
+                        moveBulletTimer.stop();
+                    }
+                    bullet = new PuffBullet(row, column, 2);
+                    try {
+                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                getClass().getResource("/view/audio/hit sound.wav")
+                        );
+                        Clip clip = AudioSystem.getClip();
+                        clip.open(audioStream);
+                        clip.start();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (obj instanceof DayLevel) {
+                        DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
+                    } else if (obj instanceof NightLevel) {
+                        NightLevel.getInstance().getNightAnc().getChildren().add(bullet.getImageView());
+                    }
+                    moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet()));
+                    moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
+                    moveBulletTimer.play();
+                }
+            }
     }
 
     private double findZombie() {
@@ -235,5 +233,33 @@ public class ScaredyShroom extends PeaPlants{
     public static void setGroup(Group g) {
         group = g;
     }
+
+    public void setCoffee(boolean coffee) {
+        this.coffee = coffee;
+        if (coffee && shootTimer == null) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event1 -> shoot(zombie)));
+            shootTimer.setCycleCount(Timeline.INDEFINITE);
+            shootTimer.play();
+        }
+    }
+
+    @Override
+    public ImageView getImage() {
+        if (obj instanceof DayLevel) {
+            if (DayLevel.getInstance().getDayAnc().getChildren().contains(this.image)) {
+                return image;
+            } else {
+                return this.scaredImg;
+            }
+        } else if (obj instanceof NightLevel) {
+            if (NightLevel.getInstance().getNightAnc().getChildren().contains(this.image)) {
+                return image;
+            } else {
+                return this.scaredImg;
+            }
+        }
+        return null;
+    }
+
 
 }

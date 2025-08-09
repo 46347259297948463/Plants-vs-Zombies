@@ -2,6 +2,7 @@ package model;
 
 import controller.DayLevel;
 import controller.NightLevel;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.animation.KeyFrame;
@@ -11,8 +12,10 @@ import javafx.util.Duration;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import java.util.ArrayList;
 
 public class Zombie {
+
     protected double row;
 
     protected double column;
@@ -45,16 +48,46 @@ public class Zombie {
 
     public static Object obj;
 
+    private Cell[][] cells;
+
+    private int isHypnotized = 1;
+
+    private int iHypnotized;
+
+    private int jHypnotized;
+
+    private Zombie eatenZombie;
+
     public Zombie(double x, double y, int rowBTN){
+        if (obj instanceof DayLevel) {
+            cells = DayLevel.getInstance().getCells();
+        } else if (obj instanceof NightLevel) {
+            cells = NightLevel.getInstance().getCells();
+        }
         this.column = x;
         this.row = y;
         this.rowBTN = rowBTN;
+
         setImageOnAnc();
+
         startMove();
+
         updateTimer = new Timeline(new KeyFrame(Duration.millis(10), event -> update()));
         updateTimer.setCycleCount(Timeline.INDEFINITE);
         updateTimer.play();
     }
+
+    public void hypnotize() {
+        isHypnotized *= -1;
+        iHypnotized = columnBTN;
+        jHypnotized = rowBTN;
+        if (isHypnotized == 1) {
+            image.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        } else if (isHypnotized == -1) {
+            image.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        }
+    }
+
 
     protected void setImageOnAnc(){
         Image image = new Image(getClass().getResource("/view/images/normalZombies.png").toString());
@@ -73,11 +106,7 @@ public class Zombie {
 
     private void startMove(){
         if(moveTimeline == null){
-            if (obj instanceof  DayLevel) {
-                currentWidthBTN = DayLevel.getInstance().getCells()[rowBTN][columnBTN].getButton().getWidth();
-            } else if (obj instanceof NightLevel) {
-                currentWidthBTN = NightLevel.getInstance().getCells()[rowBTN][columnBTN].getButton().getWidth();
-            }
+            currentWidthBTN = cells[rowBTN][columnBTN].getButton().getWidth();
             limitColumn = column - currentWidthBTN;
             moveTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> move()));
             moveTimeline.setCycleCount(Timeline.INDEFINITE);
@@ -90,12 +119,23 @@ public class Zombie {
             moveTimeline.stop();
             moveTimeline = null;
         }
+        if (eatTimeline != null) {
+            eatTimeline.stop();
+            eatTimeline = null;
+        }
+        if (clip != null) {
+            clip.stop();
+        }
     }
 
     private void move(){
-        if (columnBTN > -1){
-            if (!eat()){
-                column -= speed/2;
+        if (columnBTN > -1 && columnBTN < 9){
+            if (!eat() && !eatZombie()){
+                column -= (isHypnotized * (speed/2));
+                image.setLayoutX(column);
+            } else if (eat() && (cells[rowBTN][columnBTN].getPlant() instanceof HypnoShroom) && iHypnotized == columnBTN
+                    && jHypnotized == rowBTN && isHypnotized == -1) {
+                column -= (isHypnotized * (speed/2));
                 image.setLayoutX(column);
             } else {
                 try {
@@ -105,20 +145,18 @@ public class Zombie {
                     clip = AudioSystem.getClip();
                     clip.open(audioStream);
                     clip.loop(Clip.LOOP_CONTINUOUSLY);
-                    clip.start();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 moveTimeline.stop();
-                eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-                    if (obj instanceof DayLevel) {
-                        Plants plant = DayLevel.getInstance().getCells()[rowBTN][columnBTN].getPlant();
-                        if(plant != null){
-                            plant.takeDamage(1);
-                            if (plant.isDead()){
-                                DayLevel.getInstance().getCells()[rowBTN][columnBTN].getGroup().getChildren().remove(plant.getImage());
-                                DayLevel.getInstance().getCells()[rowBTN][columnBTN].removePlant();
-                                plant.end();
+                clip.start();
+                if (eatZombie()) {
+                    clip.start();
+                    eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                        if(eatenZombie != null){
+                            eatenZombie.takeDamage(1);
+                            if (eatenZombie.isDead()){
+                                eatenZombie.dead();
                                 eatTimeline.stop();
                                 moveTimeline = null;
                                 eatTimeline = null;
@@ -131,30 +169,68 @@ public class Zombie {
                             clip.stop();
                             startMove();
                         }
-                    } else if (obj instanceof NightLevel) {
-                        Plants plant = NightLevel.getInstance().getCells()[rowBTN][columnBTN].getPlant();
-                        if(plant != null){
-                            plant.takeDamage(1);
-                            if (plant.isDead()){
-                                NightLevel.getInstance().getCells()[rowBTN][columnBTN].getGroup().getChildren().remove(plant.getImage());
-                                NightLevel.getInstance().getCells()[rowBTN][columnBTN].removePlant();
-                                plant.end();
+                    }));
+                    eatTimeline.setCycleCount(Timeline.INDEFINITE);
+                    eatTimeline.play();
+                } else {
+                    if (cells[rowBTN][columnBTN].getPlant() instanceof HypnoShroom) {
+                        if (iHypnotized != columnBTN && jHypnotized != rowBTN) {
+                            eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                                Plants plant = cells[rowBTN][columnBTN].getPlant();
+                                if(plant != null){
+                                    plant.takeDamage(1);
+                                    if (plant.isDead()){
+                                        cells[rowBTN][columnBTN].getGroup().getChildren().remove(plant.getImage());
+                                        cells[rowBTN][columnBTN].removePlant();
+                                        plant.end();
+                                    }
+                                    eatTimeline.stop();
+                                    moveTimeline = null;
+                                    eatTimeline = null;
+                                    clip.stop();
+                                    hypnotize();
+                                    startMove();
+                                } else {
+                                    eatTimeline.stop();
+                                    eatTimeline = null;
+                                    moveTimeline = null;
+                                    clip.stop();
+                                    startMove();
+                                }
+                            }));
+                            eatTimeline.setCycleCount(1);
+                            eatTimeline.play();
+                        } else {
+                            moveTimeline = null;
+                            startMove();
+                        }
+                    } else {
+                        clip.start();
+                        eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                            Plants plant = cells[rowBTN][columnBTN].getPlant();
+                            if(plant != null){
+                                plant.takeDamage(1);
+                                if (plant.isDead()){
+                                    cells[rowBTN][columnBTN].getGroup().getChildren().remove(plant.getImage());
+                                    cells[rowBTN][columnBTN].removePlant();
+                                    plant.end();
+                                    eatTimeline.stop();
+                                    moveTimeline = null;
+                                    eatTimeline = null;
+                                    clip.stop();
+                                    startMove();
+                                }
+                            } else {
                                 eatTimeline.stop();
                                 moveTimeline = null;
-                                eatTimeline = null;
                                 clip.stop();
                                 startMove();
                             }
-                        } else {
-                            eatTimeline.stop();
-                            moveTimeline = null;
-                            clip.stop();
-                            startMove();
-                        }
+                        }));
+                        eatTimeline.setCycleCount(Timeline.INDEFINITE);
+                        eatTimeline.play();
                     }
-                }));
-                eatTimeline.setCycleCount(Timeline.INDEFINITE);
-                eatTimeline.play();
+                }
             }
         }
     }
@@ -162,13 +238,9 @@ public class Zombie {
     private void update() {
         if (limitColumn > column) {
             if (columnBTN >= 0 && columnBTN < 9) {
-                if (obj instanceof DayLevel) {
-                    DayLevel.getInstance().getCells()[rowBTN][columnBTN].removeZombie(this);
-                } else if (obj instanceof NightLevel) {
-                    NightLevel.getInstance().getCells()[rowBTN][columnBTN].removeZombie(this);
-                }
+                cells[rowBTN][columnBTN].removeZombie(this);
             }
-            columnBTN--;
+            columnBTN -= isHypnotized;
             if (columnBTN < 0) {
                 if (!lose){
                     if (obj instanceof DayLevel) {
@@ -179,16 +251,18 @@ public class Zombie {
                     lose = true;
                 }
                 return;
+            } else if (column > 1780) {
+                if (isHypnotized == -1) {
+                    dead();
+                    System.out.println("Dead!");
+                    System.out.println("columnBTN = " + columnBTN);
+                    return;
+                }
             }
-            if (obj instanceof DayLevel) {
-                currentWidthBTN = DayLevel.getInstance().getCells()[rowBTN][columnBTN].getButton().getWidth();
-                limitColumn = column - currentWidthBTN;
-                DayLevel.getInstance().getCells()[rowBTN][columnBTN].setZombies(this);
-            } else if (obj instanceof NightLevel) {
-                currentWidthBTN = NightLevel.getInstance().getCells()[rowBTN][columnBTN].getButton().getWidth();
-                limitColumn = column - currentWidthBTN;
-                NightLevel.getInstance().getCells()[rowBTN][columnBTN].setZombies(this);
-            }
+
+            currentWidthBTN = cells[rowBTN][columnBTN].getButton().getWidth();
+            limitColumn = column - (isHypnotized * currentWidthBTN);
+            cells[rowBTN][columnBTN].setZombies(this);
 
         }
         if (isDead()) {
@@ -200,13 +274,42 @@ public class Zombie {
     }
 
     private boolean eat(){
-        if (obj instanceof DayLevel) {
-            return DayLevel.getInstance().getCells()[rowBTN][columnBTN].getPlant() != null;
-        } else if (obj instanceof NightLevel) {
-            return NightLevel.getInstance().getCells()[rowBTN][columnBTN].getPlant() != null;
+        return cells[rowBTN][columnBTN].getPlant() != null;
+    }
+
+    private boolean eatZombie(){
+        if (findZombie()) {
+            if (isHypnotized == -1 || eatenZombie.isHypnotized == -1) {
+                return true;
+            }
         }
         return false;
     }
+
+    private boolean findZombie() {
+        int j = rowBTN;
+        eatenZombie = null;
+        double min = Double.MAX_VALUE;
+
+        for (int i = columnBTN; i < 9; i++) {
+            ArrayList<Zombie> zombies = cells[j][i].getZombies();
+            if (zombies != null && !zombies.isEmpty()) {
+                for (Zombie z : zombies) {
+                    if (z.isDead()) continue;
+                    if (z.getColumn() < min) {
+                        eatenZombie = z;
+                        min = z.getColumn();
+                    }
+                }
+            }
+        }
+
+        if (eatenZombie != null) {
+            return true;
+        }
+        return false;
+    }
+
 
     public void takeDamage(double damage){
         HP -= damage;
@@ -217,11 +320,10 @@ public class Zombie {
     }
 
     public void dead(){
+        cells[rowBTN][columnBTN].removeZombie(this);
         if (obj instanceof DayLevel) {
-            DayLevel.getInstance().getCells()[rowBTN][columnBTN].removeZombie(this);
             DayLevel.getInstance().getDayAnc().getChildren().remove(this.image);
         } else if (obj instanceof NightLevel) {
-            NightLevel.getInstance().getCells()[rowBTN][columnBTN].removeZombie(this);
             NightLevel.getInstance().getNightAnc().getChildren().remove(this.image);
         }
         if (updateTimer != null) {

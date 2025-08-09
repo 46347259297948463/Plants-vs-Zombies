@@ -3,12 +3,10 @@ package model;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.awt.*;
-
 public class PuffBullet extends Bullet{
 
-    public PuffBullet(double row, double column) {
-            super(row, column);
+    public PuffBullet(double row, double column, int n) {
+            super(row, column, n);
     }
 
     @Override
@@ -17,8 +15,13 @@ public class PuffBullet extends Bullet{
         ImageView imageV = new ImageView(image);
         imageV.setFitHeight(50);
         imageV.setFitWidth(50);
-        imageV.setLayoutX(this.column);
-        imageV.setLayoutY(this.row + 75);
+        if (n == 1) {
+            imageV.setLayoutX(this.column);
+            imageV.setLayoutY(this.row + 77);
+        } else {
+            imageV.setLayoutX(this.column);
+            imageV.setLayoutY(this.row + 55);
+        }
         this.imageView = imageV;
         color = "purple";
         isSnow = false;

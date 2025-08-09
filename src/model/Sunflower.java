@@ -72,35 +72,26 @@ public class Sunflower extends Plants{
                 if ((obj instanceof DayLevel) && (!DayLevel.getInstance().isStopMod)) {
                     DayLevel.getInstance().depositSunPoints(25);
                     DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
-                    try {
-                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                                getClass().getResource("/view/audio/sun sound.wav")
-                        );
-                        Clip clip = AudioSystem.getClip();
-                        clip.open(audioStream);
-                        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                        gainControl.setValue(6.0f);
-                        clip.start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    playSunSound();
                 } else if ((obj instanceof NightLevel) && (!NightLevel.getInstance().isStopMod)) {
                     NightLevel.getInstance().depositSunPoints(25);
                     NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
-                    try {
-                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                                getClass().getResource("/view/audio/sun sound.wav")
-                        );
-                        Clip clip = AudioSystem.getClip();
-                        clip.open(audioStream);
-                        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-                        gainControl.setValue(6.0f);
-                        clip.start();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    playSunSound();
                 }
             });
+        }
+    }
+
+    private void playSunSound() {
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(getClass().getResource("/view/audio/sun sound.wav"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(6.0f);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -115,7 +106,11 @@ public class Sunflower extends Plants{
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        }
         timer.stop();
         group.setOpacity(1);
     }

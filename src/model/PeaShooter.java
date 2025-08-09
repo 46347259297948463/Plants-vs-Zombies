@@ -117,7 +117,7 @@ public class PeaShooter extends PeaPlants {
                 }
                 moveBulletTimer.stop();
             }
-            bullet = new Bullet(row, column);
+            bullet = new Bullet(row, column, 1);
             try {
                 AudioInputStream audioStream = AudioSystem.getAudioInputStream(
                         getClass().getResource("/view/audio/hit sound.wav")

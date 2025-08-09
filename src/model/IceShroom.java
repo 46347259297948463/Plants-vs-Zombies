@@ -31,21 +31,29 @@ public class IceShroom extends BombPlants{
         if (obj instanceof DayLevel) {
             DayLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = DayLevel.getInstance().getCells();
+            needCoffee = true;
+            coffee = false;
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = NightLevel.getInstance().getCells();
+            needCoffee = false;
+            coffee = true;
         }
 
         ImageView imageView = new ImageView(getClass().getResource("/view/images/Ice shroom.png").toString());
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);
         setImage(imageView);
-        iceShroomTimer = new Timeline(
-                new KeyFrame(Duration.seconds(1),event -> BOMB()),
-                new KeyFrame(Duration.seconds(5),event -> afterBomb())
-        );
-        iceShroomTimer.setCycleCount(1);
-        iceShroomTimer.play();
+
+        if (obj instanceof NightLevel /*|| obj instanceOf FogLevel*/) {
+            iceShroomTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(1),event -> BOMB()),
+                    new KeyFrame(Duration.seconds(11),event -> afterBomb())
+            );
+            iceShroomTimer.setCycleCount(1);
+            iceShroomTimer.play();
+        }
+
         group.setOpacity(0.7);
 
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
@@ -83,10 +91,10 @@ public class IceShroom extends BombPlants{
 
         if (obj instanceof DayLevel) {
             DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-            cells[row][column].removePlant();
+            cells[row][column].setPlants(null);
         } else if (obj instanceof NightLevel){
             NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-            cells[row][column].removePlant();
+            cells[row][column].setPlants(null);
         }
     }
 
@@ -94,11 +102,15 @@ public class IceShroom extends BombPlants{
         for (int i = 0 ; i < 5; i++){
             for(int j = 0; j < 9; j++){
                 ArrayList<Zombie> zombies = cells[i][j].getZombies();
-                for(Zombie z : zombies){
-                    z.play();
+                if (zombies != null) {
+                    for (Zombie z : zombies) {
+                        z.play();
+                    }
                 }
             }
         }
+        iceShroomTimer.stop();
+        end();
     }
 
     @Override
@@ -145,6 +157,18 @@ public class IceShroom extends BombPlants{
 
     public static void setGroup(Group g) {
         group = g;
+    }
+
+    public void setCoffee(boolean coffee) {
+        this.coffee = coffee;
+        if (coffee && iceShroomTimer == null) {
+            iceShroomTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(1),event1 -> BOMB()),
+                    new KeyFrame(Duration.seconds(5),event2 -> afterBomb())
+            );
+            iceShroomTimer.setCycleCount(1);
+            iceShroomTimer.play();
+        }
     }
 
 }

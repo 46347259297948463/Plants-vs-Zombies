@@ -1,37 +1,54 @@
 package model;
 import controller.DayLevel;
+import controller.NightLevel;
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.ImageView;
 import javafx.scene.Group;
+import javafx.util.Duration;
 
 
 public class HypnoShroom extends Plants{
 
     private Timeline timer;
 
-    private Cell[][] cells = DayLevel.getInstance().getCells();
+    private Cell[][] cells;
 
     private static Group group;
 
     private static int availableNum;
 
-    private static int HP = 4;
+    private final static int HP = 4;
 
     public HypnoShroom(int i, int j) {
         super(HP, i, j, 75, 20);
-        DayLevel.getInstance().setAvailablePicked(false,availableNum);
-        ImageView imageView = new ImageView(getClass().getResource("/images/hypno shroom.png").toString());
-        imageView.setFitWidth(120);
-        imageView.setFitHeight(125);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(false,availableNum);
+            cells = DayLevel.getInstance().getCells();
+            needCoffee = true;
+            setCoffee(false);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(false,availableNum);
+            cells = NightLevel.getInstance().getCells();
+            needCoffee = true;
+            setCoffee(false);
+        }
+        ImageView imageView = new ImageView(getClass().getResource("/view/images/hypno shroom.png").toString());
+        imageView.setFitWidth(90);
+        imageView.setFitHeight(120);
+        imageView.setLayoutX(25);
         setImage(imageView);
+
         group.setOpacity(0.7);
 
+        timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
+        timer.setCycleCount(1);
+        timer.play();
     }
 
     public HypnoShroom() {
-
+        price = 75;
     }
-
 
     @Override
     public Plants clonePlant(int row, int column) {
@@ -40,7 +57,11 @@ public class HypnoShroom extends Plants{
 
     @Override
     protected void recharge() {
-        DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        if (obj instanceof DayLevel) {
+            DayLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof NightLevel) {
+            NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        }
         timer.stop();
         group.setOpacity(1);
     }
@@ -57,7 +78,7 @@ public class HypnoShroom extends Plants{
 
     @Override
     public void end() {
-
+        cells[row][column].getGroup().getChildren().remove(image);
     }
 
     @Override
@@ -67,10 +88,11 @@ public class HypnoShroom extends Plants{
 
     @Override
     public void takeDamage(int damage){
-        HP -= damage;
-
+        super.HP -= damage;
+        if (super.HP < 1) {
+            cells[row][column].removePlant();
+        }
     }
-
 
     public static void setAvailableNum(int a) {
         availableNum = a;

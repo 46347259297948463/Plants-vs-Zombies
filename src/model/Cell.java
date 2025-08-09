@@ -24,7 +24,9 @@ public class Cell {
     }
 
     public void removePlant(){
-        plant.end();
+        if (plant != null) {
+            plant.end();
+        }
         this.plant = null;
     }
 
@@ -46,14 +48,6 @@ public class Cell {
             }
         }
         zombies = null;
-    }
-
-    public boolean hasPlant(){
-        return plant != null;
-    }
-
-    public boolean hasZombie(){
-        return zombies.get(0) != null;
     }
 
     public void setPlants(Plants plant){
@@ -81,16 +75,15 @@ public class Cell {
         return plant;
     }
 
-    public ArrayList<Zombie> getZombies(){
+    public ArrayList<Zombie> getZombies() {
         if (zombies != null) {
-            zombies.removeIf(zombie -> zombie.isDead());
+            zombies.removeIf(zombie -> zombie == null || zombie.isDead());
             if (zombies.isEmpty()) {
                 zombies = null;
                 return null;
             }
         }
         return zombies;
-
     }
 
     public void setAvailable(boolean available) {
@@ -102,4 +95,7 @@ public class Cell {
         plant = null;
     }
 
+    public boolean isAvailable() {
+        return isAvailable;
+    }
 }

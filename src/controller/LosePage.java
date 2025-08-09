@@ -56,8 +56,6 @@ public class LosePage implements Initializable {
                 Stage oldStage = (Stage) tryAgainBTN.getScene().getWindow();
                 oldStage.close();
 
-                DayLevel.resetInstance();
-
                 FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
                 try {
                     loader.load();
@@ -81,8 +79,6 @@ public class LosePage implements Initializable {
                 FirstPage.playAudio();
                 Stage oldStage = (Stage) tryAgainBTN.getScene().getWindow();
                 oldStage.close();
-
-                NightLevel.resetInstance();
 
                 FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
                 try {

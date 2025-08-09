@@ -407,6 +407,10 @@ public class NightLevel implements Initializable {
         Bullet.obj = NightLevel.getInstance();
         Menu.obj = NightLevel.getInstance();
 
+        setButtons();
+        setGroups();
+        fillBoard();
+
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
                     getClass().getResource("/view/audio/night.wav")
@@ -468,7 +472,7 @@ public class NightLevel implements Initializable {
                         gameTimer.stop();
                         gameTimer = null;
                         exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-                            if (isGameFinish()){
+                            if (isGameFinish()) {
                                 clip.stop();
                                 try {
                                     AudioInputStream audioStream = AudioSystem.getAudioInputStream(
@@ -485,7 +489,6 @@ public class NightLevel implements Initializable {
                                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
                                     Parent winContent = loader.load();
 
-                                    NightLevel.resetInstance();
                                     WinPage.setObj(NightLevel.getInstance());
                                     nightAnc.getChildren().add(winContent);
 
@@ -507,10 +510,6 @@ public class NightLevel implements Initializable {
             gameTimer.setCycleCount(1);
             gameTimer.play();
         }
-
-        setButtons();
-        setGroups();
-        fillBoard();
 
         plant1BTN.setOnAction(event -> {
             if (!isStopMod) {
@@ -564,298 +563,60 @@ public class NightLevel implements Initializable {
         });
     }
 
-    public void stop(){
-        isStopMod = true;
-        if (gameTimer != null){
-            gameTimer.pause();
-        }
-        if (zombieTimer != null){
-            zombieTimer.pause();
-        }
-        if (midTimer != null){
-            midTimer.pause();
-        }
-        if (finalTimer != null){
-            finalTimer.pause();
-        }
-        for (int i = 0; i < 5 ; i++){
-            for (int j = 0 ; j < 9; j++){
-                if (cells[i][j].getPlant() != null){
-                    cells[i][j].getPlant().stop();
-                }
-                if (cells[i][j].getZombies() != null){
-                    for (Zombie zombie : cells[i][j].getZombies()){
-                        zombie.stop();
+    private void cellOnAction(){
+        for (int i=0; i<5; i++){
+            for (int j=0; j<9; j++){
+                final int row = i;
+                final int column = j;
+                cells[i][j].getButton().setOnAction(event -> {
+                    if (!isStopMod) {
+                        if (isShovelMode) {
+                            if (cells[row][column].getPlant() != null) {
+                                try {
+                                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                            getClass().getResource("/view/audio/shovel sound.wav")
+                                    );
+                                    Clip clip = AudioSystem.getClip();
+                                    clip.open(audioStream);
+                                    clip.start();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                cells[row][column].getGroup().getChildren().remove(cells[row][column].getPlant().getImage());
+                                cells[row][column].getPlant().end();
+                                cells[row][column].setPlants(null);
+                            }
+                            isShovelMode = false;
+                        } else if (selectedPlant != null && cells[row][column].getPlant() == null && availableNum != -1) {
+                            if (availablePicked[availableNum]) {
+                                if (selectedPlant.getPrice() <= Integer.parseInt(sunPoints.getText())) {
+                                    try {
+                                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                                                getClass().getResource("/view/audio/planting sound.wav")
+                                        );
+                                        Clip clip = AudioSystem.getClip();
+                                        clip.open(audioStream);
+                                        clip.start();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    Plants newPlant = selectedPlant.clonePlant(row, column);
+                                    newPlant.getImage().setMouseTransparent(true);
+                                    newPlant.setNeedCoffee(false);
+                                    cells[row][column].getGroup().getChildren().add(newPlant.getImage());
+                                    cells[row][column].setPlants(newPlant);
+                                    withdrawSunPoints(newPlant.getPrice());
+                                }
+                            }
+                            selectedGroup = null;
+                            selectedPlant = null;
+                            availableNum = -1;
+                        }
                     }
-                }
+                });
             }
         }
-    }
-
-    public void play(){
-        isStopMod = false;
-        if (gameTimer != null){
-            gameTimer.play();
-        }
-        if (zombieTimer != null){
-            zombieTimer.play();
-        }
-        if (midTimer != null){
-            midTimer.play();
-        }
-        if (finalTimer != null){
-            finalTimer.play();
-        }
-        for (int i = 0; i < 5 ; i++){
-            for (int j = 0 ; j < 9; j++){
-                if (cells[i][j].getPlant() != null){
-                    cells[i][j].getPlant().play();
-                }
-                if (cells[i][j].getZombies() != null){
-                    for (Zombie zombie : cells[i][j].getZombies()){
-                        zombie.play();
-                    }
-                }
-            }
-        }
-    }
-
-    public void lose(){
-        clip.stop();
-        try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                    getClass().getResource("/view/audio/lose sound.wav")
-            );
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.start();
-        } catch (Exception ev) {
-            ev.printStackTrace();
-        }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/LosePage.fxml"));
-            Parent loseContent = loader.load();
-
-            LosePage.setObj(DayLevel.getInstance());
-
-            nightAnc.getChildren().add(loseContent);
-
-            AnchorPane.setTopAnchor(loseContent, 260.0);
-            AnchorPane.setLeftAnchor(loseContent, 690.0);
-
-            loseContent.setOpacity(1);
-        } catch (IOException ev) {
-            ev.printStackTrace();
-        }
-        stop();
-        exitTimer.stop();
-    }
-
-    public static void stopAudio(){
-        clip.stop();
-    }
-
-    public static void playAudio(){
-        clip.start();
-    }
-
-    private static void setInstance(NightLevel nightLevel) {
-        instance = nightLevel;
-    }
-
-    public static NightLevel getInstance() {
-        if (instance == null) {
-            instance = new NightLevel();
-        }
-        return instance;
-    }
-
-    private void step1(){
-        try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                    getClass().getResource("/view/audio/zombies are coming sound.wav")
-            );
-            Clip coming = AudioSystem.getClip();
-            coming.open(audioStream);
-            coming.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> basicZombie()));
-        zombieTimer.setCycleCount(Timeline.INDEFINITE);
-        zombieTimer.play();
-    }
-
-    private void step2(){
-        if (zombieTimer != null) {
-            zombieTimer.stop();
-        }
-        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
-            int choose = random.nextInt(2);
-            if (choose == 0){
-                basicZombie();
-            } else {
-                coneHeadZombie();
-            }
-        }));
-        zombieTimer.setCycleCount(Timeline.INDEFINITE);
-        zombieTimer.play();
-    }
-
-    private void midAttack(){
-        if (zombieTimer != null) {
-            zombieTimer.stop();
-        }
-        try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                    getClass().getResource("/view/audio/wave sound.wav")
-            );
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.start();
-        } catch (Exception ev) {
-            ev.printStackTrace();
-        }
-        midTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
-            for (int i = 0; i < 5; i++){
-                int choose = random.nextInt(2);
-                if (choose == 0){
-                    basicZombie();
-                } else {
-                    coneHeadZombie();
-                }
-            }
-        } ));
-        midTimer.setCycleCount(4);
-        midTimer.play();
-    }
-
-    private void step3(){
-        if (midTimer != null) {
-            midTimer.stop();
-            midTimer = null;
-        }
-        if (zombieTimer != null) {
-            zombieTimer.stop();
-        }
-        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
-            int choose = random.nextInt(3);
-            if (choose == 0){
-                basicZombie();
-            } else if (choose == 1) {
-                coneHeadZombie();
-            }else {
-                screenDoorZombie();
-            }
-        }));
-        zombieTimer.setCycleCount(Timeline.INDEFINITE);
-        zombieTimer.play();
-    }
-
-    private void step4(){
-        if (zombieTimer != null) {
-            zombieTimer.stop();
-        }
-        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(1) , event -> {
-            int choose = random.nextInt(4);
-            if (choose == 0){
-                basicZombie();
-            } else if (choose == 1) {
-                coneHeadZombie();
-            }else if (choose == 2){
-                screenDoorZombie();
-            }else {
-                impZombie();
-            }
-        }));
-        zombieTimer.setCycleCount(Timeline.INDEFINITE);
-        zombieTimer.play();
-    }
-
-    private void finalAttack(){
-        if (zombieTimer != null) {
-            zombieTimer.stop();
-        }
-        zombieTimer = null;
-        try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                    getClass().getResource("/view/audio/wave sound.wav")
-            );
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioStream);
-            clip.start();
-        } catch (Exception ev) {
-            ev.printStackTrace();
-        }
-        finalTimer = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
-            for (int i = 0; i < 5; i++){
-                int choose = random.nextInt(4);
-                if (choose == 0){
-                    basicZombie();
-                } else if (choose == 1) {
-                    coneHeadZombie();
-                }else if (choose == 2){
-                    screenDoorZombie();
-                }else {
-                    impZombie();
-                }
-            }
-        }));
-        finalTimer.setCycleCount(8);
-        finalTimer.play();
-    }
-
-    private void basicZombie(){
-        int row;
-        while (!setRandomZombies(row = random.nextInt(5)));
-        numberOfZombies[row]++;
-        Zombie zombie = new Zombie( 1780, row * 185 + 130, row);
-        cells[row][8].setZombies(zombie);
-    }
-
-    private void coneHeadZombie(){
-        int row;
-        while (!setRandomZombies(row = random.nextInt(5)));
-        numberOfZombies[row]++;
-        ConeheadZombie zombie = new ConeheadZombie( 1780, row * 185 + 130, row);
-        cells[row][8].setZombies(zombie);
-    }
-
-    private void screenDoorZombie(){
-        int row;
-        while (!setRandomZombies(row = random.nextInt(5)));
-        numberOfZombies[row]++;
-        ScreenDoorZombie zombie = new ScreenDoorZombie( 1780, row * 185 + 130, row);
-        cells[row][8].setZombies(zombie);
-    }
-
-    private void impZombie(){
-        int row;
-        while (!setRandomZombies(row = random.nextInt(5)));
-        numberOfZombies[row]++;
-        ImpZombie zombie = new ImpZombie(1780, row * 185 + 130, row);
-        cells[row][8].setZombies(zombie);
-    }
-
-    private boolean isGameFinish(){
-        for (int i = 0; i<5 ; i++){
-            for (int j = 0; j<9; j++){
-                if (cells[i][j].getZombies() != null){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean setRandomZombies(int k){
-        for (int i = 0 ; i < 5; i++){
-            if (numberOfZombies[k] - numberOfZombies[i] >=3){
-                return false;
-            }
-        }
-        return true;
     }
 
     public void setNames(ArrayList<String> plants){
@@ -1049,61 +810,29 @@ public class NightLevel implements Initializable {
         cells[4][6] = new Cell(cell46, group46);
         cells[4][7] = new Cell(cell47, group47);
         cells[4][8] = new Cell(cell48, group48);
-    }
 
-    private void cellOnAction(){
-        for (int i=0; i<5; i++){
-            for (int j=0; j<9; j++){
-                final int row = i;
-                final int column = j;
-                cells[i][j].getButton().setOnAction(event -> {
-                    if (!isStopMod) {
-                        if (isShovelMode) {
-                            if (cells[row][column].getPlant() != null) {
-                                try {
-                                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                                            getClass().getResource("/view/audio/shovel sound.wav")
-                                    );
-                                    Clip clip = AudioSystem.getClip();
-                                    clip.open(audioStream);
-                                    clip.start();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                cells[row][column].getGroup().getChildren().remove(cells[row][column].getPlant().getImage());
-                                cells[row][column].getPlant().end();
-                                cells[row][column].setPlants(null);
-                            }
-                            isShovelMode = false;
-                        } else if (selectedPlant != null && cells[row][column].getPlant() == null && availableNum != -1) {
-                            if (availablePicked[availableNum]) {
-                                if (selectedPlant.getPrice() <= Integer.parseInt(sunPoints.getText())) {
-                                    try {
-                                        AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                                                getClass().getResource("/view/audio/planting sound.wav")
-                                        );
-                                        Clip clip = AudioSystem.getClip();
-                                        clip.open(audioStream);
-                                        clip.start();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
+        int[] X = {-1, -1, -1, -1, -1, -1};
+        int[] Y = {-1, -1, -1, -1, -1, -1};
+        int n = 1;
+        for (int i = 0 ; i < 6 ; i++) {
+            int x = (int) (Math.random() * 5);
+            int y = (int) (Math.random() * 5) + 4;
 
-                                    Plants newPlant = selectedPlant.clonePlant(row, column);
-                                    newPlant.getImage().setMouseTransparent(true);
-                                    newPlant.setNeedCoffee(false);
-                                    cells[row][column].getGroup().getChildren().add(newPlant.getImage());
-                                    cells[row][column].setPlants(newPlant);
-                                    withdrawSunPoints(newPlant.getPrice());
-                                }
-                            }
-                            selectedGroup = null;
-                            selectedPlant = null;
-                            availableNum = -1;
-                        }
-                    }
-                });
+            for (int j = 0 ; j < i ; j++) {
+                if (x == X[j] && y == Y[j]) {
+                    x = (int) (Math.random() * 5);
+                    y = (int) (Math.random() * 5) + 4;
+                    j = -1;
+                }
             }
+            ImageView imageView = new ImageView("/view/images/grave_" + n + ".png");
+            imageView.setFitWidth(135);
+            imageView.setFitHeight(140);
+            cells[x][y].getGroup().getChildren().add(imageView);
+            cells[x][y].setAvailable(false);
+            n++;
+            X[i] = x;
+            Y[i] = y;
         }
     }
 
@@ -1115,6 +844,293 @@ public class NightLevel implements Initializable {
         sunPoints.setText((Integer.parseInt(sunPoints.getText()) + n) + "");
     }
 
+    private void step1(){
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/zombies are coming sound.wav")
+            );
+            Clip coming = AudioSystem.getClip();
+            coming.open(audioStream);
+            coming.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> basicZombie()));
+        zombieTimer.setCycleCount(Timeline.INDEFINITE);
+        zombieTimer.play();
+    }
+
+    private void step2(){
+        if (zombieTimer != null) {
+            zombieTimer.stop();
+        }
+        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
+            int choose = random.nextInt(2);
+            if (choose == 0){
+                basicZombie();
+            } else {
+                coneHeadZombie();
+            }
+        }));
+        zombieTimer.setCycleCount(Timeline.INDEFINITE);
+        zombieTimer.play();
+    }
+
+    private void midAttack(){
+        if (zombieTimer != null) {
+            zombieTimer.stop();
+        }
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/wave sound.wav")
+            );
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception ev) {
+            ev.printStackTrace();
+        }
+        midTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
+            for (int i = 0; i < 5; i++){
+                int choose = random.nextInt(2);
+                if (choose == 0){
+                    basicZombie();
+                } else {
+                    coneHeadZombie();
+                }
+            }
+        } ));
+        midTimer.setCycleCount(4);
+        midTimer.play();
+    }
+
+    private void step3(){
+        if (midTimer != null) {
+            midTimer.stop();
+            midTimer = null;
+        }
+        if (zombieTimer != null) {
+            zombieTimer.stop();
+        }
+        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> {
+            int choose = random.nextInt(3);
+            if (choose == 0){
+                basicZombie();
+            } else if (choose == 1) {
+                coneHeadZombie();
+            }else {
+                screenDoorZombie();
+            }
+        }));
+        zombieTimer.setCycleCount(Timeline.INDEFINITE);
+        zombieTimer.play();
+    }
+
+    private void step4(){
+        if (zombieTimer != null) {
+            zombieTimer.stop();
+        }
+        zombieTimer = new Timeline(new KeyFrame(Duration.seconds(1) , event -> {
+            int choose = random.nextInt(4);
+            if (choose == 0){
+                basicZombie();
+            } else if (choose == 1) {
+                coneHeadZombie();
+            }else if (choose == 2){
+                screenDoorZombie();
+            }else {
+                impZombie();
+            }
+        }));
+        zombieTimer.setCycleCount(Timeline.INDEFINITE);
+        zombieTimer.play();
+    }
+
+    private void finalAttack(){
+        if (zombieTimer != null) {
+            zombieTimer.stop();
+        }
+        zombieTimer = null;
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/wave sound.wav")
+            );
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception ev) {
+            ev.printStackTrace();
+        }
+        finalTimer = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
+            for (int i = 0; i < 5; i++){
+                int choose = random.nextInt(4);
+                if (choose == 0){
+                    basicZombie();
+                } else if (choose == 1) {
+                    coneHeadZombie();
+                }else if (choose == 2){
+                    screenDoorZombie();
+                }else {
+                    impZombie();
+                }
+            }
+        }));
+        finalTimer.setCycleCount(8);
+        finalTimer.play();
+    }
+
+    private void basicZombie(){
+        int row;
+        while (!setRandomZombies(row = random.nextInt(5)));
+        numberOfZombies[row]++;
+        Zombie zombie = new Zombie( 1780, row * 185 + 130, row);
+        cells[row][8].setZombies(zombie);
+    }
+
+    private void coneHeadZombie(){
+        int row;
+        while (!setRandomZombies(row = random.nextInt(5)));
+        numberOfZombies[row]++;
+        ConeheadZombie zombie = new ConeheadZombie( 1780, row * 185 + 130, row);
+        cells[row][8].setZombies(zombie);
+    }
+
+    private void screenDoorZombie(){
+        int row;
+        while (!setRandomZombies(row = random.nextInt(5)));
+        numberOfZombies[row]++;
+        ScreenDoorZombie zombie = new ScreenDoorZombie( 1780, row * 185 + 130, row);
+        cells[row][8].setZombies(zombie);
+    }
+
+    private void impZombie(){
+        int row;
+        while (!setRandomZombies(row = random.nextInt(5)));
+        numberOfZombies[row]++;
+        ImpZombie zombie = new ImpZombie(1780, row * 185 + 130, row);
+        cells[row][8].setZombies(zombie);
+    }
+
+    private boolean isGameFinish(){
+        for (int i = 0; i<5 ; i++){
+            for (int j = 0; j<9; j++){
+                if (cells[i][j].getZombies() != null){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean setRandomZombies(int k){
+        for (int i = 0 ; i < 5; i++){
+            if (numberOfZombies[k] - numberOfZombies[i] >=3){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void stop(){
+        isStopMod = true;
+        if (gameTimer != null){
+            gameTimer.pause();
+        }
+        if (zombieTimer != null){
+            zombieTimer.pause();
+        }
+        if (midTimer != null){
+            midTimer.pause();
+        }
+        if (finalTimer != null){
+            finalTimer.pause();
+        }
+        for (int i = 0; i < 5 ; i++){
+            for (int j = 0 ; j < 9; j++){
+                if (cells[i][j].getPlant() != null){
+                    cells[i][j].getPlant().stop();
+                }
+                if (cells[i][j].getZombies() != null){
+                    for (Zombie zombie : cells[i][j].getZombies()){
+                        zombie.stop();
+                    }
+                }
+            }
+        }
+    }
+
+    public void play(){
+        isStopMod = false;
+        if (gameTimer != null){
+            gameTimer.play();
+        }
+        if (zombieTimer != null){
+            zombieTimer.play();
+        }
+        if (midTimer != null){
+            midTimer.play();
+        }
+        if (finalTimer != null){
+            finalTimer.play();
+        }
+        for (int i = 0; i < 5 ; i++){
+            for (int j = 0 ; j < 9; j++){
+                if (cells[i][j].getPlant() != null){
+                    cells[i][j].getPlant().play();
+                }
+                if (cells[i][j].getZombies() != null){
+                    for (Zombie zombie : cells[i][j].getZombies()){
+                        zombie.play();
+                    }
+                }
+            }
+        }
+    }
+
+    public static void stopAudio(){
+        clip.stop();
+    }
+
+    public static void playAudio(){
+        clip.start();
+    }
+
+    public void lose(){
+        clip.stop();
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/lose sound.wav")
+            );
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception ev) {
+            ev.printStackTrace();
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/LosePage.fxml"));
+            Parent loseContent = loader.load();
+
+            LosePage.setObj(NightLevel.getInstance());
+
+            nightAnc.getChildren().add(loseContent);
+
+            AnchorPane.setTopAnchor(loseContent, 260.0);
+            AnchorPane.setLeftAnchor(loseContent, 690.0);
+
+            loseContent.setOpacity(1);
+        } catch (IOException ev) {
+            ev.printStackTrace();
+        }
+        stop();
+        exitTimer.stop();
+    }
+
+    private static void setInstance(NightLevel nightLevel) {
+        instance = nightLevel;
+    }
+
     public void setAvailablePicked(Boolean bool, int i){
         if (i != -1){
             availablePicked[i] = bool;
@@ -1123,6 +1139,13 @@ public class NightLevel implements Initializable {
 
     public static void setMenu(int menu) {
         NightLevel.menu = menu;
+    }
+
+    public static NightLevel getInstance() {
+        if (instance == null) {
+            instance = new NightLevel();
+        }
+        return instance;
     }
 
     public Cell[][] getCells() {
@@ -1456,14 +1479,10 @@ public class NightLevel implements Initializable {
         return l;
     }
 
-    public static void resetInstance() {
-        instance = new NightLevel();
-    }
-
     public void restart() {
-        groupsOfPicked = new ArrayList<>();
-        buttonsOfPicked = new ArrayList<>();
-        plants = new ArrayList<>();
+        groupsOfPicked.clear();
+        buttonsOfPicked.clear();
+        plants.clear();
         cells = new Cell[5][9];
         isStopMod = false;
 
@@ -1471,8 +1490,25 @@ public class NightLevel implements Initializable {
         setGroups();
         fillBoard();
 
-        gameTimer = null;
-        numberOfZombies = new int[5];
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (cells[i][j] != null && cells[i][j].getGroup() != null) {
+                    cells[i][j].getGroup().getChildren().clear();
+                    cells[i][j].setPlants(null);
+                    cells[i][j].setZombies(null);
+                }
+            }
+        }
+
+        sunPoints.setText("0");
+        selectedPlant = null;
+        selectedGroup = null;
+        availableNum = -1;
+
+        if (gameTimer != null) {
+            gameTimer.stop();
+            gameTimer = null;
+        }
     }
 
 }

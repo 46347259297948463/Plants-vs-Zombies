@@ -25,25 +25,34 @@ public class Doomshroom extends BombPlants{
     private static int availableNum;
 
     public Doomshroom(int i, int j) {
-        super(i, j, 125, 20);
+        super(i, j, 125, 30);
         if (obj instanceof DayLevel) {
             DayLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = DayLevel.getInstance().getCells();
+            needCoffee = true;
+            setCoffee(false);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = NightLevel.getInstance().getCells();
+            needCoffee = false;
+            setCoffee(true);
         }
         ImageView imageView = new ImageView("/view/images/Doom shroom.png");
         imageView.setFitWidth(115);
         imageView.setFitHeight(120);
         setImage(imageView);
-        doomshroomTimer = new Timeline(
-                new KeyFrame(Duration.seconds(1.5), event -> BOMB()),
-                new KeyFrame(Duration.seconds(16.5), event -> afterBOMB())
-        );
-        doomshroomTimer.setCycleCount(1);
-        doomshroomTimer.play();
+
+        if (obj instanceof NightLevel /*|| obj instanceof FogLevel*/) {
+            doomshroomTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(1.5), event1 -> BOMB()),
+                    new KeyFrame(Duration.seconds(16.5), even2 -> afterBOMB())
+            );
+            doomshroomTimer.setCycleCount(1);
+            doomshroomTimer.play();
+        }
+
         group.setOpacity(0.7);
+
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
         timer.play();
@@ -54,13 +63,8 @@ public class Doomshroom extends BombPlants{
     }
 
     private void afterBOMB() {
-        if (obj instanceof DayLevel) {
-            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(image);
-            DayLevel.getInstance().getCells()[row][column].setAvailable(true);
-        } else if (obj instanceof NightLevel) {
-            NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(image);
-            NightLevel.getInstance().getCells()[row][column].setAvailable(true);
-        }
+        cells[row][column].getGroup().getChildren().remove(image);
+        cells[row][column].setAvailable(true);
     }
 
     @Override
@@ -88,8 +92,9 @@ public class Doomshroom extends BombPlants{
 
         cells[row][column].removePlant();
         image.setImage(new Image(getClass().getResource("/view/images/after doom shroom bomb.png").toString()));
-        image.setFitWidth(145);
-        image.setFitHeight(115);
+        image.setFitWidth(135);
+        image.setFitHeight(105);
+        cells[row][column].setAvailable(false);
     }
 
     @Override
@@ -110,12 +115,16 @@ public class Doomshroom extends BombPlants{
 
     @Override
     public void stop() {
-        doomshroomTimer.pause();
+        if (doomshroomTimer != null) {
+            doomshroomTimer.pause();
+        }
     }
 
     @Override
     public void play() {
-        doomshroomTimer.play();
+        if (doomshroomTimer != null) {
+            doomshroomTimer.play();
+        }
     }
 
     @Override
@@ -136,6 +145,18 @@ public class Doomshroom extends BombPlants{
 
     public static void setGroup(Group g) {
         group = g;
+    }
+
+    public void setCoffee(boolean coffee) {
+        this.coffee = coffee;
+        if (coffee && doomshroomTimer == null) {
+            doomshroomTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(1.5), event1 -> BOMB()),
+                    new KeyFrame(Duration.seconds(16.5), even2 -> afterBOMB())
+            );
+            doomshroomTimer.setCycleCount(1);
+            doomshroomTimer.play();
+        }
     }
 
 }

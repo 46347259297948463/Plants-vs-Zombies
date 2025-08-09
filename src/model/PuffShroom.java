@@ -39,9 +39,13 @@ public class PuffShroom extends PeaPlants{
         if (obj instanceof DayLevel) {
             DayLevel.getInstance().setAvailablePicked(false,availableNum);
             cells = DayLevel.getInstance().getCells();
+            needCoffee = true;
+            coffee = false;
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false,availableNum);
             cells = NightLevel.getInstance().getCells();
+            needCoffee = false;
+            coffee = true;
         }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/puff shroom.png").toString());
         imageView.setFitWidth(65);
@@ -49,14 +53,18 @@ public class PuffShroom extends PeaPlants{
         imageView.setLayoutX(column + 40);
         imageView.setLayoutY(row + 60);
         setImage(imageView);
-        shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
-        shootTimer.setCycleCount(Timeline.INDEFINITE);
-        shootTimer.play();
+
+        if (obj instanceof NightLevel /*|| obj instanceOf FogLevel*/) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event1 -> shoot(zombie)));
+            shootTimer.setCycleCount(Timeline.INDEFINITE);
+            shootTimer.play();
+        }
+
         group.setOpacity(0.7);
+
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
         timer.play();
-
     }
 
     public PuffShroom(){
@@ -77,7 +85,7 @@ public class PuffShroom extends PeaPlants{
                 }
                 moveBulletTimer.stop();
             }
-            bullet = new PuffBullet(row , column);
+            bullet = new PuffBullet(row , column, 1);
             try {
                 AudioInputStream audioStream = AudioSystem.getAudioInputStream(
                         getClass().getResource("/view/audio/hit sound.wav")
@@ -190,5 +198,15 @@ public class PuffShroom extends PeaPlants{
     public static void setGroup(Group g) {
         group = g;
     }
+
+    public void setCoffee(boolean coffee) {
+        this.coffee = coffee;
+        if (coffee && shootTimer == null) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event1 -> shoot(zombie)));
+            shootTimer.setCycleCount(Timeline.INDEFINITE);
+            shootTimer.play();
+        }
+    }
+
 
 }

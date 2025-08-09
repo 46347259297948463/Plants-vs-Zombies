@@ -5,9 +5,10 @@ import javafx.scene.image.ImageView;
 
 public class SnowBullet extends  Bullet{
 
-    public SnowBullet(double row, double column){
-        super(row, column);
+    public SnowBullet(double row, double column, int n){
+        super(row, column, n);
     }
+
 
     @Override
     protected void setting(){

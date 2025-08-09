@@ -19,9 +19,14 @@ public class Bullet {
 
     public static Object obj;
 
-    public Bullet(double row, double column){
+    protected int n;
+
+    protected Object bulletObject;
+
+    public Bullet(double row, double column, int n){
         this.row = row * 191.5 + 153;
         this.column = column * 153.5 + 590;
+        this.n = n;
         setting();
     }
 

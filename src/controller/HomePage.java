@@ -36,6 +36,8 @@ public class HomePage implements Initializable {
 
     private static HomePage instance;
 
+    private boolean isLoad = false;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -43,6 +45,7 @@ public class HomePage implements Initializable {
 
         File save = new File("save.dat");
         if (save.exists() && save.length() != 0){
+            isLoad = true;
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/LoadPage.fxml"));
                 Parent loadContent = loader.load();
@@ -59,48 +62,60 @@ public class HomePage implements Initializable {
             }
         }
 
-        exitBTN.setOnAction(event -> Platform.exit());
+        exitBTN.setOnAction(event -> {
+            if (!isLoad) {
+                Platform.exit();
+            }
+        });
 
         dayBTN.setOnAction(event -> {
-            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (!isLoad) {
+                FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
+                try {
+                    loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                PickIcon controller= loader.getController();
+                controller.setObj(DayLevel.getInstance());
+                Stage stage= new Stage();
+                stage.setScene(new Scene(loader.getRoot()));
+
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                stage.setFullScreen(true);
+                stage.show();
+                Stage oldStage = (Stage) dayBTN.getScene().getWindow();
+                oldStage.close();
             }
-
-            PickIcon controller= loader.getController();
-            controller.setObj(DayLevel.getInstance());
-            Stage stage= new Stage();
-            stage.setScene(new Scene(loader.getRoot()));
-
-            stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
-            stage.setFullScreen(true);
-            stage.show();
-            Stage oldStage = (Stage) dayBTN.getScene().getWindow();
-            oldStage.close();
         });
 
         nightBTN.setOnAction(event -> {
-            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+           if (!isLoad) {
+               FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
+               try {
+                   loader.load();
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
 
-            PickIcon controller= loader.getController();
-            controller.setObj(NightLevel.getInstance());
-            Stage stage= new Stage();
-            stage.setScene(new Scene(loader.getRoot()));
+               PickIcon controller= loader.getController();
+               controller.setObj(NightLevel.getInstance());
+               Stage stage= new Stage();
+               stage.setScene(new Scene(loader.getRoot()));
 
-            stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
-            stage.setFullScreen(true);
-            stage.show();
-            Stage oldStage = (Stage) nightBTN.getScene().getWindow();
-            oldStage.close();
+               stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+               stage.setFullScreen(true);
+               stage.show();
+               Stage oldStage = (Stage) nightBTN.getScene().getWindow();
+               oldStage.close();
+           }
         });
 
+    }
+
+    public void setLoad(boolean load) {
+        isLoad = load;
     }
 
     public static void setInstance(HomePage instance) {

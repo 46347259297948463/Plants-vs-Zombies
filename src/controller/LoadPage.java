@@ -33,9 +33,11 @@ public class LoadPage implements Initializable {
             if (root instanceof AnchorPane) {
                 HomePage.getInstance().getAnchorPane().getChildren().remove(this.anchorPane);
             }
+            HomePage.getInstance().setLoad(false);
         });
 
         yesBTN.setOnAction(event -> {
+            HomePage.getInstance().setLoad(false);
             DayLevel.isOnSaveMode = true;
             FirstPage.stopAudio();
             FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/DayLevel.fxml"));
