@@ -157,6 +157,7 @@ public class Zombie {
                             eatenZombie.takeDamage(1);
                             if (eatenZombie.isDead()){
                                 eatenZombie.dead();
+                                eatenZombie = null;
                                 eatTimeline.stop();
                                 moveTimeline = null;
                                 eatTimeline = null;
@@ -279,7 +280,7 @@ public class Zombie {
 
     private boolean eatZombie(){
         if (findZombie()) {
-            if (isHypnotized == -1 || eatenZombie.isHypnotized == -1) {
+            if (isHypnotized != eatenZombie.isHypnotized) {
                 return true;
             }
         }
@@ -289,16 +290,32 @@ public class Zombie {
     private boolean findZombie() {
         int j = rowBTN;
         eatenZombie = null;
-        double min = Double.MAX_VALUE;
 
-        for (int i = columnBTN; i < 9; i++) {
-            ArrayList<Zombie> zombies = cells[j][i].getZombies();
-            if (zombies != null && !zombies.isEmpty()) {
-                for (Zombie z : zombies) {
-                    if (z.isDead()) continue;
-                    if (z.getColumn() < min) {
-                        eatenZombie = z;
-                        min = z.getColumn();
+        if (isHypnotized == -1) {
+            double min = Double.MAX_VALUE;
+            for (int i = columnBTN; i < 9; i++) {
+                ArrayList<Zombie> zombies = cells[j][i].getZombies();
+                if (zombies != null && !zombies.isEmpty()) {
+                    for (Zombie z : zombies) {
+                        if (z.isDead()) continue;
+                        if (z.getColumn() < min) {
+                            eatenZombie = z;
+                            min = z.getColumn();
+                        }
+                    }
+                }
+            }
+        } else {
+            double min = Double.MIN_VALUE;
+            for (int i = columnBTN; i >= 0; i--) {
+                ArrayList<Zombie> zombies = cells[j][i].getZombies();
+                if (zombies != null && !zombies.isEmpty()) {
+                    for (Zombie z : zombies) {
+                        if (z.isDead()) continue;
+                        if (z.getColumn() > min) {
+                            eatenZombie = z;
+                            min = z.getColumn();
+                        }
                     }
                 }
             }

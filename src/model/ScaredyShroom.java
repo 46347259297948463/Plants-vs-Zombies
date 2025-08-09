@@ -246,20 +246,19 @@ public class ScaredyShroom extends PeaPlants{
     @Override
     public ImageView getImage() {
         if (obj instanceof DayLevel) {
-            if (DayLevel.getInstance().getDayAnc().getChildren().contains(this.image)) {
-                return image;
+            if (DayLevel.getInstance().getDayAnc().getChildren().contains(scaredImg)) {
+                return scaredImg;
             } else {
-                return this.scaredImg;
+                return image;
             }
         } else if (obj instanceof NightLevel) {
-            if (NightLevel.getInstance().getNightAnc().getChildren().contains(this.image)) {
-                return image;
+            if (NightLevel.getInstance().getNightAnc().getChildren().contains(scaredImg)) {
+                return scaredImg;
             } else {
-                return this.scaredImg;
+                return image;
             }
         }
         return null;
     }
-
 
 }

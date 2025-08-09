@@ -27,12 +27,14 @@ public class CoffeeBean extends Plants{
         ImageView imageView = new ImageView(getClass().getResource("/view/images/coffee bean.png").toString());
         imageView.setFitWidth(75);
         imageView.setFitHeight(75);
-        imageView.setLayoutX(10);
-        imageView.setLayoutY(10);
+        imageView.setLayoutX(5);
+        imageView.setLayoutY(5);
         setImage(imageView);
 
         coffeeBeanTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
-            plant.setCoffee(true);
+            if (plant != null) {
+                plant.setCoffee(true);
+            }
             if (obj instanceof DayLevel) {
                 DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
             } else if (obj instanceof NightLevel) {
