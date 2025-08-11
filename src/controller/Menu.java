@@ -83,18 +83,11 @@ public class Menu implements Initializable {
                 NightLevel.getInstance().getNightAnc().getChildren().remove(this.anchorPane);
                 NightLevel.getInstance().play();
                 NightLevel.setMenu(0);
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().getFogAnc().getChildren().remove(this.anchorPane);
+                FogLevel.getInstance().play();
+                FogLevel.setMenu(0);
             }
-//
-//            AnchorPane root = (AnchorPane) anchorPane.getScene().getRoot();
-//            root.getChildren().remove(anchorPane);  // خود anchorPane را حذف کن
-//
-//            if (obj instanceof DayLevel) {
-//                ((DayLevel) obj).play();
-//                DayLevel.setMenu(0);
-//            } else if (obj instanceof NightLevel) {
-//                ((NightLevel) obj).play();
-//                NightLevel.setMenu(0);
-//            }
         });
 
         exitBTN.setOnAction(event -> {
@@ -119,6 +112,7 @@ public class Menu implements Initializable {
                 }
 
             } else if (obj instanceof NightLevel) {
+                NightLevel.getInstance().end();
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SavePage.fxml"));
                     Parent loadContact = loader.load();
@@ -133,8 +127,21 @@ public class Menu implements Initializable {
                     e.printStackTrace();
                 }
 
-            } else {
+            } else if (obj instanceof FogLevel){
+                FogLevel.getInstance().end();
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/SavePage.fxml"));
+                    Parent loadContact = loader.load();
+                    FogLevel.getInstance().getFogAnc().getChildren().add(loadContact);
 
+                    AnchorPane.setTopAnchor(loadContact, 260.0);
+                    AnchorPane.setLeftAnchor(loadContact, 710.0);
+
+                    loadContact.setOpacity(1);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         });
@@ -164,9 +171,15 @@ public class Menu implements Initializable {
                 DayLevel.stopAudio();
                 DayLevel.getInstance().restart();
             } else if (obj instanceof NightLevel) {
+                NightLevel.getInstance().end();
                 NightLevel.setMenu(0);
                 NightLevel.stopAudio();
                 NightLevel.getInstance().restart();
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().end();
+                FogLevel.setMenu(0);
+                FogLevel.stopAudio();
+                FogLevel.getInstance().restart();
             }
 
         });
@@ -215,6 +228,31 @@ public class Menu implements Initializable {
 
                 PickIcon controller = loader.getController();
                 controller.setObj(NightLevel.getInstance());
+                FirstPage.playAudio();
+
+                Stage stage = new Stage();
+                stage.setScene(new Scene(loader.getRoot()));
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+                stage.setFullScreen(true);
+                stage.show();
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().stop();
+                FogLevel.setMenu(0);
+                FogLevel.stopAudio();
+
+                FogLevel.getInstance().restart();
+                Stage oldStage = (Stage) restartBTN.getScene().getWindow();
+                oldStage.close();
+
+                FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
+                try {
+                    loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                PickIcon controller = loader.getController();
+                controller.setObj(FogLevel.getInstance());
                 FirstPage.playAudio();
 
                 Stage stage = new Stage();

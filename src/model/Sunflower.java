@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -33,6 +34,8 @@ public class Sunflower extends Plants{
             DayLevel.getInstance().setAvailablePicked(false, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(false, availableNum);
         }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/sunflower.png").toString());
         imageView.setFitWidth(120);
@@ -67,17 +70,21 @@ public class Sunflower extends Plants{
                 DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
             } else if (obj instanceof NightLevel) {
                 NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
             }
             sun.getButton().setOnAction(event -> {
                 if ((obj instanceof DayLevel) && (!DayLevel.getInstance().isStopMod)) {
                     DayLevel.getInstance().depositSunPoints(25);
                     DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
-                    playSunSound();
                 } else if ((obj instanceof NightLevel) && (!NightLevel.getInstance().isStopMod)) {
                     NightLevel.getInstance().depositSunPoints(25);
                     NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
-                    playSunSound();
+                } else if ((obj instanceof FogLevel) && (!FogLevel.getInstance().isStopMod)) {
+                    FogLevel.getInstance().depositSunPoints(25);
+                    FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
                 }
+                playSunSound();
             });
         }
     }
@@ -110,6 +117,8 @@ public class Sunflower extends Plants{
             DayLevel.getInstance().setAvailablePicked(true, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(true, availableNum);
         }
         timer.stop();
         group.setOpacity(1);

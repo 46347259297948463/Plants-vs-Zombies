@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,6 +46,8 @@ public class Bullet {
             DayLevel.getInstance().getDayAnc().getChildren().remove(imageView);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().getNightAnc().getChildren().remove(imageView);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().getFogAnc().getChildren().remove(imageView);
         }
     }
 

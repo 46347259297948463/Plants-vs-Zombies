@@ -405,6 +405,25 @@ public class PickIcon implements Initializable {
 
                                     ((Stage) resetBTN.getScene().getWindow()).hide();
                                     FirstPage.stopAudio();
+                            } else if (obj instanceof FogLevel) {
+                                    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/FogLevel.fxml"));
+                                    try {
+                                            loader.load();
+                                    } catch (IOException e) {
+                                            e.printStackTrace();
+                                    }
+
+                                    FogLevel controller = loader.getController();
+                                    controller.setNames(plantsPicked);
+                                    Stage stage = new Stage();
+                                    stage.setScene(new Scene(loader.getRoot()));
+
+                                    stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                                    stage.setFullScreen(true);
+                                    stage.show();
+
+                                    ((Stage) resetBTN.getScene().getWindow()).hide();
+                                    FirstPage.stopAudio();
                             }
                     }
             });
@@ -412,7 +431,9 @@ public class PickIcon implements Initializable {
     }
 
     private void playNButtton(Group group, int i){
-            imageViews.get(i).setOpacity(1);
+            if (imageViews.get(i) != null) {
+                    imageViews.get(i).setOpacity(1);
+            }
             removePic(group, i);
             plantsPicked.set(i, null);
     }
@@ -542,7 +563,7 @@ public class PickIcon implements Initializable {
 
     public void setObj(Object object){
             obj = object;
-            if (obj instanceof NightLevel) {
+            if (obj instanceof NightLevel || obj instanceof FogLevel) {
                     isDay = false;
                     imageView.setImage(new Image(getClass().getResource("/view/images/pick night.png").toString()));
                     beanState(1, false);

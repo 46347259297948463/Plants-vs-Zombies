@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -51,6 +52,9 @@ public class Repeater extends PeaPlants{
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = NightLevel.getInstance().getCells();
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = FogLevel.getInstance().getCells();
         }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/repeater.png").toString());
         imageView.setFitWidth(120);
@@ -153,6 +157,8 @@ public class Repeater extends PeaPlants{
                     DayLevel.getInstance().getDayAnc().getChildren().remove(bullet1.getImageView());
                 } else if (obj instanceof NightLevel) {
                     NightLevel.getInstance().getNightAnc().getChildren().remove(bullet1.getImageView());
+                } else if (obj instanceof FogLevel) {
+                    FogLevel.getInstance().getFogAnc().getChildren().remove(bullet1.getImageView());
                 }
                 moveBulletTimer1.stop();
             }
@@ -172,6 +178,8 @@ public class Repeater extends PeaPlants{
                 DayLevel.getInstance().getDayAnc().getChildren().add(bullet1.getImageView());
             } else if (obj instanceof NightLevel) {
                 NightLevel.getInstance().getNightAnc().getChildren().add(bullet1.getImageView());
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().getFogAnc().getChildren().add(bullet1.getImageView());
             }
             moveBulletTimer1 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet1()));
             moveBulletTimer1.setCycleCount(Timeline.INDEFINITE);
@@ -184,6 +192,8 @@ public class Repeater extends PeaPlants{
                     DayLevel.getInstance().getDayAnc().getChildren().remove(bullet2.getImageView());
                 } else if (obj instanceof NightLevel) {
                     NightLevel.getInstance().getNightAnc().getChildren().remove(bullet2.getImageView());
+                } else if (obj instanceof FogLevel) {
+                    FogLevel.getInstance().getFogAnc().getChildren().remove(bullet2.getImageView());
                 }
                 moveBulletTimer2.stop();
             }
@@ -192,6 +202,8 @@ public class Repeater extends PeaPlants{
                 DayLevel.getInstance().getDayAnc().getChildren().add(bullet2.getImageView());
             } else if (obj instanceof NightLevel) {
                 NightLevel.getInstance().getNightAnc().getChildren().add(bullet2.getImageView());
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().getFogAnc().getChildren().add(bullet2.getImageView());
             }
             moveBulletTimer2 = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet2()));
             moveBulletTimer2.setCycleCount(Timeline.INDEFINITE);
@@ -210,6 +222,8 @@ public class Repeater extends PeaPlants{
             DayLevel.getInstance().setAvailablePicked(true, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(true, availableNum);
         }
         timer.stop();
         group.setOpacity(1);

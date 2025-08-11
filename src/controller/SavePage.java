@@ -21,13 +21,21 @@ public class SavePage implements Initializable {
     @FXML
     private Button yesBTN;
 
+    public static Object obj;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         noBTN.setOnAction(event -> Platform.exit());
 
         yesBTN.setOnAction(event -> {
-            DayLevel.getInstance().saveGame(DayLevel.getInstance().buildGameState());
+            if (obj instanceof DayLevel) {
+                DayLevel.getInstance().saveGame(NightLevel.getInstance().buildGameState());
+            } else if (obj instanceof NightLevel) {
+                NightLevel.getInstance().saveGame(NightLevel.getInstance().buildGameState());
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().saveGame(FogLevel.getInstance().buildGameState());
+            }
             Platform.exit();
         });
     }

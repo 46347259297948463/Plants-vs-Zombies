@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,6 +27,8 @@ public class ImpZombie extends Zombie{
             DayLevel.getInstance().getDayAnc().getChildren().add(imageV);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().getNightAnc().getChildren().add(imageV);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().getFogAnc().getChildren().add(imageV);
         }
     }
 

@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -39,6 +40,8 @@ public class CoffeeBean extends Plants{
                 DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
             } else if (obj instanceof NightLevel) {
                 NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
             }
             end();
         }));
@@ -67,6 +70,8 @@ public class CoffeeBean extends Plants{
             DayLevel.getInstance().setAvailablePicked(true, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(true, availableNum);
         }
         timer.stop();
         group.setOpacity(1);

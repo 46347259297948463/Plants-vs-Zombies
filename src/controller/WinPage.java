@@ -49,6 +49,9 @@ public class WinPage implements Initializable {
             } else if (obj instanceof NightLevel) {
                 NightLevel.setMenu(0);
                 NightLevel.stopAudio();
+            } else if (obj instanceof FogLevel) {
+                FogLevel.setMenu(0);
+                FogLevel.stopAudio();
             }
         });
 
@@ -95,6 +98,30 @@ public class WinPage implements Initializable {
                 PickIcon controller= loader.getController();
                 controller.setObj(NightLevel.getInstance());
                 NightLevel.getInstance().restart();
+
+                Stage stage= new Stage();
+                stage.setScene(new Scene(loader.getRoot()));
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                stage.setFullScreen(true);
+                stage.show();
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().stop();
+                FogLevel.setMenu(0);
+                FogLevel.stopAudio();
+                FirstPage.playAudio();
+                Stage oldStage = (Stage) tryAgainBTN.getScene().getWindow();
+                oldStage.close();
+
+                FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/PickIcon.fxml"));
+                try {
+                    loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                PickIcon controller= loader.getController();
+                controller.setObj(FogLevel.getInstance());
+                FogLevel.getInstance().restart();
 
                 Stage stage= new Stage();
                 stage.setScene(new Scene(loader.getRoot()));

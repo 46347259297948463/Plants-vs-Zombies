@@ -23,9 +23,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
-import static java.lang.System.*;
-
-public class NightLevel implements Initializable {
+public class FogLevel implements Initializable {
 
     @FXML
     private ImageView box;
@@ -346,7 +344,7 @@ public class NightLevel implements Initializable {
     private Label sunPoints;
 
     @FXML
-    private AnchorPane nightAnc;
+    private AnchorPane fogAnc;
 
     private ArrayList<String> names = new ArrayList<>();
 
@@ -376,7 +374,7 @@ public class NightLevel implements Initializable {
 
     private static Clip clip;
 
-    private static NightLevel instance;
+    private static FogLevel instance;
 
     public static boolean isOnSaveMode = false;
 
@@ -403,11 +401,11 @@ public class NightLevel implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        Plants.obj = NightLevel.getInstance();
-        Zombie.obj = NightLevel.getInstance();
-        Bullet.obj = NightLevel.getInstance();
-        Menu.obj = NightLevel.getInstance();
-        SavePage.obj = NightLevel.getInstance();
+        Plants.obj = FogLevel.getInstance();
+        Zombie.obj = FogLevel.getInstance();
+        Bullet.obj = FogLevel.getInstance();
+        Menu.obj = FogLevel.getInstance();
+        SavePage.obj = FogLevel.getInstance();
 
         setButtons();
         setGroups();
@@ -425,7 +423,7 @@ public class NightLevel implements Initializable {
             e.printStackTrace();
         }
 
-        NightLevel.setInstance(this);
+        FogLevel.setInstance(this);
 
         sunPoints.setText("50");
 
@@ -491,8 +489,8 @@ public class NightLevel implements Initializable {
                                     FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
                                     Parent winContent = loader.load();
 
-                                    WinPage.setObj(NightLevel.getInstance());
-                                    nightAnc.getChildren().add(winContent);
+                                    WinPage.setObj(FogLevel.getInstance());
+                                    fogAnc.getChildren().add(winContent);
 
                                     AnchorPane.setTopAnchor(winContent, 250.0);
                                     AnchorPane.setLeftAnchor(winContent, 690.0);
@@ -931,20 +929,20 @@ public class NightLevel implements Initializable {
             }
 
             for (int i = 0 ; i < 6 ; i++) {
-               if (cells[Y[i]][X[i]].isGrave()) {
-                   int choose = random.nextInt(2);
-                   if (choose == 0){
-                       numberOfZombies[Y[i]]++;
-                       Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
-                       zombie.columnBTN = X[i];
-                       cells[Y[i]][X[i]].setZombies(zombie);
-                   } else {
-                       numberOfZombies[Y[i]]++;
-                       ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
-                       coneheadZombie.columnBTN = X[i];
-                       cells[Y[i]][X[i]].setZombies(coneheadZombie);
-                   }
-               }
+                if (cells[Y[i]][X[i]].isGrave()) {
+                    int choose = random.nextInt(2);
+                    if (choose == 0){
+                        numberOfZombies[Y[i]]++;
+                        Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        zombie.columnBTN = X[i];
+                        cells[Y[i]][X[i]].setZombies(zombie);
+                    } else {
+                        numberOfZombies[Y[i]]++;
+                        ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        coneheadZombie.columnBTN = X[i];
+                        cells[Y[i]][X[i]].setZombies(coneheadZombie);
+                    }
+                }
             }
 
         } ));
@@ -1196,9 +1194,9 @@ public class NightLevel implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/LosePage.fxml"));
             Parent loseContent = loader.load();
 
-            LosePage.setObj(NightLevel.getInstance());
+            LosePage.setObj(FogLevel.getInstance());
 
-            nightAnc.getChildren().add(loseContent);
+            fogAnc.getChildren().add(loseContent);
 
             AnchorPane.setTopAnchor(loseContent, 260.0);
             AnchorPane.setLeftAnchor(loseContent, 690.0);
@@ -1211,7 +1209,7 @@ public class NightLevel implements Initializable {
         exitTimer.stop();
     }
 
-    private static void setInstance(NightLevel nightLevel) {
+    private static void setInstance(FogLevel nightLevel) {
         instance = nightLevel;
     }
 
@@ -1222,12 +1220,12 @@ public class NightLevel implements Initializable {
     }
 
     public static void setMenu(int menu) {
-        NightLevel.menu = menu;
+        FogLevel.menu = menu;
     }
 
-    public static NightLevel getInstance() {
+    public static FogLevel getInstance() {
         if (instance == null) {
-            instance = new NightLevel();
+            instance = new FogLevel();
         }
         return instance;
     }
@@ -1236,8 +1234,8 @@ public class NightLevel implements Initializable {
         return cells;
     }
 
-    public AnchorPane getNightAnc(){
-        return nightAnc;
+    public AnchorPane getFogAnc(){
+        return fogAnc;
     }
 
     public Button getMenuBTN() {
@@ -1246,14 +1244,14 @@ public class NightLevel implements Initializable {
 
     public GameState buildGameState() {
         GameState gameState = new GameState();
-        gameState.type = NightLevel.getInstance().getClass().getSimpleName();
+        gameState.type = FogLevel.getInstance().getClass().getSimpleName();
         gameState.sunPoints = Integer.parseInt(sunPoints.getText());
         gameState.zombies = getZombiesData();
         gameState.plants = getPlantsData();
         if (gameTimer == null) {
             gameState.isOnGameMode = false;
         } else {
-            gameState.gameTimer = (long) NightLevel.getInstance().gameTimer.getCurrentTime().toSeconds();
+            gameState.gameTimer = (long) FogLevel.getInstance().gameTimer.getCurrentTime().toSeconds();
         }
         gameState.names = cardNames;
         gameState.rechargeTime = getRechargeTimer();
@@ -1321,8 +1319,8 @@ public class NightLevel implements Initializable {
                                         FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
                                         Parent winContent = loader.load();
 
-                                        WinPage.setObj(NightLevel.getInstance());
-                                        nightAnc.getChildren().add(winContent);
+                                        WinPage.setObj(FogLevel.getInstance());
+                                        fogAnc.getChildren().add(winContent);
 
                                         AnchorPane.setTopAnchor(winContent, 250.0);
                                         AnchorPane.setLeftAnchor(winContent, 690.0);
@@ -1361,8 +1359,8 @@ public class NightLevel implements Initializable {
                             FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
                             Parent winContent = loader.load();
 
-                            WinPage.setObj(NightLevel.getInstance());
-                            nightAnc.getChildren().add(winContent);
+                            WinPage.setObj(FogLevel.getInstance());
+                            fogAnc.getChildren().add(winContent);
 
                             AnchorPane.setTopAnchor(winContent, 250.0);
                             AnchorPane.setLeftAnchor(winContent, 690.0);

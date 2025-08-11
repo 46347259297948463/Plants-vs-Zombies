@@ -1,6 +1,8 @@
 package model;
 
 import controller.DayLevel;
+import controller.FirstPage;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -32,6 +34,9 @@ public class CherryBomb extends BombPlants{
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = NightLevel.getInstance().getCells();
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = FogLevel.getInstance().getCells();
         }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/cherry bomb.png").toString());
         imageView.setFitWidth(135);
@@ -90,11 +95,7 @@ public class CherryBomb extends BombPlants{
             }
         }
 
-        if (obj instanceof DayLevel) {
-            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-        } else if (obj instanceof NightLevel) {
-            NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-        }
+        cells[row][column].getGroup().getChildren().remove(this.image);
         cells[row][column].removePlant();
     }
 
@@ -104,6 +105,8 @@ public class CherryBomb extends BombPlants{
             DayLevel.getInstance().setAvailablePicked(true, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(true, availableNum);
         }
         timer.stop();
         group.setOpacity(1);

@@ -1,8 +1,10 @@
 package model;
 
 
+import controller.FogLevel;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 
@@ -18,15 +20,18 @@ public class Cell {
 
     private boolean isAvailable = true;
 
+    private boolean isGrave = false;
+
+    private ImageView graveImage;
+
+    private ImageView cloudImage;
+
     public Cell(Button button, Group group) {
         this.button = button;
         this.group = group;
     }
 
     public void removePlant(){
-        if (plant != null) {
-            plant.end();
-        }
         this.plant = null;
     }
 
@@ -51,7 +56,7 @@ public class Cell {
     }
 
     public void setPlants(Plants plant){
-        if (isAvailable) {
+        if (isAvailable || (isGrave && plant instanceof GraveBuster)) {
             this.plant = plant;
         }
     }
@@ -97,5 +102,31 @@ public class Cell {
 
     public boolean isAvailable() {
         return isAvailable;
+    }
+
+    public boolean isGrave() {
+        return isGrave;
+    }
+
+    public void setGrave(boolean grave) {
+        isGrave = grave;
+    }
+
+    public ImageView getGraveImage() {
+        return graveImage;
+    }
+
+    public void setGraveImage(ImageView graveImage) {
+        this.graveImage = graveImage;
+    }
+
+    public void setCloud() {
+        cloudImage = new ImageView(getClass().getResource("/view/images/cloud.png").toString());
+        cloudImage.setFitWidth(175);
+        cloudImage.setFitHeight(145);
+        cloudImage.setLayoutY(group.getLayoutY());
+        cloudImage.setLayoutX(group.getLayoutX());
+        FogLevel.getInstance().getFogAnc().getChildren().add(cloudImage);
+
     }
 }

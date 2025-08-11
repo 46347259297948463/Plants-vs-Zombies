@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -97,23 +98,7 @@ public class Sun {
                 }
             }
         } else if (Plants.obj instanceof NightLevel) {
-            if (Plants.obj instanceof DayLevel) {
-                if (num == 1 || num == 3) {
-                    if (DayLevel.getInstance() != null &&
-                            DayLevel.getInstance().getCells() != null &&
-                            row >= 0 && column >= 0 &&
-                            DayLevel.getInstance().getCells()[row][column] != null &&
-                            DayLevel.getInstance().getCells()[row][column].getGroup() != null) {
-                        DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.getGroup());
-                    }
-                } else {
-                    if (DayLevel.getInstance() != null &&
-                            DayLevel.getInstance().getDayAnc() != null) {
-                        DayLevel.getInstance().getDayAnc().getChildren().remove(getGroup());
-                    }
-                }
-            } else if (Plants.obj instanceof NightLevel) {
-                if (num == 1 || num == 3) {
+            if (num == 1 || num == 3) {
                     if (NightLevel.getInstance() != null &&
                             NightLevel.getInstance().getCells() != null &&
                             row >= 0 && column >= 0 &&
@@ -122,10 +107,24 @@ public class Sun {
                         NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.getGroup());
                     }
                 } else {
-                    if (NightLevel.getInstance() != null &&
-                            NightLevel.getInstance().getNightAnc() != null) {
-                        NightLevel.getInstance().getNightAnc().getChildren().remove(getGroup());
-                    }
+                if (NightLevel.getInstance() != null && 
+                        NightLevel.getInstance().getNightAnc() != null) {
+                    NightLevel.getInstance().getNightAnc().getChildren().remove(getGroup());
+                }
+            }
+        } else if (Plants.obj instanceof FogLevel) {
+            if (num == 1 || num == 3) {
+                if (FogLevel.getInstance() != null &&
+                        FogLevel.getInstance().getCells() != null &&
+                        row >= 0 && column >= 0 &&
+                        FogLevel.getInstance().getCells()[row][column] != null &&
+                        FogLevel.getInstance().getCells()[row][column].getGroup() != null) {
+                    FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.getGroup());
+                }
+            } else {
+                if (FogLevel.getInstance() != null &&
+                        FogLevel.getInstance().getFogAnc() != null) {
+                    FogLevel.getInstance().getFogAnc().getChildren().remove(getGroup());
                 }
             }
         }

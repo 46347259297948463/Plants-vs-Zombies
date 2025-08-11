@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -38,8 +39,12 @@ public class IceShroom extends BombPlants{
             cells = NightLevel.getInstance().getCells();
             needCoffee = false;
             coffee = true;
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = FogLevel.getInstance().getCells();
+            needCoffee = false;
+            coffee = true;
         }
-
         ImageView imageView = new ImageView(getClass().getResource("/view/images/Ice shroom.png").toString());
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);
@@ -89,13 +94,8 @@ public class IceShroom extends BombPlants{
             }
         }
 
-        if (obj instanceof DayLevel) {
-            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-            cells[row][column].setPlants(null);
-        } else if (obj instanceof NightLevel){
-            NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-            cells[row][column].setPlants(null);
-        }
+        cells[row][column].getGroup().getChildren().remove(this.image);
+        cells[row][column].setPlants(null);
     }
 
     private void afterBomb(){
@@ -124,6 +124,8 @@ public class IceShroom extends BombPlants{
             DayLevel.getInstance().setAvailablePicked(true, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(true, availableNum);
         }
         timer.stop();
         group.setOpacity(1);
@@ -131,12 +133,16 @@ public class IceShroom extends BombPlants{
 
     @Override
     public void stop() {
-        iceShroomTimer.pause();
+        if (iceShroomTimer != null) {
+            iceShroomTimer.pause();
+        }
     }
 
     @Override
     public void play() {
-        iceShroomTimer.play();
+        if (iceShroomTimer != null) {
+            iceShroomTimer.play();
+        }
     }
 
     @Override

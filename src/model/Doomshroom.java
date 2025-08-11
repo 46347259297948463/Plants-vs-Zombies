@@ -1,6 +1,8 @@
 package model;
 
 import controller.DayLevel;
+import controller.FirstPage;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -30,12 +32,17 @@ public class Doomshroom extends BombPlants{
             DayLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = DayLevel.getInstance().getCells();
             needCoffee = true;
-            setCoffee(false);
+            coffee = false;
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = NightLevel.getInstance().getCells();
             needCoffee = false;
-            setCoffee(true);
+            coffee = true;
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = FogLevel.getInstance().getCells();
+            needCoffee = false;
+            coffee = true;
         }
         ImageView imageView = new ImageView("/view/images/Doom shroom.png");
         imageView.setFitWidth(115);
@@ -108,6 +115,8 @@ public class Doomshroom extends BombPlants{
             DayLevel.getInstance().setAvailablePicked(true, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(true, availableNum);
         }
         timer.stop();
         group.setOpacity(1);

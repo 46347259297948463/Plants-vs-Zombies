@@ -25,6 +25,8 @@ public class LoadPage implements Initializable {
     @FXML
     private Button yesBTN;
 
+    public static Object obj;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -37,28 +39,76 @@ public class LoadPage implements Initializable {
         });
 
         yesBTN.setOnAction(event -> {
-            HomePage.getInstance().setLoad(false);
-            DayLevel.isOnSaveMode = true;
-            FirstPage.stopAudio();
-            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/DayLevel.fxml"));
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (obj instanceof DayLevel) {
+                HomePage.getInstance().setLoad(false);
+                DayLevel.isOnSaveMode = true;
+                FirstPage.stopAudio();
+                FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/DayLevel.fxml"));
+                try {
+                    loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                DayLevel controller= loader.getController();
+                Stage stage= new Stage();
+                stage.setScene(new Scene(loader.getRoot()));
+
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                stage.setFullScreen(true);
+                stage.show();
+
+                Stage oldStage = (Stage) yesBTN.getScene().getWindow();
+                oldStage.close();
+
+                DayLevel.getInstance().applyGameState();
+            } else if (obj instanceof NightLevel) {
+                HomePage.getInstance().setLoad(false);
+                NightLevel.isOnSaveMode = true;
+                FirstPage.stopAudio();
+                FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/NightLevel.fxml"));
+                try {
+                    loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                NightLevel controller= loader.getController();
+                Stage stage= new Stage();
+                stage.setScene(new Scene(loader.getRoot()));
+
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                stage.setFullScreen(true);
+                stage.show();
+
+                Stage oldStage = (Stage) yesBTN.getScene().getWindow();
+                oldStage.close();
+
+                NightLevel.getInstance().applyGameState();
+            } else if (obj instanceof FogLevel) {
+                HomePage.getInstance().setLoad(false);
+                FogLevel.isOnSaveMode = true;
+                FirstPage.stopAudio();
+                FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/FogLevel.fxml"));
+                try {
+                    loader.load();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                FogLevel controller= loader.getController();
+                Stage stage= new Stage();
+                stage.setScene(new Scene(loader.getRoot()));
+
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                stage.setFullScreen(true);
+                stage.show();
+
+                Stage oldStage = (Stage) yesBTN.getScene().getWindow();
+                oldStage.close();
+
+                FogLevel.getInstance().applyGameState();
             }
-
-            DayLevel controller= loader.getController();
-            Stage stage= new Stage();
-            stage.setScene(new Scene(loader.getRoot()));
-
-            stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
-            stage.setFullScreen(true);
-            stage.show();
-
-            Stage oldStage = (Stage) yesBTN.getScene().getWindow();
-            oldStage.close();
-
-            DayLevel.getInstance().applyGameState();
         });
 
     }

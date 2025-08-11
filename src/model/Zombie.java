@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.image.Image;
@@ -63,6 +64,8 @@ public class Zombie {
             cells = DayLevel.getInstance().getCells();
         } else if (obj instanceof NightLevel) {
             cells = NightLevel.getInstance().getCells();
+        } else if (obj instanceof FogLevel) {
+            cells = FogLevel.getInstance().getCells();
         }
         this.column = x;
         this.row = y;
@@ -101,6 +104,8 @@ public class Zombie {
             DayLevel.getInstance().getDayAnc().getChildren().add(imageV);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().getNightAnc().getChildren().add(imageV);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().getFogAnc().getChildren().add(imageV);
         }
     }
 
@@ -125,6 +130,7 @@ public class Zombie {
         }
         if (clip != null) {
             clip.stop();
+            System.out.println("stopMove clip stoped");
         }
     }
 
@@ -148,33 +154,41 @@ public class Zombie {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                moveTimeline.stop();
-                clip.start();
+                if (moveTimeline != null) {
+                    moveTimeline.stop();
+                }
                 if (eatZombie()) {
                     clip.start();
+                    System.out.println("eatZombie if line 155 clip started");
                     eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
                         if(eatenZombie != null){
                             eatenZombie.takeDamage(1);
                             if (eatenZombie.isDead()){
                                 eatenZombie.dead();
                                 eatenZombie = null;
+                                iHypnotized = -1;
+                                jHypnotized = -1;
                                 eatTimeline.stop();
                                 moveTimeline = null;
                                 eatTimeline = null;
                                 clip.stop();
+                                System.out.println("eatTimeline the eaten zombie is dead & clip stoped line 169");
                                 startMove();
                             }
                         } else {
                             eatTimeline.stop();
                             moveTimeline = null;
                             clip.stop();
+                            System.out.println("eaten Zombie is null the clip stoped line 176");
                             startMove();
                         }
                     }));
                     eatTimeline.setCycleCount(Timeline.INDEFINITE);
                     eatTimeline.play();
                 } else {
-                    if (cells[rowBTN][columnBTN].getPlant() instanceof HypnoShroom) {
+                    System.out.println("the plant will be eaten clip started line 184");
+                    if (cells[rowBTN][columnBTN].getPlant() instanceof HypnoShroom
+                            && cells[rowBTN][columnBTN].getPlant().isCoffee()) {
                         if (iHypnotized != columnBTN && jHypnotized != rowBTN) {
                             eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
                                 Plants plant = cells[rowBTN][columnBTN].getPlant();
@@ -189,6 +203,7 @@ public class Zombie {
                                     moveTimeline = null;
                                     eatTimeline = null;
                                     clip.stop();
+                                    System.out.println("The plant is hypno so i eat it and the clip stopped line 201");
                                     hypnotize();
                                     startMove();
                                 } else {
@@ -196,6 +211,7 @@ public class Zombie {
                                     eatTimeline = null;
                                     moveTimeline = null;
                                     clip.stop();
+                                    System.out.println("The plant is hypno but it's null so the clip stopped line 209");
                                     startMove();
                                 }
                             }));
@@ -206,7 +222,6 @@ public class Zombie {
                             startMove();
                         }
                     } else {
-                        clip.start();
                         eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
                             Plants plant = cells[rowBTN][columnBTN].getPlant();
                             if(plant != null){
@@ -219,12 +234,14 @@ public class Zombie {
                                     moveTimeline = null;
                                     eatTimeline = null;
                                     clip.stop();
+                                    System.out.println("I eat the non hypno plant and it dies the clip is stopped line 232");
                                     startMove();
                                 }
                             } else {
                                 eatTimeline.stop();
                                 moveTimeline = null;
                                 clip.stop();
+                                System.out.println("I try to eat the non hypno plant but it was null so the clip is stopped line 239");
                                 startMove();
                             }
                         }));
@@ -248,6 +265,8 @@ public class Zombie {
                         DayLevel.getInstance().lose();
                     } else if (obj instanceof NightLevel) {
                         NightLevel.getInstance().lose();
+                    } else if (obj instanceof FogLevel) {
+                        FogLevel.getInstance().lose();
                     }
                     lose = true;
                 }
@@ -292,6 +311,7 @@ public class Zombie {
         eatenZombie = null;
 
         if (isHypnotized == -1) {
+
             double min = Double.MAX_VALUE;
             for (int i = columnBTN; i < 9; i++) {
                 ArrayList<Zombie> zombies = cells[j][i].getZombies();
@@ -342,6 +362,8 @@ public class Zombie {
             DayLevel.getInstance().getDayAnc().getChildren().remove(this.image);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().getNightAnc().getChildren().remove(this.image);
+        }  else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().getFogAnc().getChildren().remove(this.image);
         }
         if (updateTimer != null) {
             updateTimer.stop();
@@ -356,6 +378,7 @@ public class Zombie {
             clip.stop();
             clip.close();
             clip = null;
+            System.out.println("The zombie is dead so i kill the voice...");
         }
 
     }

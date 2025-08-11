@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -46,6 +47,11 @@ public class PuffShroom extends PeaPlants{
             cells = NightLevel.getInstance().getCells();
             needCoffee = false;
             coffee = true;
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(false,availableNum);
+            cells = FogLevel.getInstance().getCells();
+            needCoffee = false;
+            coffee = true;
         }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/puff shroom.png").toString());
         imageView.setFitWidth(65);
@@ -82,6 +88,8 @@ public class PuffShroom extends PeaPlants{
                     DayLevel.getInstance().getDayAnc().getChildren().remove(bullet.getImageView());
                 } else if (obj instanceof NightLevel) {
                     NightLevel.getInstance().getNightAnc().getChildren().remove(bullet.getImageView());
+                } else if (obj instanceof FogLevel) {
+                    FogLevel.getInstance().getFogAnc().getChildren().remove(bullet.getImageView());
                 }
                 moveBulletTimer.stop();
             }
@@ -100,6 +108,8 @@ public class PuffShroom extends PeaPlants{
                 DayLevel.getInstance().getDayAnc().getChildren().add(bullet.getImageView());
             } else if (obj instanceof NightLevel) {
                 NightLevel.getInstance().getNightAnc().getChildren().add(bullet.getImageView());
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().getFogAnc().getChildren().add(bullet.getImageView());
             }
             moveBulletTimer = new Timeline(new KeyFrame(Duration.millis(50), event -> moveBullet()));
             moveBulletTimer.setCycleCount(Timeline.INDEFINITE);
@@ -162,6 +172,8 @@ public class PuffShroom extends PeaPlants{
             DayLevel.getInstance().setAvailablePicked(true, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(true, availableNum);
         }
         timer.stop();
         group.setOpacity(1);

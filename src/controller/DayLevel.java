@@ -402,6 +402,7 @@ public class DayLevel implements Initializable {
         Zombie.obj = DayLevel.getInstance();
         Bullet.obj = DayLevel.getInstance();
         Menu.obj = DayLevel.getInstance();
+        SavePage.obj = DayLevel.getInstance();
 
         setButtons();
         setGroups();
@@ -586,7 +587,7 @@ public class DayLevel implements Initializable {
                                 cells[row][column].setPlants(null);
                             }
                             isShovelMode = false;
-                        } else if (selectedPlant != null && availableNum != -1) {
+                        } else if (selectedPlant != null && availableNum != -1 && cells[row][column].isAvailable()) {
                             if (cells[row][column].getPlant() == null) {
                                 if (availablePicked[availableNum]) {
                                     if (selectedPlant.getPrice() <= Integer.parseInt(sunPoints.getText())) {
@@ -1181,7 +1182,6 @@ public class DayLevel implements Initializable {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(SAVE_FILE));
             out.writeObject(gameState);
             out.close();
-            System.out.println("GAME SAVED");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1192,7 +1192,6 @@ public class DayLevel implements Initializable {
             ObjectInputStream input = new ObjectInputStream(new FileInputStream(SAVE_FILE));
             GameState gameState = (GameState) input.readObject();
             input.close();
-            System.out.println("GAME LOADED");
             return gameState;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1206,9 +1205,6 @@ public class DayLevel implements Initializable {
             isOnSaveMode = false;
             sunPoints.setText(String.valueOf(loadedState.sunPoints));
             this.setNames(loadedState.names);
-            System.out.println("timer: " + loadedState.gameTimer);
-            System.out.println("Game mode: " + loadedState.isOnGameMode);
-            System.out.println(zombieTimer);
             if (loadedState.isOnGameMode) {
                 gameTimer = new Timeline(
                         new KeyFrame(Duration.seconds(20), e -> step1()),
@@ -1467,8 +1463,8 @@ public class DayLevel implements Initializable {
                     cells[i][j].getPlant().end();
                 }
                 if (cells[i][j].getZombies() != null) {
-                    for (Zombie zombie : cells[i][j].getZombies()) {
-                        zombie.dead();
+                    for (Zombie z : cells[i][j].getZombies()) {
+                        z.stop();
                     }
                 }
             }

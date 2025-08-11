@@ -1,5 +1,6 @@
 package model;
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -26,12 +27,17 @@ public class HypnoShroom extends Plants{
             DayLevel.getInstance().setAvailablePicked(false,availableNum);
             cells = DayLevel.getInstance().getCells();
             needCoffee = true;
-            setCoffee(false);
+            coffee = false;
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false,availableNum);
             cells = NightLevel.getInstance().getCells();
-            needCoffee = true;
-            setCoffee(false);
+            needCoffee = false;
+            coffee = true;
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(false,availableNum);
+            cells = FogLevel.getInstance().getCells();
+            needCoffee = false;
+            coffee = true;
         }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/hypno shroom.png").toString());
         imageView.setFitWidth(90);
@@ -61,6 +67,8 @@ public class HypnoShroom extends Plants{
             DayLevel.getInstance().setAvailablePicked(true, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(true, availableNum);
         }
         timer.stop();
         group.setOpacity(1);
@@ -79,6 +87,7 @@ public class HypnoShroom extends Plants{
     @Override
     public void end() {
         cells[row][column].getGroup().getChildren().remove(image);
+        cells[row][column].removePlant();
     }
 
     @Override
@@ -101,4 +110,5 @@ public class HypnoShroom extends Plants{
     public static void setGroup(Group g) {
         group = g;
     }
+
 }

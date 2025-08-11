@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -44,6 +45,10 @@ public class SunShroom extends Plants {
             coffee = false;
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false, availableNum);
+            needCoffee = true;
+            coffee = false;
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(false, availableNum);
             needCoffee = true;
             coffee = false;
         }
@@ -104,18 +109,22 @@ public class SunShroom extends Plants {
             DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().add(sun.getGroup());
         }
 
         sun.getButton().setOnAction(event -> {
-            if (obj instanceof DayLevel && !DayLevel.getInstance().isStopMod) {
+            if ((obj instanceof DayLevel) && !DayLevel.getInstance().isStopMod) {
                 DayLevel.getInstance().depositSunPoints(isGrown ? 25 : 15);
                 DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
-                playSunSound();
-            } else if (obj instanceof NightLevel && !NightLevel.getInstance().isStopMod) {
+            } else if ((obj instanceof NightLevel) && !NightLevel.getInstance().isStopMod) {
                 NightLevel.getInstance().depositSunPoints(isGrown ? 25 : 15);
                 NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
-                playSunSound();
+            } else if ((obj instanceof FogLevel) && !FogLevel.getInstance().isStopMod) {
+                FogLevel.getInstance().depositSunPoints(isGrown ? 25 : 15);
+                FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
             }
+            playSunSound();
         });
     }
 
@@ -138,6 +147,8 @@ public class SunShroom extends Plants {
             DayLevel.getInstance().setAvailablePicked(true, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(true, availableNum);
         }
         timer.stop();
         group.setOpacity(1);

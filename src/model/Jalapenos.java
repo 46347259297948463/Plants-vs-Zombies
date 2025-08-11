@@ -1,6 +1,7 @@
 package model;
 
 import controller.DayLevel;
+import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -32,6 +33,9 @@ public class Jalapenos extends BombPlants{
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(false, availableNum);
             cells = NightLevel.getInstance().getCells();
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(false, availableNum);
+            cells = FogLevel.getInstance().getCells(); 
         }
         ImageView imageView = new ImageView(getClass().getResource("/view/images/jalapenos.png").toString());
         imageView.setFitWidth(135);
@@ -82,11 +86,8 @@ public class Jalapenos extends BombPlants{
         for (int j = 0 ; j < 9 ; j++){
             cells[row][j].removeAllZombies();
         }
-        if (obj instanceof DayLevel) {
-            DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-        } else if (obj instanceof NightLevel) {
-            NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-        }
+
+        cells[row][column].getGroup().getChildren().remove(this.image);
         cells[row][column].removePlant();
     }
 
@@ -96,6 +97,8 @@ public class Jalapenos extends BombPlants{
             DayLevel.getInstance().setAvailablePicked(true, availableNum);
         } else if (obj instanceof NightLevel) {
             NightLevel.getInstance().setAvailablePicked(true, availableNum);
+        } else if (obj instanceof FogLevel) {
+            FogLevel.getInstance().setAvailablePicked(true, availableNum);
         }
         timer.stop();
         group.setOpacity(1);
