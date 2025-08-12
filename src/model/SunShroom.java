@@ -117,14 +117,16 @@ public class SunShroom extends Plants {
             if ((obj instanceof DayLevel) && !DayLevel.getInstance().isStopMod) {
                 DayLevel.getInstance().depositSunPoints(isGrown ? 25 : 15);
                 DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
+                playSunSound();
             } else if ((obj instanceof NightLevel) && !NightLevel.getInstance().isStopMod) {
                 NightLevel.getInstance().depositSunPoints(isGrown ? 25 : 15);
                 NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
+                playSunSound();
             } else if ((obj instanceof FogLevel) && !FogLevel.getInstance().isStopMod) {
                 FogLevel.getInstance().depositSunPoints(isGrown ? 25 : 15);
                 FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
+                playSunSound();
             }
-            playSunSound();
         });
     }
 

@@ -417,6 +417,7 @@ public class FogLevel implements Initializable {
         fillBoard();
         setButtons();
         setGroups();
+        makeFog();
 
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(
@@ -869,7 +870,6 @@ public class FogLevel implements Initializable {
             X[i] = x;
             Y[i] = y;
         }
-        makeFog();
     }
 
     public void withdrawSunPoints(int n){
@@ -1264,6 +1264,7 @@ public class FogLevel implements Initializable {
         gameState.sunPoints = Integer.parseInt(sunPoints.getText());
         gameState.zombies = getZombiesData();
         gameState.plants = getPlantsData();
+        
         if (gameTimer == null) {
             gameState.isOnGameMode = false;
         } else {
@@ -1301,6 +1302,7 @@ public class FogLevel implements Initializable {
         GameState loadedState = loadGame();
         if (loadedState != null){
             isOnSaveMode = false;
+            makeFog();
             sunPoints.setText(String.valueOf(loadedState.sunPoints));
             this.setNames(loadedState.names);
             if (loadedState.isOnGameMode) {
@@ -1613,6 +1615,7 @@ public class FogLevel implements Initializable {
         fillBoard();
         setButtons();
         setGroups();
+        makeFog();
 
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 9; j++) {
@@ -1651,6 +1654,7 @@ public class FogLevel implements Initializable {
     }
 
     private void makeFog () {
+        System.out.println("FogLevel.makeFog");
         for (int i = 0 ; i < 5 ; i++) {
             for (int j = 4 ; j < 9 ; j++) {
                 setCloud(cells[i][j]);
@@ -1659,6 +1663,7 @@ public class FogLevel implements Initializable {
     }
 
     public void setCloud(Cell cell) {
+        System.out.println("FogLevel.setCloud");
         ImageView cloudImage = new ImageView(cloudImageResource);
         cloudImage.setFitWidth(300);
         cloudImage.setFitHeight(350);

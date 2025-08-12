@@ -45,7 +45,7 @@ public class Blover extends Plants{
 
         bloverTimer = new Timeline(
                 new KeyFrame(Duration.seconds(3), event -> poof()),
-                new KeyFrame(Duration.seconds(12), event -> afterPoof())
+                new KeyFrame(Duration.seconds(13), event -> afterPoof())
                 );
         bloverTimer.setCycleCount(1);
         bloverTimer.play();
@@ -119,7 +119,6 @@ public class Blover extends Plants{
                 FogLevel.getInstance().removeCloud(cells[i][j]);
             }
         }
-        end();
         cells[row][column].getGroup().getChildren().remove(this.image);
         cells[row][column].removePlant();
     }
@@ -130,6 +129,7 @@ public class Blover extends Plants{
                 FogLevel.getInstance().setCloud(cells[i][j]);
             }
         }
+        end();
     }
 
 }

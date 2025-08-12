@@ -77,14 +77,17 @@ public class Sunflower extends Plants{
                 if ((obj instanceof DayLevel) && (!DayLevel.getInstance().isStopMod)) {
                     DayLevel.getInstance().depositSunPoints(25);
                     DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
+                    playSunSound();
                 } else if ((obj instanceof NightLevel) && (!NightLevel.getInstance().isStopMod)) {
                     NightLevel.getInstance().depositSunPoints(25);
                     NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
+                    playSunSound();
                 } else if ((obj instanceof FogLevel) && (!FogLevel.getInstance().isStopMod)) {
                     FogLevel.getInstance().depositSunPoints(25);
                     FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(sun.getGroup());
+                    playSunSound();
                 }
-                playSunSound();
+
             });
         }
     }
