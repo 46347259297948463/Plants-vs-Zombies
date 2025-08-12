@@ -99,4 +99,13 @@ public abstract class Plants {
     public void setCoffee(boolean coffee) {
         this.coffee = coffee;
     }
+
+    public void hide() {
+        image.setOpacity(0);
+    }
+
+    public void apear() {
+        image.setOpacity(1);
+    }
+
 }

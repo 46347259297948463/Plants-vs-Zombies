@@ -49,7 +49,7 @@ public class Zombie {
 
     public static Object obj;
 
-    private Cell[][] cells;
+    protected Cell[][] cells;
 
     private int isHypnotized = 1;
 
@@ -91,7 +91,6 @@ public class Zombie {
         }
     }
 
-
     protected void setImageOnAnc(){
         Image image = new Image(getClass().getResource("/view/images/normalZombies.png").toString());
         ImageView imageV = new ImageView(image);
@@ -100,6 +99,11 @@ public class Zombie {
         imageV.setLayoutY(row);
         imageV.setFitHeight(220);
         imageV.setFitWidth(165);
+        if (columnBTN > 4 && cells[rowBTN][columnBTN].getCloudImage() != null) {
+            hide();
+        } else {
+            apear();
+        }
         if (obj instanceof DayLevel) {
             DayLevel.getInstance().getDayAnc().getChildren().add(imageV);
         } else if (obj instanceof NightLevel) {
@@ -135,6 +139,11 @@ public class Zombie {
     }
 
     private void move(){
+        if (columnBTN > 4 && cells[rowBTN][columnBTN].getCloudImage() != null) {
+            hide();
+        } else {
+            apear();
+        }
         if (columnBTN > -1 && columnBTN < 9){
             if (!eat() && !eatZombie()){
                 column -= (isHypnotized * (speed/2));
@@ -158,7 +167,6 @@ public class Zombie {
                     moveTimeline.stop();
                 }
                 if (eatZombie()) {
-                    clip.start();
                     System.out.println("eatZombie if line 155 clip started");
                     eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
                         if(eatenZombie != null){
@@ -421,6 +429,14 @@ public class Zombie {
 
     public ImageView getImage() {
         return image;
+    }
+
+    protected void hide() {
+        image.setOpacity(0);
+    }
+
+    protected void apear() {
+        image.setOpacity(1);
     }
 
 }

@@ -68,7 +68,7 @@ public class ScaredyShroom extends PeaPlants{
         scaredImg.setFitHeight(50);
         setImage(imageView);
 
-        if (obj instanceof NightLevel /*|| obj instanceof FogLevel*/) {
+        if (obj instanceof NightLevel || obj instanceof FogLevel) {
             shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event1 -> shoot(zombie)));
             shootTimer.setCycleCount(Timeline.INDEFINITE);
             shootTimer.play();
@@ -248,6 +248,25 @@ public class ScaredyShroom extends PeaPlants{
             return scaredImg;
         } else {
             return image;
+        }
+    }
+
+    @Override
+    public void hide() {
+        if (cells[row][column].getGroup().getChildren().contains(scaredImg)) {
+            scaredImg.setOpacity(0);
+        } else {
+            image.setOpacity(0);
+        }
+
+    }
+
+    @Override
+    public void apear() {
+        if (cells[row][column].getGroup().getChildren().contains(scaredImg)) {
+            scaredImg.setOpacity(1);
+        } else {
+            image.setOpacity(1);
         }
     }
 

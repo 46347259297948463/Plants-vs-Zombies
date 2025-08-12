@@ -60,7 +60,7 @@ public class PuffShroom extends PeaPlants{
         imageView.setLayoutY(row + 60);
         setImage(imageView);
 
-        if (obj instanceof NightLevel /*|| obj instanceOf FogLevel*/) {
+        if (obj instanceof NightLevel || obj instanceof FogLevel) {
             shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event1 -> shoot(zombie)));
             shootTimer.setCycleCount(Timeline.INDEFINITE);
             shootTimer.play();

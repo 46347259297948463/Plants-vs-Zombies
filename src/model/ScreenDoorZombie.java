@@ -22,6 +22,11 @@ public class ScreenDoorZombie extends Zombie{
         imageV.setLayoutY(row);
         imageV.setFitHeight(225);
         imageV.setFitWidth(145);
+        if (columnBTN > 4 && cells[rowBTN][columnBTN].getCloudImage() != null) {
+            hide();
+        } else {
+            apear();
+        }
         if (obj instanceof DayLevel) {
             DayLevel.getInstance().getDayAnc().getChildren().add(imageV);
         } else if (obj instanceof NightLevel) {

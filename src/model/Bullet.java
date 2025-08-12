@@ -24,10 +24,24 @@ public class Bullet {
 
     protected Object bulletObject;
 
+    protected Cell[][] cells;
+
     public Bullet(double row, double column, int n){
+        if (obj instanceof DayLevel) {
+            cells = DayLevel.getInstance().getCells();
+        } else if (obj instanceof NightLevel) {
+            cells = NightLevel.getInstance().getCells();
+        } else if (obj instanceof FogLevel) {
+            cells = FogLevel.getInstance().getCells();
+        }
         this.row = row * 191.5 + 153;
         this.column = column * 153.5 + 590;
         this.n = n;
+//        if (column > 4 && cells[(int) row][(int) column].getCloudImage() != null) {
+//            hide();
+//        } else {
+//            apear();
+//        }
         setting();
     }
 
@@ -52,12 +66,31 @@ public class Bullet {
     }
 
     public void move(){
+//        int rowBTN = (int) ((row - 153) / 191.5);
+//        int columnBTN = (int) ((column - 590) / 153.5);
+//        if (columnBTN > 4 && columnBTN < 9 && cells[rowBTN][columnBTN].getCloudImage() != null) {
+//            hide();
+//        } else {
+//            apear();
+//        }
         column += 35;
         imageView.setLayoutX(column);
     }
 
     public ImageView getImageView() {
         return imageView;
+    }
+
+    public void hide() {
+        if (imageView != null) {
+            imageView.setOpacity(0);
+        }
+    }
+
+    public void apear() {
+        if (imageView != null) {
+            imageView.setOpacity(1);
+        }
     }
 
 }

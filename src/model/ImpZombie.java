@@ -23,6 +23,11 @@ public class ImpZombie extends Zombie{
         imageV.setLayoutY(row);
         imageV.setFitHeight(140);
         imageV.setFitWidth(125);
+        if (columnBTN > 4 && cells[rowBTN][columnBTN].getCloudImage() != null) {
+            hide();
+        } else {
+            apear();
+        }
         if (obj instanceof DayLevel) {
             DayLevel.getInstance().getDayAnc().getChildren().add(imageV);
         } else if (obj instanceof NightLevel) {

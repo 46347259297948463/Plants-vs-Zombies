@@ -50,7 +50,7 @@ public class IceShroom extends BombPlants{
         imageView.setFitHeight(140);
         setImage(imageView);
 
-        if (obj instanceof NightLevel /*|| obj instanceOf FogLevel*/) {
+        if (obj instanceof NightLevel || obj instanceof FogLevel) {
             iceShroomTimer = new Timeline(
                     new KeyFrame(Duration.seconds(1),event -> BOMB()),
                     new KeyFrame(Duration.seconds(11),event -> afterBomb())
@@ -95,7 +95,7 @@ public class IceShroom extends BombPlants{
         }
 
         cells[row][column].getGroup().getChildren().remove(this.image);
-        cells[row][column].setPlants(null);
+        cells[row][column].removePlant();
     }
 
     private void afterBomb(){

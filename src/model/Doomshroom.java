@@ -49,7 +49,7 @@ public class Doomshroom extends BombPlants{
         imageView.setFitHeight(120);
         setImage(imageView);
 
-        if (obj instanceof NightLevel /*|| obj instanceof FogLevel*/) {
+        if (obj instanceof NightLevel || obj instanceof FogLevel) {
             doomshroomTimer = new Timeline(
                     new KeyFrame(Duration.seconds(1.5), event1 -> BOMB()),
                     new KeyFrame(Duration.seconds(16.5), even2 -> afterBOMB())

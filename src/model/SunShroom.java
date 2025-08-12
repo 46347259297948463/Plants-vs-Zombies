@@ -60,7 +60,7 @@ public class SunShroom extends Plants {
         imageView.setLayoutY(row + 50);
         setImage(imageView);
 
-        if (obj instanceof NightLevel /*|| obj instanceof FogLevel*/) {
+        if (obj instanceof NightLevel || obj instanceof FogLevel) {
             Timeline growTimer = new Timeline(new KeyFrame(Duration.seconds(20), e -> isGrown = true));
             growTimer.setCycleCount(1);
             growTimer.play();

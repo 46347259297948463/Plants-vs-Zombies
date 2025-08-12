@@ -1,7 +1,6 @@
 package model;
 
 
-import controller.FogLevel;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -120,13 +119,11 @@ public class Cell {
         this.graveImage = graveImage;
     }
 
-    public void setCloud() {
-        cloudImage = new ImageView(getClass().getResource("/view/images/cloud.png").toString());
-        cloudImage.setFitWidth(175);
-        cloudImage.setFitHeight(145);
-        cloudImage.setLayoutY(group.getLayoutY());
-        cloudImage.setLayoutX(group.getLayoutX());
-        FogLevel.getInstance().getFogAnc().getChildren().add(cloudImage);
+    public ImageView getCloudImage() {
+        return cloudImage;
+    }
 
+    public void setCloudImage(ImageView cloudImage) {
+        this.cloudImage = cloudImage;
     }
 }
