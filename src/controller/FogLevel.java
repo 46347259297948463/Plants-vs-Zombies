@@ -1604,7 +1604,9 @@ public class FogLevel implements Initializable {
         ArrayList<Long> l = new ArrayList<>();
         for (int i = 0 ; i < 6 ; i++) {
             if (!availablePicked[i]) {
-                l.add((long) plants.get(i).getTimer().getCurrentTime().toSeconds());
+                if (plants.get(i).getTimer() != null) {
+                    l.add((long) plants.get(i).getTimer().getCurrentTime().toSeconds());
+                }
             } else {
                 l.add(-1L);
             }

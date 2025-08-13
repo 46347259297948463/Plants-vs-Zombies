@@ -30,7 +30,7 @@ public class SavePage implements Initializable {
 
         yesBTN.setOnAction(event -> {
             if (obj instanceof DayLevel) {
-                DayLevel.getInstance().saveGame(NightLevel.getInstance().buildGameState());
+                DayLevel.getInstance().saveGame(DayLevel.getInstance().buildGameState());
             } else if (obj instanceof NightLevel) {
                 NightLevel.getInstance().saveGame(NightLevel.getInstance().buildGameState());
             } else if (obj instanceof FogLevel) {

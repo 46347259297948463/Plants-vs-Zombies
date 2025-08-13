@@ -19,7 +19,7 @@ public class HypnoShroom extends Plants{
 
     private static int availableNum;
 
-    private final static int HP = 4;
+    private final static int HP = 1;
 
     public HypnoShroom(int i, int j) {
         super(HP, i, j, 75, 20);
@@ -99,7 +99,7 @@ public class HypnoShroom extends Plants{
     public void takeDamage(int damage){
         super.HP -= damage;
         if (super.HP < 1) {
-            cells[row][column].removePlant();
+            this.end();
         }
     }
 
