@@ -604,7 +604,11 @@ public class DayLevel implements Initializable {
                                         Plants newPlant = selectedPlant.clonePlant(row, column);
                                         newPlant.getImage().setMouseTransparent(true);
                                         cells[row][column].getGroup().getChildren().add(newPlant.getImage());
-                                        cells[row][column].setPlants(newPlant);
+                                        if (selectedPlant instanceof CoffeeBean) {
+                                            cells[row][column].setCoffeeBean(newPlant);
+                                        } else {
+                                            cells[row][column].setPlants(newPlant);
+                                        }
                                         withdrawSunPoints(newPlant.getPrice());
                                     }
                                 }

@@ -617,7 +617,12 @@ public class FogLevel implements Initializable {
                                         newPlant.getImage().setMouseTransparent(true);
                                         newPlant.setNeedCoffee(false);
                                         cells[row][column].getGroup().getChildren().add(newPlant.getImage());
-                                        cells[row][column].setPlants(newPlant);
+                                        if (selectedPlant instanceof CoffeeBean) {
+                                            System.out.println("Coffee");
+                                            cells[row][column].setCoffeeBean(newPlant);
+                                        } else {
+                                            cells[row][column].setPlants(newPlant);
+                                        }
                                         withdrawSunPoints(newPlant.getPrice());
                                     }
                                 }
@@ -945,12 +950,14 @@ public class FogLevel implements Initializable {
                     int choose = random.nextInt(2);
                     if (choose == 0){
                         numberOfZombies[Y[i]]++;
-                        Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         zombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(zombie);
                     } else {
                         numberOfZombies[Y[i]]++;
-                        ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         coneheadZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(coneheadZombie);
                     }
@@ -1264,7 +1271,7 @@ public class FogLevel implements Initializable {
         gameState.sunPoints = Integer.parseInt(sunPoints.getText());
         gameState.zombies = getZombiesData();
         gameState.plants = getPlantsData();
-        
+
         if (gameTimer == null) {
             gameState.isOnGameMode = false;
         } else {
@@ -1684,7 +1691,9 @@ public class FogLevel implements Initializable {
     }
 
     public void removeCloud(Cell cell) {
-        fogAnc.getChildren().remove(cell.getCloudImage());
+        if (cell.getCloudImage() != null) {
+            fogAnc.getChildren().remove(cell.getCloudImage());
+        }
         cell.setCloudImage(null);
         if (cell.getPlant() != null) {
             cell.getPlant().apear();

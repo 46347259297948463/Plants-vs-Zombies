@@ -38,10 +38,13 @@ public class CoffeeBean extends Plants{
             }
             if (obj instanceof DayLevel) {
                 DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                DayLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
             } else if (obj instanceof NightLevel) {
                 NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                NightLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
             } else if (obj instanceof FogLevel) {
                 FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                FogLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
             }
             end();
         }));
@@ -79,7 +82,9 @@ public class CoffeeBean extends Plants{
 
     @Override
     public void stop() {
-        coffeeBeanTimer.pause();
+        if (coffeeBeanTimer != null) {
+            coffeeBeanTimer.pause();
+        }
     }
 
     @Override

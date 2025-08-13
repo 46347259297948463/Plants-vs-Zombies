@@ -25,6 +25,8 @@ public class Cell {
 
     private ImageView cloudImage;
 
+    private Plants coffeeBean;
+
     public Cell(Button button, Group group) {
         this.button = button;
         this.group = group;
@@ -125,5 +127,13 @@ public class Cell {
 
     public void setCloudImage(ImageView cloudImage) {
         this.cloudImage = cloudImage;
+    }
+
+    public Plants getCoffeeBean() {
+        return coffeeBean;
+    }
+
+    public void setCoffeeBean(Plants coffeeBean) {
+        this.coffeeBean = coffeeBean;
     }
 }

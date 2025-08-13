@@ -184,7 +184,9 @@ public class Zombie {
                                 startMove();
                             }
                         } else {
-                            eatTimeline.stop();
+                            if (eatTimeline != null) {
+                                eatTimeline.stop();
+                            }
                             moveTimeline = null;
                             clip.stop();
                             System.out.println("eaten Zombie is null the clip stoped line 176");

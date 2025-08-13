@@ -488,7 +488,8 @@ public class NightLevel implements Initializable {
                                 }
 
                                 try {
-                                    FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
+                                    FXMLLoader loader = new FXMLLoader(getClass()
+                                            .getResource("../view/WinPage.fxml"));
                                     Parent winContent = loader.load();
 
                                     WinPage.setObj(NightLevel.getInstance());
@@ -584,12 +585,14 @@ public class NightLevel implements Initializable {
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                cells[row][column].getGroup().getChildren().remove(cells[row][column].getPlant().getImage());
+                                cells[row][column].getGroup().getChildren().remove(cells[row][column]
+                                        .getPlant().getImage());
                                 cells[row][column].getPlant().end();
                                 cells[row][column].setPlants(null);
                             }
                             isShovelMode = false;
-                        } else if (selectedPlant != null && cells[row][column].getPlant() == null && availableNum != -1) {
+                        } else if (selectedPlant != null && cells[row][column].getPlant() == null
+                                && availableNum != -1) {
                             if (cells[row][column].isAvailable()) {
                                 if (availablePicked[availableNum]) {
                                     if (selectedPlant.getPrice() <= Integer.parseInt(sunPoints.getText())) {
@@ -608,7 +611,12 @@ public class NightLevel implements Initializable {
                                         newPlant.getImage().setMouseTransparent(true);
                                         newPlant.setNeedCoffee(false);
                                         cells[row][column].getGroup().getChildren().add(newPlant.getImage());
-                                        cells[row][column].setPlants(newPlant);
+                                        if (selectedPlant instanceof CoffeeBean) {
+                                            System.out.println("Coffee");
+                                            cells[row][column].setCoffeeBean(newPlant);
+                                        } else {
+                                            cells[row][column].setPlants(newPlant);
+                                        }
                                         withdrawSunPoints(newPlant.getPrice());
                                     }
                                 }
@@ -656,7 +664,8 @@ public class NightLevel implements Initializable {
         for (int i = 0 ; i < 6 ; i++) {
             if (names.get(i) != null) {
                 groupsOfPicked.get(i).getChildren().remove(buttonsOfPicked.get(i));
-                Image image = new Image(getClass().getResource("/view/images/" + names.get(i) + ".png").toString());
+                Image image = new Image(getClass().getResource("/view/images/" + names.get(i)
+                        + ".png").toString());
                 ImageView imageView = new ImageView(image);
                 imageView.setFitWidth(180);
                 imageView.setFitHeight(130);
@@ -935,12 +944,14 @@ public class NightLevel implements Initializable {
                    int choose = random.nextInt(2);
                    if (choose == 0){
                        numberOfZombies[Y[i]]++;
-                       Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                       Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton()
+                               .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                        zombie.columnBTN = X[i];
                        cells[Y[i]][X[i]].setZombies(zombie);
                    } else {
                        numberOfZombies[Y[i]]++;
-                       ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                       ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton()
+                               .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                        coneheadZombie.columnBTN = X[i];
                        cells[Y[i]][X[i]].setZombies(coneheadZombie);
                    }
@@ -1036,22 +1047,26 @@ public class NightLevel implements Initializable {
                     int choose = random.nextInt(4);
                     if (choose == 0) {
                         numberOfZombies[Y[i]]++;
-                        Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         zombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(zombie);
                     } else if (choose == 1) {
                         numberOfZombies[Y[i]]++;
-                        ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         coneheadZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(coneheadZombie);
                     } else if (choose == 2) {
                         numberOfZombies[Y[i]]++;
-                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         screenDoorZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(screenDoorZombie);
                     } else if (choose == 3) {
                         numberOfZombies[Y[i]]++;
-                        ImpZombie impZombie = new ImpZombie(cells[Y[i]][X[i]].getButton().getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        ImpZombie impZombie = new ImpZombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         impZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(impZombie);
                     }
@@ -1318,7 +1333,8 @@ public class NightLevel implements Initializable {
                                     }
 
                                     try {
-                                        FXMLLoader loader = new FXMLLoader(getClass().getResource("../view/WinPage.fxml"));
+                                        FXMLLoader loader = new FXMLLoader(getClass()
+                                                .getResource("../view/WinPage.fxml"));
                                         Parent winContent = loader.load();
 
                                         WinPage.setObj(NightLevel.getInstance());
@@ -1388,13 +1404,15 @@ public class NightLevel implements Initializable {
                         zombie.setHP(zombieData.HP);
                         break;
                     case "ConeheadZombie":
-                        ConeheadZombie coneheadZombie = new ConeheadZombie(zombieData.y, zombieData.x, zombieData.rowBTN);
+                        ConeheadZombie coneheadZombie = new ConeheadZombie(zombieData.y, zombieData.x
+                                , zombieData.rowBTN);
                         coneheadZombie.columnBTN = zombieData.columnBTN;
                         cells[coneheadZombie.rowBTN][coneheadZombie.columnBTN].setZombies(coneheadZombie);
                         coneheadZombie.setHP(zombieData.HP);
                         break;
                     case "ScreenDoorZombie":
-                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(zombieData.y, zombieData.x, zombieData.rowBTN);
+                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(zombieData.y, zombieData.x
+                                , zombieData.rowBTN);
                         screenDoorZombie.columnBTN = zombieData.columnBTN;
                         cells[screenDoorZombie.rowBTN][screenDoorZombie.columnBTN].setZombies(screenDoorZombie);
                         screenDoorZombie.setHP(zombieData.HP);
@@ -1414,37 +1432,43 @@ public class NightLevel implements Initializable {
                         CherryBomb cherryBomb = new CherryBomb(plantData.row , plantData.column);
                         cherryBomb.setHP(plantData.HP);
                         cells[cherryBomb.getRow()][cherryBomb.getColumn()].setPlants(cherryBomb);
-                        cells[cherryBomb.getRow()][cherryBomb.getColumn()].getGroup().getChildren().add(cherryBomb.getImage());
+                        cells[cherryBomb.getRow()][cherryBomb.getColumn()].getGroup().getChildren()
+                                .add(cherryBomb.getImage());
                         break;
                     case "Jalapenos" :
                         Jalapenos jalapenos = new Jalapenos(plantData.row , plantData.column);
                         jalapenos.setHP(plantData.HP);
                         cells[jalapenos.getRow()][jalapenos.getColumn()].setPlants(jalapenos);
-                        cells[jalapenos.getRow()][jalapenos.getColumn()].getGroup().getChildren().add(jalapenos.getImage());
+                        cells[jalapenos.getRow()][jalapenos.getColumn()].getGroup().getChildren()
+                                .add(jalapenos.getImage());
                         break;
                     case "PeaShooter" :
                         PeaShooter peaShooter = new PeaShooter(plantData.row , plantData.column);
                         peaShooter.setHP(plantData.HP);
                         cells[peaShooter.getRow()][peaShooter.getColumn()].setPlants(peaShooter);
-                        cells[peaShooter.getRow()][peaShooter.getColumn()].getGroup().getChildren().add(peaShooter.getImage());
+                        cells[peaShooter.getRow()][peaShooter.getColumn()].getGroup().getChildren()
+                                .add(peaShooter.getImage());
                         break;
                     case "Repeater" :
                         Repeater repeater  = new Repeater(plantData.row , plantData.column);
                         repeater.setHP(plantData.HP);
                         cells[repeater.getRow()][repeater.getColumn()].setPlants(repeater);
-                        cells[repeater.getRow()][repeater.getColumn()].getGroup().getChildren().add(repeater.getImage());
+                        cells[repeater.getRow()][repeater.getColumn()].getGroup().getChildren()
+                                .add(repeater.getImage());
                         break;
                     case "SnowShooter" :
                         SnowShooter snowShooter = new SnowShooter(plantData.row , plantData.column);
                         snowShooter.setHP(plantData.HP);
                         cells[snowShooter.getRow()][snowShooter.getColumn()].setPlants(snowShooter);
-                        cells[snowShooter.getRow()][snowShooter.getColumn()].getGroup().getChildren().add(snowShooter.getImage());
+                        cells[snowShooter.getRow()][snowShooter.getColumn()].getGroup().getChildren()
+                                .add(snowShooter.getImage());
                         break;
                     case "Sunflower" :
                         Sunflower sunflower = new Sunflower(plantData.row , plantData.column);
                         sunflower.setHP(plantData.HP);
                         cells[sunflower.getRow()][sunflower.getColumn()].setPlants(sunflower);
-                        cells[sunflower.getRow()][sunflower.getColumn()].getGroup().getChildren().add(sunflower.getImage());
+                        cells[sunflower.getRow()][sunflower.getColumn()].getGroup().getChildren()
+                                .add(sunflower.getImage());
                         break;
                     case "TallNut" :
                         TallNut tallNut = new TallNut(plantData.row , plantData.column);
@@ -1459,56 +1483,73 @@ public class NightLevel implements Initializable {
                         cells[wallNut.getRow()][wallNut.getColumn()].getGroup().getChildren().add(wallNut.getImage());
                         break;
                     case "Blover":
-                        Blover blover = new Blover();
-                        //...
+                        Blover blover = new Blover(plantData.row , plantData.column);
+                        blover.setHP(plantData.HP);
+                        cells[blover.getRow()][blover.getColumn()].setPlants(blover);
+                        cells[blover.getRow()][blover.getColumn()].getGroup().getChildren().add(blover.getImage());
                         break;
                     case "CoffeeBean":
-                        CoffeeBean coffeeBean = new CoffeeBean();
-                        //...
+                        CoffeeBean coffeeBean = new CoffeeBean(plantData.row , plantData.column);
+                        coffeeBean.setHP(plantData.HP);
+                        cells[coffeeBean.getRow()][coffeeBean.getColumn()].setPlants(coffeeBean);
+                        cells[coffeeBean.getRow()][coffeeBean.getColumn()].getGroup().getChildren()
+                                .add(coffeeBean.getImage());
                         break;
                     case "DoomShroom":
                         Doomshroom doomshroom = new Doomshroom(plantData.row, plantData.column);
                         doomshroom.setHP(plantData.HP);
                         cells[doomshroom.getRow()][doomshroom.getColumn()].setPlants(doomshroom);
-                        cells[doomshroom.getRow()][doomshroom.getColumn()].getGroup().getChildren().add(doomshroom.getImage());
+                        cells[doomshroom.getRow()][doomshroom.getColumn()].getGroup().getChildren()
+                                .add(doomshroom.getImage());
                         break;
                     case "GraveBuster":
-                        GraveBuster graveBuster = new GraveBuster();
-                        //...
+                        GraveBuster graveBuster = new GraveBuster(plantData.row , plantData.column);
+                        graveBuster.setHP(plantData.HP);
+                        cells[graveBuster.getRow()][graveBuster.getColumn()].setPlants(graveBuster);
+                        cells[graveBuster.getRow()][graveBuster.getColumn()].getGroup().getChildren()
+                                .add(graveBuster.getImage());
                         break;
                     case "HypnoShroom":
                         HypnoShroom hypnoShroom = new HypnoShroom(plantData.row, plantData.column);
                         hypnoShroom.setHP(plantData.HP);
                         cells[hypnoShroom.getRow()][hypnoShroom.getColumn()].setPlants(hypnoShroom);
-                        cells[hypnoShroom.getRow()][hypnoShroom.getColumn()].getGroup().getChildren().add(hypnoShroom.getImage());
+                        cells[hypnoShroom.getRow()][hypnoShroom.getColumn()].getGroup().getChildren()
+                                .add(hypnoShroom.getImage());
                         break;
                     case "IceShroom":
                         IceShroom iceShroom = new IceShroom(plantData.row, plantData.column);
                         iceShroom.setHP(plantData.HP);
                         cells[iceShroom.getRow()][iceShroom.getColumn()].setPlants(iceShroom);
-                        cells[iceShroom.getRow()][iceShroom.getColumn()].getGroup().getChildren().add(iceShroom.getImage());
+                        cells[iceShroom.getRow()][iceShroom.getColumn()].getGroup().getChildren()
+                                .add(iceShroom.getImage());
                         break;
                     case "Plantern":
-                        Plantern plantern = new Plantern();
-                        //...
+                        Plantern plantern = new Plantern(plantData.row , plantData.column);
+                        plantern.setHP(plantData.HP);
+                        cells[plantern.getRow()][plantern.getColumn()].setPlants(plantern);
+                        cells[plantern.getRow()][plantern.getColumn()].getGroup().getChildren()
+                                .add(plantern.getImage());
                         break;
                     case "PuffShroom":
                         PuffShroom puffShroom = new PuffShroom(plantData.row, plantData.column);
                         puffShroom.setHP(plantData.HP);
                         cells[puffShroom.getRow()][puffShroom.getColumn()].setPlants(puffShroom);
-                        cells[puffShroom.getRow()][puffShroom.getColumn()].getGroup().getChildren().add(puffShroom.getImage());
+                        cells[puffShroom.getRow()][puffShroom.getColumn()].getGroup().getChildren()
+                                .add(puffShroom.getImage());
                         break;
                     case "ScaredyShroom":
                         ScaredyShroom scaredyShroom = new ScaredyShroom(plantData.row, plantData.column);
                         scaredyShroom.setHP(plantData.HP);
                         cells[scaredyShroom.getRow()][scaredyShroom.getColumn()].setPlants(scaredyShroom);
-                        cells[scaredyShroom.getRow()][scaredyShroom.getColumn()].getGroup().getChildren().add(scaredyShroom.getImage());
+                        cells[scaredyShroom.getRow()][scaredyShroom.getColumn()].getGroup().getChildren()
+                                .add(scaredyShroom.getImage());
                         break;
                     case "SunShroom":
                         SunShroom sunShroom = new SunShroom(plantData.row, plantData.column);
                         sunShroom.setHP(plantData.HP);
                         cells[sunShroom.getRow()][sunShroom.getColumn()].setPlants(sunShroom);
-                        cells[sunShroom.getRow()][sunShroom.getColumn()].getGroup().getChildren().add(sunShroom.getImage());
+                        cells[sunShroom.getRow()][sunShroom.getColumn()].getGroup().getChildren()
+                                .add(sunShroom.getImage());
                         break;
                 }
             }
