@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -422,7 +423,7 @@ public class DayLevel implements Initializable {
 
         DayLevel.setInstance(this);
 
-        sunPoints.setText("0");
+        sunPoints.setText("300");
 
         menuBTN.setOnAction(event -> {
             if (menu == 0 && !isStopMod) {
@@ -892,10 +893,15 @@ public class DayLevel implements Initializable {
         midTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
             for (int i = 0; i < 5; i++) {
                 int choose = random.nextInt(2);
+                int row = random.nextInt(5);
                 if (choose == 0) {
-                    basicZombie();
+                    numberOfZombies[row]++;
+                    Zombie zombie = new Zombie(1780, row * 185 + 130, row);
+                    cells[row][8].setZombies(zombie);
                 } else {
-                    coneHeadZombie();
+                    numberOfZombies[row]++;
+                    ConeheadZombie coneheadZombie = new ConeheadZombie(1780, row * 185 + 130, row);
+                    cells[row][8].setZombies(coneheadZombie);
                 }
             }
         }));
@@ -963,14 +969,23 @@ public class DayLevel implements Initializable {
         finalTimer = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
             for (int i = 0; i < 5; i++) {
                 int choose = random.nextInt(4);
+                int row = random.nextInt(5);
                 if (choose == 0) {
-                    basicZombie();
+                    numberOfZombies[row]++;
+                    Zombie zombie = new Zombie(1780, row * 185 + 130, row);
+                    cells[row][8].setZombies(zombie);
                 } else if (choose == 1) {
-                    coneHeadZombie();
+                    numberOfZombies[row]++;
+                    ConeheadZombie coneheadZombie = new ConeheadZombie(1780, row * 185 + 130, row);
+                    cells[row][8].setZombies(coneheadZombie);
                 } else if (choose == 2) {
-                    screenDoorZombie();
+                    numberOfZombies[row]++;
+                    ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(1780, row * 185 + 130, row);
+                    cells[row][8].setZombies(screenDoorZombie);
                 } else {
-                    impZombie();
+                    numberOfZombies[row]++;
+                    ImpZombie impZombie = new ImpZombie(1780, row * 185 + 130, row);
+                    cells[row][8].setZombies(impZombie);
                 }
             }
         }));
@@ -1178,7 +1193,6 @@ public class DayLevel implements Initializable {
             gameState.gameTimer = (long) DayLevel.getInstance().gameTimer.getCurrentTime().toSeconds();
         }
         gameState.names = cardNames;
-        gameState.rechargeTime = getRechargeTimer();
         return gameState;
     }
 
@@ -1331,40 +1345,52 @@ public class DayLevel implements Initializable {
             }
 
             for (PlantData plantData : loadedState.plants) {
+                Plants.isOnSaveMode = true;
                 switch (plantData.type) {
                     case "CherryBomb":
                         CherryBomb cherryBomb = new CherryBomb(plantData.row, plantData.column);
                         cherryBomb.setHP(plantData.HP);
+                        cherryBomb.setOnSaveMode(true);
+                        cherryBomb.setCherryBombTimer(plantData.plantTimer[0]);
                         cells[cherryBomb.getRow()][cherryBomb.getColumn()].setPlants(cherryBomb);
                         cells[cherryBomb.getRow()][cherryBomb.getColumn()].getGroup().getChildren().add(cherryBomb.getImage());
                         break;
                     case "Jalapenos":
                         Jalapenos jalapenos = new Jalapenos(plantData.row, plantData.column);
                         jalapenos.setHP(plantData.HP);
+                        jalapenos.setOnSaveMode(true);
+                        jalapenos.setJalopenosTimer(plantData.plantTimer[0]);
                         cells[jalapenos.getRow()][jalapenos.getColumn()].setPlants(jalapenos);
                         cells[jalapenos.getRow()][jalapenos.getColumn()].getGroup().getChildren().add(jalapenos.getImage());
                         break;
                     case "PeaShooter":
                         PeaShooter peaShooter = new PeaShooter(plantData.row, plantData.column);
                         peaShooter.setHP(plantData.HP);
+                        peaShooter.setShootTimer(plantData.plantTimer[0]);
                         cells[peaShooter.getRow()][peaShooter.getColumn()].setPlants(peaShooter);
                         cells[peaShooter.getRow()][peaShooter.getColumn()].getGroup().getChildren().add(peaShooter.getImage());
                         break;
                     case "Repeater":
                         Repeater repeater = new Repeater(plantData.row, plantData.column);
                         repeater.setHP(plantData.HP);
+                        repeater.setOnSaveMode(true);
+                        repeater.setShootTimer(plantData.plantTimer[0]);
                         cells[repeater.getRow()][repeater.getColumn()].setPlants(repeater);
                         cells[repeater.getRow()][repeater.getColumn()].getGroup().getChildren().add(repeater.getImage());
                         break;
                     case "SnowShooter":
                         SnowShooter snowShooter = new SnowShooter(plantData.row, plantData.column);
                         snowShooter.setHP(plantData.HP);
+                        snowShooter.setOnSaveMode(true);
+                        snowShooter.setShootTimer(plantData.plantTimer[0]);
                         cells[snowShooter.getRow()][snowShooter.getColumn()].setPlants(snowShooter);
                         cells[snowShooter.getRow()][snowShooter.getColumn()].getGroup().getChildren().add(snowShooter.getImage());
                         break;
                     case "Sunflower":
                         Sunflower sunflower = new Sunflower(plantData.row, plantData.column);
                         sunflower.setHP(plantData.HP);
+                        sunflower.setOnSaveMode(true);
+                        sunflower.setSunTimeline(plantData.plantTimer[0]);
                         cells[sunflower.getRow()][sunflower.getColumn()].setPlants(sunflower);
                         cells[sunflower.getRow()][sunflower.getColumn()].getGroup().getChildren().add(sunflower.getImage());
                         break;
@@ -1383,12 +1409,16 @@ public class DayLevel implements Initializable {
                     case "Blover":
                         Blover blover = new Blover(plantData.row , plantData.column);
                         blover.setHP(plantData.HP);
+                        blover.setOnSaveMode(true);
+                        blover.setBloverTimer(plantData.plantTimer[0]);
                         cells[blover.getRow()][blover.getColumn()].setPlants(blover);
                         cells[blover.getRow()][blover.getColumn()].getGroup().getChildren().add(blover.getImage());
                         break;
                     case "CoffeeBean":
                         CoffeeBean coffeeBean = new CoffeeBean(plantData.row , plantData.column);
                         coffeeBean.setHP(plantData.HP);
+                        coffeeBean.setOnSaveMode(true);
+                        coffeeBean.setCoffeeBeanTimer(plantData.plantTimer[0]);
                         cells[coffeeBean.getRow()][coffeeBean.getColumn()].setPlants(coffeeBean);
                         cells[coffeeBean.getRow()][coffeeBean.getColumn()].getGroup().getChildren()
                                 .add(coffeeBean.getImage());
@@ -1396,6 +1426,10 @@ public class DayLevel implements Initializable {
                     case "DoomShroom":
                         Doomshroom doomshroom = new Doomshroom(plantData.row, plantData.column);
                         doomshroom.setHP(plantData.HP);
+                        doomshroom.setCoffee(plantData.coffee);
+                        doomshroom.setNeedCoffee(plantData.needCoffee);
+                        doomshroom.setOnSaveMode(true);
+                        doomshroom.setDoomshroomTimer(plantData.plantTimer[0]);
                         cells[doomshroom.getRow()][doomshroom.getColumn()].setPlants(doomshroom);
                         cells[doomshroom.getRow()][doomshroom.getColumn()].getGroup().getChildren()
                                 .add(doomshroom.getImage());
@@ -1403,6 +1437,8 @@ public class DayLevel implements Initializable {
                     case "GraveBuster":
                         GraveBuster graveBuster = new GraveBuster(plantData.row , plantData.column);
                         graveBuster.setHP(plantData.HP);
+                        graveBuster.setOnSaveMode(true);
+                        graveBuster.setBusterTimer(plantData.plantTimer[0]);
                         cells[graveBuster.getRow()][graveBuster.getColumn()].setPlants(graveBuster);
                         cells[graveBuster.getRow()][graveBuster.getColumn()].getGroup().getChildren()
                                 .add(graveBuster.getImage());
@@ -1410,6 +1446,8 @@ public class DayLevel implements Initializable {
                     case "HypnoShroom":
                         HypnoShroom hypnoShroom = new HypnoShroom(plantData.row, plantData.column);
                         hypnoShroom.setHP(plantData.HP);
+                        hypnoShroom.setCoffee(plantData.coffee);
+                        hypnoShroom.setNeedCoffee(plantData.needCoffee);
                         cells[hypnoShroom.getRow()][hypnoShroom.getColumn()].setPlants(hypnoShroom);
                         cells[hypnoShroom.getRow()][hypnoShroom.getColumn()].getGroup().getChildren()
                                 .add(hypnoShroom.getImage());
@@ -1417,6 +1455,10 @@ public class DayLevel implements Initializable {
                     case "IceShroom":
                         IceShroom iceShroom = new IceShroom(plantData.row, plantData.column);
                         iceShroom.setHP(plantData.HP);
+                        iceShroom.setCoffee(plantData.coffee);
+                        iceShroom.setNeedCoffee(plantData.needCoffee);
+                        iceShroom.setOnSaveMode(true);
+                        iceShroom.setIceShroomTimer(plantData.plantTimer[0]);
                         cells[iceShroom.getRow()][iceShroom.getColumn()].setPlants(iceShroom);
                         cells[iceShroom.getRow()][iceShroom.getColumn()].getGroup().getChildren()
                                 .add(iceShroom.getImage());
@@ -1424,6 +1466,8 @@ public class DayLevel implements Initializable {
                     case "Plantern":
                         Plantern plantern = new Plantern(plantData.row , plantData.column);
                         plantern.setHP(plantData.HP);
+                        plantern.setOnSaveMode(true);
+                        plantern.setPlanternTimer(plantData.plantTimer[0]);
                         cells[plantern.getRow()][plantern.getColumn()].setPlants(plantern);
                         cells[plantern.getRow()][plantern.getColumn()].getGroup().getChildren()
                                 .add(plantern.getImage());
@@ -1431,6 +1475,10 @@ public class DayLevel implements Initializable {
                     case "PuffShroom":
                         PuffShroom puffShroom = new PuffShroom(plantData.row, plantData.column);
                         puffShroom.setHP(plantData.HP);
+                        puffShroom.setCoffee(plantData.coffee);
+                        puffShroom.setNeedCoffee(plantData.needCoffee);
+                        puffShroom.setOnSaveMode(true);
+                        puffShroom.setShootTimer(plantData.plantTimer[0]);
                         cells[puffShroom.getRow()][puffShroom.getColumn()].setPlants(puffShroom);
                         cells[puffShroom.getRow()][puffShroom.getColumn()].getGroup().getChildren()
                                 .add(puffShroom.getImage());
@@ -1438,6 +1486,10 @@ public class DayLevel implements Initializable {
                     case "ScaredyShroom":
                         ScaredyShroom scaredyShroom = new ScaredyShroom(plantData.row, plantData.column);
                         scaredyShroom.setHP(plantData.HP);
+                        scaredyShroom.setCoffee(plantData.coffee);
+                        scaredyShroom.setNeedCoffee(plantData.needCoffee);
+                        scaredyShroom.setOnSaveMode(true);
+                        scaredyShroom.setShootTimer(plantData.plantTimer[0]);
                         cells[scaredyShroom.getRow()][scaredyShroom.getColumn()].setPlants(scaredyShroom);
                         cells[scaredyShroom.getRow()][scaredyShroom.getColumn()].getGroup().getChildren()
                                 .add(scaredyShroom.getImage());
@@ -1445,11 +1497,14 @@ public class DayLevel implements Initializable {
                     case "SunShroom":
                         SunShroom sunShroom = new SunShroom(plantData.row, plantData.column);
                         sunShroom.setHP(plantData.HP);
+                        sunShroom.setCoffee(plantData.coffee);
+                        sunShroom.setNeedCoffee(plantData.needCoffee);
                         cells[sunShroom.getRow()][sunShroom.getColumn()].setPlants(sunShroom);
                         cells[sunShroom.getRow()][sunShroom.getColumn()].getGroup().getChildren()
                                 .add(sunShroom.getImage());
                         break;
                 }
+                Plants.isOnSaveMode = false;
             }
 
         }
@@ -1473,34 +1528,125 @@ public class DayLevel implements Initializable {
     }
 
     private ArrayList<PlantData> getPlantsData() {
-        ArrayList<PlantData> plantData = new ArrayList<>();
+        ArrayList<PlantData> plantDatas = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 9; j++) {
                 if (cells[i][j].getPlant() != null) {
                     Plants plant = cells[i][j].getPlant();
-                    PlantData p = new PlantData(plant.getRow(), plant.getColumn(), plant.getHP(),
-                            plant.getClass().getSimpleName());
-                    plantData.add(p);
+                    PlantData plantData = new PlantData(plant.getRow(), plant.getColumn(), plant.getHP(),
+                            plant.getClass().getSimpleName(), plant.isCoffee(), plant.isNeedCoffee());
+                    switch (plant.getClass().getSimpleName()) {
+                        case "Blover" :
+                            if (((Blover) plant).getBloverTimer() != null) {
+                                plantData.plantTimer[0] = ((Blover) plant).getBloverTimer().getCurrentTime()
+                                        .toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            break;
+                        case "CherryBomb" :
+                            if (((CherryBomb) plant).getCherryBombTimer() != null) {
+                                plantData.plantTimer[0] = ((CherryBomb) plant).getCherryBombTimer()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            break;
+                        case "CoffeeBean" :
+                            if (((CoffeeBean) plant).getCoffeeBeanTimer() != null) {
+                                plantData.plantTimer[0] = ((CoffeeBean) plant).getCoffeeBeanTimer()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            break;
+                        case "GraveBuster" :
+                            if (((GraveBuster) plant).getBusterTimer() != null) {
+                                plantData.plantTimer[0] = ((GraveBuster) plant).getBusterTimer()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            break;
+                        case "IceShroom" :
+                            if (((IceShroom) plant).getIceShroomTimer() != null) {
+                                plantData.plantTimer[0] = ((IceShroom) plant).getIceShroomTimer()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            break;
+                        case "Jalapenos" :
+                            if (((Jalapenos) plant).getJalopenosTimer() != null) {
+                                plantData.plantTimer[0] = ((Jalapenos) plant).getJalopenosTimer()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            break;
+                        case "PeaShooter" :
+                        case "PuffShroom" :
+                        case "Repeater" :
+                        case "ScaredyShroom" :
+                        case "SnowShooter" :
+                            if (((PeaPlants) plant).getShootTimer() != null) {
+                                plantData.plantTimer[0] = ((PeaPlants) plant).getShootTimer()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            break;
+                        case "Sunflower" :
+                            if (((Sunflower) plant).getSunTimeline() != null) {
+                                plantData.plantTimer[0] = ((Sunflower) plant).getSunTimeline()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            break;
+                        case "Plantern" :
+                            if (((Plantern) plant).getPlanternTimer() != null) {
+                                plantData.plantTimer[0] = ((Plantern) plant).getPlanternTimer()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            break;
+                        case "SunShroom" :
+                            if (((SunShroom) plant).getSunTimeline() != null) {
+                                plantData.plantTimer[0] = ((SunShroom) plant).getSunTimeline()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            if (((SunShroom) plant).getIncreaseSizeTimer() != null) {
+                                plantData.plantTimer[1] = ((SunShroom) plant).getIncreaseSizeTimer()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[1] = -1;
+                            }
+                            if (((SunShroom) plant).getGrowTimer() != null) {
+                                plantData.plantTimer[2] = ((SunShroom) plant).getGrowTimer()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[2] = -1;
+                            }
+                            break;
+                        case "DoomShroom" :
+                            if (((Doomshroom) plant).getDoomshroomTimer() != null) {
+                                plantData.plantTimer[0] = ((Doomshroom) plant).getDoomshroomTimer()
+                                        .getCurrentTime().toMillis();
+                            } else {
+                                plantData.plantTimer[0] = -1;
+                            }
+                            break;
+                    }
+                    plantDatas.add(plantData);
                 }
             }
         }
 
-        return plantData;
-    }
-
-    private ArrayList<Long> getRechargeTimer() {
-        ArrayList<Long> l = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            if (!availablePicked[i]) {
-                if (plants.get(i).getTimer() != null) {
-                    l.add((long) plants.get(i).getTimer().getCurrentTime().toSeconds());
-                }
-            }
-            else {
-                l.add(-1L);
-            }
-        }
-        return l;
+        return plantDatas;
     }
 
     public void restart() {

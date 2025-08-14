@@ -60,10 +60,16 @@ public class Repeater extends PeaPlants{
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
         setImage(imageView);
-        shootTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> shoot(zombie1)));
-        shootTimer.setCycleCount(Timeline.INDEFINITE);
-        shootTimer.play();
+
+        if (!isOnSaveMode) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie1)));
+            getShootTimer().setCycleCount(Timeline.INDEFINITE);
+            getShootTimer().play();
+        }
+
+
         group.setOpacity(0.7);
+
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
         timer.play();
@@ -237,7 +243,7 @@ public class Repeater extends PeaPlants{
         if (moveBulletTimer2 != null){
             moveBulletTimer2.pause();
         }
-        shootTimer.pause();
+        getShootTimer().pause();
     }
 
     @Override
@@ -248,7 +254,7 @@ public class Repeater extends PeaPlants{
         if (moveBulletTimer2 != null){
             moveBulletTimer2.play();
         }
-        shootTimer.play();
+        getShootTimer().play();
     }
 
     @Override
@@ -262,6 +268,14 @@ public class Repeater extends PeaPlants{
 
     public static void setGroup(Group g) {
         group = g;
+    }
+
+    public void setShootTimer(double l) {
+        if (l != -1) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie1)));
+            getShootTimer().setCycleCount(Timeline.INDEFINITE);
+            getShootTimer().playFrom(Duration.seconds(l));
+        }
     }
 
 }

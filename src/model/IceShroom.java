@@ -51,12 +51,14 @@ public class IceShroom extends BombPlants{
         setImage(imageView);
 
         if (obj instanceof NightLevel || obj instanceof FogLevel) {
-            iceShroomTimer = new Timeline(
-                    new KeyFrame(Duration.seconds(1),event -> BOMB()),
-                    new KeyFrame(Duration.seconds(11),event -> afterBomb())
-            );
-            iceShroomTimer.setCycleCount(1);
-            iceShroomTimer.play();
+            if (!isOnSaveMode) {
+                iceShroomTimer = new Timeline(
+                        new KeyFrame(Duration.seconds(1),event -> BOMB()),
+                        new KeyFrame(Duration.seconds(11),event -> afterBomb())
+                );
+                iceShroomTimer.setCycleCount(1);
+                iceShroomTimer.play();
+            }
         }
 
         group.setOpacity(0.7);
@@ -148,7 +150,7 @@ public class IceShroom extends BombPlants{
     @Override
     public void end() {
         if (iceShroomTimer != null){
-            iceShroomTimer.stop();
+            iceShroomTimer.pause();
         }
     }
 
@@ -168,13 +170,29 @@ public class IceShroom extends BombPlants{
     public void setCoffee(boolean coffee) {
         this.coffee = coffee;
         if (coffee && iceShroomTimer == null) {
+            if (!isOnSaveMode) {
+                iceShroomTimer = new Timeline(
+                        new KeyFrame(Duration.seconds(1),event1 -> BOMB()),
+                        new KeyFrame(Duration.seconds(5),event2 -> afterBomb())
+                );
+                iceShroomTimer.setCycleCount(1);
+                iceShroomTimer.play();
+            }
+        }
+    }
+
+    public Timeline getIceShroomTimer() {
+        return iceShroomTimer;
+    }
+
+    public void setIceShroomTimer(double l) {
+        if (l != -1) {
             iceShroomTimer = new Timeline(
                     new KeyFrame(Duration.seconds(1),event1 -> BOMB()),
                     new KeyFrame(Duration.seconds(5),event2 -> afterBomb())
             );
             iceShroomTimer.setCycleCount(1);
-            iceShroomTimer.play();
+            iceShroomTimer.playFrom(Duration.seconds(l));
         }
     }
-
 }

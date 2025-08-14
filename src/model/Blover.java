@@ -9,6 +9,10 @@ import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
 public class Blover extends Plants{
 
     private Timeline bloverTimer;
@@ -22,6 +26,8 @@ public class Blover extends Plants{
     private static int availableNum;
 
     private final static int HP = 4;
+
+    private Clip clip;
 
     public Blover(int i, int j) {
         super(HP, i, j, 100, 15);
@@ -43,12 +49,14 @@ public class Blover extends Plants{
         imageView.setLayoutX(25);
         setImage(imageView);
 
-        bloverTimer = new Timeline(
-                new KeyFrame(Duration.seconds(3), event -> poof()),
-                new KeyFrame(Duration.seconds(13), event -> afterPoof())
-                );
-        bloverTimer.setCycleCount(1);
-        bloverTimer.play();
+        if (!isOnSaveMode) {
+            bloverTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(3), event -> poof()),
+                    new KeyFrame(Duration.seconds(13), event -> afterPoof())
+            );
+            bloverTimer.setCycleCount(1);
+            bloverTimer.play();
+        }
 
         group.setOpacity(0.7);
 
@@ -96,7 +104,7 @@ public class Blover extends Plants{
     @Override
     public void end() {
         if (bloverTimer != null) {
-            bloverTimer.stop();
+            bloverTimer.pause();
         }
     }
 
@@ -114,6 +122,18 @@ public class Blover extends Plants{
     }
 
     private void poof() {
+
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/blover sound.wav")
+            );
+            clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         for (int i = 0 ; i < 5 ; i++) {
             for (int j = 4 ; j < 9 ; j++) {
                 FogLevel.getInstance().removeCloud(cells[i][j]);
@@ -132,4 +152,18 @@ public class Blover extends Plants{
         end();
     }
 
+    public Timeline getBloverTimer() {
+        return bloverTimer;
+    }
+
+    public void setBloverTimer(double l) {
+        if (l != -1) {
+            bloverTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(3), event -> poof()),
+                    new KeyFrame(Duration.seconds(13), event -> afterPoof())
+            );
+            bloverTimer.setCycleCount(1);
+            bloverTimer.playFrom(Duration.seconds(l));
+        }
+    }
 }

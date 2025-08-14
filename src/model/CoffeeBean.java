@@ -3,7 +3,6 @@ package model;
 import controller.DayLevel;
 import controller.FogLevel;
 import controller.NightLevel;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -32,24 +31,26 @@ public class CoffeeBean extends Plants{
         imageView.setLayoutY(5);
         setImage(imageView);
 
-        coffeeBeanTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
-            if (plant != null) {
-                plant.setCoffee(true);
-            }
-            if (obj instanceof DayLevel) {
-                DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-                DayLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
-            } else if (obj instanceof NightLevel) {
-                NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-                NightLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
-            } else if (obj instanceof FogLevel) {
-                FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
-                FogLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
-            }
-            end();
-        }));
-        coffeeBeanTimer.setCycleCount(1);
-        coffeeBeanTimer.play();
+        if (!isOnSaveMode) {
+            coffeeBeanTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+                if (plant != null) {
+                    plant.setCoffee(true);
+                }
+                if (obj instanceof DayLevel) {
+                    DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                    DayLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
+                } else if (obj instanceof NightLevel) {
+                    NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                    NightLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
+                } else if (obj instanceof FogLevel) {
+                    FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                    FogLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
+                }
+                end();
+            }));
+            coffeeBeanTimer.setCycleCount(1);
+            coffeeBeanTimer.play();
+        }
 
         group.setOpacity(0.7);
 
@@ -97,9 +98,8 @@ public class CoffeeBean extends Plants{
     @Override
     public void end() {
         if (coffeeBeanTimer != null) {
-            coffeeBeanTimer.stop();
+            coffeeBeanTimer.pause();
         }
-        coffeeBeanTimer = null;
     }
 
     @Override
@@ -117,5 +117,32 @@ public class CoffeeBean extends Plants{
 
     public void setPlant(Plants plant) {
         this.plant = plant;
+    }
+
+    public Timeline getCoffeeBeanTimer() {
+        return coffeeBeanTimer;
+    }
+
+    public void setCoffeeBeanTimer(double l) {
+        if (l != -1) {
+            coffeeBeanTimer = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+                if (plant != null) {
+                    plant.setCoffee(true);
+                }
+                if (obj instanceof DayLevel) {
+                    DayLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                    DayLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
+                } else if (obj instanceof NightLevel) {
+                    NightLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                    NightLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
+                } else if (obj instanceof FogLevel) {
+                    FogLevel.getInstance().getCells()[row][column].getGroup().getChildren().remove(this.image);
+                    FogLevel.getInstance().getCells()[row][column].setCoffeeBean(null);
+                }
+                end();
+            }));
+            coffeeBeanTimer.setCycleCount(1);
+            coffeeBeanTimer.playFrom(Duration.seconds(l));
+        }
     }
 }

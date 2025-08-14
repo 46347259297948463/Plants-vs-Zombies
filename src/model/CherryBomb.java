@@ -1,7 +1,6 @@
 package model;
 
 import controller.DayLevel;
-import controller.FirstPage;
 import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
@@ -42,13 +41,18 @@ public class CherryBomb extends BombPlants{
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);
         setImage(imageView);
-        cherryBombTimer = new Timeline(
-                new KeyFrame(Duration.seconds(0), event -> increaseSize()),
-                new KeyFrame(Duration.seconds(2) , event -> BOMB())
-        );
-        cherryBombTimer.setCycleCount(1);
-        cherryBombTimer.play();
+
+        if (!isOnSaveMode) {
+            cherryBombTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(0), event -> increaseSize()),
+                    new KeyFrame(Duration.seconds(2), event -> BOMB())
+            );
+            cherryBombTimer.setCycleCount(1);
+            cherryBombTimer.play();
+        }
+
         group.setOpacity(0.7);
+
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
         timer.play();
@@ -115,18 +119,22 @@ public class CherryBomb extends BombPlants{
     @Override
     public void end() {
         if (cherryBombTimer != null){
-            cherryBombTimer.stop();
+            cherryBombTimer.pause();
         }
     }
 
     @Override
     public void stop(){
-        cherryBombTimer.pause();
+        if (cherryBombTimer != null) {
+            cherryBombTimer.pause();
+        }
     }
 
     @Override
     public void play() {
-        cherryBombTimer.play();
+        if (cherryBombTimer != null) {
+            cherryBombTimer.play();
+        }
     }
 
     @Override
@@ -142,4 +150,18 @@ public class CherryBomb extends BombPlants{
         group = g;
     }
 
+    public Timeline getCherryBombTimer() {
+        return cherryBombTimer;
+    }
+
+    public void setCherryBombTimer(double l) {
+        if (l != -1) {
+            cherryBombTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(0), event -> increaseSize()),
+                    new KeyFrame(Duration.seconds(2), event -> BOMB())
+            );
+            cherryBombTimer.setCycleCount(1);
+            cherryBombTimer.playFrom(Duration.seconds(l));
+        }
+    }
 }

@@ -4,6 +4,8 @@ package model;
 import javafx.animation.Timeline;
 import javafx.scene.image.ImageView;
 
+import java.io.Serializable;
+
 public abstract class Plants {
 
     protected int HP;
@@ -23,6 +25,8 @@ public abstract class Plants {
     protected boolean coffee = false;
 
     public static Object obj;
+
+    public static boolean isOnSaveMode;
 
     public Plants(int hp, int i, int j, int price, double rechargeTime){
         HP = hp;
@@ -108,4 +112,7 @@ public abstract class Plants {
         image.setOpacity(1);
     }
 
+    public void setOnSaveMode(boolean onSaveMode) {
+        isOnSaveMode = onSaveMode;
+    }
 }

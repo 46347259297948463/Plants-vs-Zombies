@@ -28,6 +28,8 @@ public class SunShroom extends Plants {
 
     private Timeline increaseSizeTimer;
 
+    private Timeline growTimer;
+
     private boolean isGrown = false;
 
     private boolean isEnded = false;
@@ -61,22 +63,24 @@ public class SunShroom extends Plants {
         setImage(imageView);
 
         if (obj instanceof NightLevel || obj instanceof FogLevel) {
-            Timeline growTimer = new Timeline(new KeyFrame(Duration.seconds(20), e -> isGrown = true));
-            growTimer.setCycleCount(1);
-            growTimer.play();
+            if (!isOnSaveMode) {
+                growTimer = new Timeline(new KeyFrame(Duration.seconds(20), e -> isGrown = true));
+                growTimer.setCycleCount(1);
+                growTimer.play();
 
-            increaseSizeTimer = new Timeline(new KeyFrame(Duration.millis(200), e -> {
-                if (isGrown) {
-                    increaseSizeTimer.stop();
-                    return;
-                }
-                image.setFitHeight(image.getFitHeight() * 1.005);
-                image.setFitWidth(image.getFitWidth() * 1.005);
-            }));
-            increaseSizeTimer.setCycleCount(Timeline.INDEFINITE);
-            increaseSizeTimer.play();
+                increaseSizeTimer = new Timeline(new KeyFrame(Duration.millis(200), e -> {
+                    if (isGrown) {
+                        increaseSizeTimer.stop();
+                        return;
+                    }
+                    image.setFitHeight(image.getFitHeight() * 1.005);
+                    image.setFitWidth(image.getFitWidth() * 1.005);
+                }));
+                increaseSizeTimer.setCycleCount(Timeline.INDEFINITE);
+                increaseSizeTimer.play();
 
-            startTimer();
+                startTimer();
+            }
         }
 
         group.setOpacity(0.7);
@@ -181,8 +185,8 @@ public class SunShroom extends Plants {
     @Override
     public void end() {
         isEnded = true;
-        if (sunTimeline != null) sunTimeline.stop();
-        if (increaseSizeTimer != null) increaseSizeTimer.stop();
+        if (sunTimeline != null) sunTimeline.pause();
+        if (increaseSizeTimer != null) increaseSizeTimer.pause();
         if (sun != null) sun.stop();
     }
 
@@ -203,10 +207,45 @@ public class SunShroom extends Plants {
     public void setCoffee(boolean coffee) {
         this.coffee = coffee;
         if (coffee && increaseSizeTimer == null) {
-            Timeline growTimer = new Timeline(new KeyFrame(Duration.seconds(20), e -> isGrown = true));
-            growTimer.setCycleCount(1);
-            growTimer.play();
+            if (!isOnSaveMode) {
+                growTimer = new Timeline(new KeyFrame(Duration.seconds(20), e -> isGrown = true));
+                growTimer.setCycleCount(1);
+                growTimer.play();
 
+                increaseSizeTimer = new Timeline(new KeyFrame(Duration.millis(200), e -> {
+                    if (isGrown) {
+                        increaseSizeTimer.stop();
+                        return;
+                    }
+                    image.setFitHeight(image.getFitHeight() * 1.005);
+                    image.setFitWidth(image.getFitWidth() * 1.005);
+                }));
+                increaseSizeTimer.setCycleCount(Timeline.INDEFINITE);
+                increaseSizeTimer.play();
+
+                startTimer();
+            }
+        }
+    }
+
+    public Timeline getSunTimeline() {
+        return sunTimeline;
+    }
+
+    public void setSunTimeline(double l) {
+        if (l != -1) {
+            sunTimeline = new Timeline(new KeyFrame(Duration.seconds(7.5), event -> makeSun()));
+            sunTimeline.setCycleCount(Timeline.INDEFINITE);
+            sunTimeline.playFrom(Duration.seconds(l));
+        }
+    }
+
+    public Timeline getIncreaseSizeTimer() {
+        return increaseSizeTimer;
+    }
+
+    public void setIncreaseSizeTimer(double l) {
+        if (l != -1) {
             increaseSizeTimer = new Timeline(new KeyFrame(Duration.millis(200), e -> {
                 if (isGrown) {
                     increaseSizeTimer.stop();
@@ -216,10 +255,21 @@ public class SunShroom extends Plants {
                 image.setFitWidth(image.getFitWidth() * 1.005);
             }));
             increaseSizeTimer.setCycleCount(Timeline.INDEFINITE);
-            increaseSizeTimer.play();
-
-            startTimer();
+            increaseSizeTimer.playFrom(Duration.seconds(l));
         }
     }
 
+    public Timeline getGrowTimer() {
+        return growTimer;
+    }
+
+    public void setGrowTimer(double l) {
+        if (l != -1) {
+            growTimer = new Timeline(new KeyFrame(Duration.seconds(20), e -> isGrown = true));
+            growTimer.setCycleCount(1);
+            growTimer.playFrom(Duration.seconds(l));
+        } else {
+            isGrown = true;
+        }
+    }
 }

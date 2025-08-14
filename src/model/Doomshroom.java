@@ -1,7 +1,6 @@
 package model;
 
 import controller.DayLevel;
-import controller.FirstPage;
 import controller.FogLevel;
 import controller.NightLevel;
 import javafx.animation.KeyFrame;
@@ -50,12 +49,14 @@ public class Doomshroom extends BombPlants{
         setImage(imageView);
 
         if (obj instanceof NightLevel || obj instanceof FogLevel) {
-            doomshroomTimer = new Timeline(
-                    new KeyFrame(Duration.seconds(1.5), event1 -> BOMB()),
-                    new KeyFrame(Duration.seconds(16.5), even2 -> afterBOMB())
-            );
-            doomshroomTimer.setCycleCount(1);
-            doomshroomTimer.play();
+           if (!isOnSaveMode) {
+               doomshroomTimer = new Timeline(
+                       new KeyFrame(Duration.seconds(1.5), event1 -> BOMB()),
+                       new KeyFrame(Duration.seconds(16.5), even2 -> afterBOMB())
+               );
+               doomshroomTimer.setCycleCount(1);
+               doomshroomTimer.play();
+           }
         }
 
         group.setOpacity(0.7);
@@ -139,7 +140,7 @@ public class Doomshroom extends BombPlants{
     @Override
     public void end() {
         if (doomshroomTimer != null){
-            doomshroomTimer.stop();
+            doomshroomTimer.pause();
         }
     }
 
@@ -168,4 +169,18 @@ public class Doomshroom extends BombPlants{
         }
     }
 
+    public void setDoomshroomTimer(double l) {
+        if (l != -1) {
+            doomshroomTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(1.5), event1 -> BOMB()),
+                    new KeyFrame(Duration.seconds(16.5), even2 -> afterBOMB())
+            );
+            doomshroomTimer.setCycleCount(1);
+            doomshroomTimer.playFrom(Duration.seconds(l));
+        }
+    }
+
+    public Timeline getDoomshroomTimer() {
+        return doomshroomTimer;
+    }
 }

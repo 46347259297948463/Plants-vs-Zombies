@@ -41,12 +41,16 @@ public class Jalapenos extends BombPlants{
         imageView.setFitWidth(135);
         imageView.setFitHeight(140);
         setImage(imageView);
-        jalopenosTimer = new Timeline(
-                new KeyFrame(Duration.seconds(0), event -> increaseSize()),
-                new KeyFrame(Duration.seconds(2) , event -> BOMB())
-        );
-        jalopenosTimer.setCycleCount(1);
-        jalopenosTimer.play();
+
+        if (!isOnSaveMode) {
+            jalopenosTimer = new Timeline(
+                    new KeyFrame(Duration.seconds(0), event -> increaseSize()),
+                    new KeyFrame(Duration.seconds(2) , event -> BOMB())
+            );
+            jalopenosTimer.setCycleCount(1);
+            jalopenosTimer.play();
+        }
+
         group.setOpacity(0.7);
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
@@ -107,14 +111,13 @@ public class Jalapenos extends BombPlants{
     @Override
     public void end() {
         if (jalopenosTimer != null){
-            jalopenosTimer.stop();
+            jalopenosTimer.pause();
         }
     }
 
     @Override
     public void stop() {
         jalopenosTimer.pause();
-
     }
 
     @Override
@@ -135,4 +138,16 @@ public class Jalapenos extends BombPlants{
         group = g;
     }
 
+    public Timeline getJalopenosTimer() {
+        return jalopenosTimer;
+    }
+
+    public void setJalopenosTimer(double l) {
+        jalopenosTimer = new Timeline(
+                new KeyFrame(Duration.seconds(0), event -> increaseSize()),
+                new KeyFrame(Duration.seconds(2) , event -> BOMB())
+        );
+        jalopenosTimer.setCycleCount(1);
+        jalopenosTimer.playFrom(Duration.seconds(l));
+    }
 }

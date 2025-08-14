@@ -52,10 +52,15 @@ public class PeaShooter extends PeaPlants {
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
         setImage(imageView);
-        shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
-        shootTimer.setCycleCount(Timeline.INDEFINITE);
-        shootTimer.play();
+
+        if (!isOnSaveMode) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
+            getShootTimer().setCycleCount(Timeline.INDEFINITE);
+            getShootTimer().play();
+        }
+
         group.setOpacity(0.7);
+
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
         timer.play();
@@ -170,7 +175,7 @@ public class PeaShooter extends PeaPlants {
         if (moveBulletTimer != null){
             moveBulletTimer.pause();
         }
-        if (shootTimer != null) {
+        if (getShootTimer() != null) {
             shootTimer.pause();
         }
     }
@@ -180,7 +185,7 @@ public class PeaShooter extends PeaPlants {
         if (moveBulletTimer != null){
             moveBulletTimer.play();
         }
-        if (shootTimer != null) {
+        if (getShootTimer() != null) {
             shootTimer.play();
         }
     }
@@ -196,6 +201,16 @@ public class PeaShooter extends PeaPlants {
 
     public static void setGroup(Group g) {
         group = g;
+    }
+
+    public void setShootTimer(double l) {
+        if (l != -1) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
+            getShootTimer().setCycleCount(Timeline.INDEFINITE);
+            getShootTimer().playFrom(Duration.seconds(l));
+            System.out.println("the saved timer");
+            System.out.println(l);
+        }
     }
 
 }

@@ -54,9 +54,13 @@ public class SnowShooter extends PeaPlants{
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
         setImage(imageView);
-        shootTimer = new Timeline(new KeyFrame(Duration.seconds(2) , event -> shoot(zombie)));
-        shootTimer.setCycleCount(Timeline.INDEFINITE);
-        shootTimer.play();
+
+        if (!isOnSaveMode) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
+            getShootTimer().setCycleCount(Timeline.INDEFINITE);
+            getShootTimer().play();
+        }
+
         group.setOpacity(0.7);
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
@@ -186,7 +190,7 @@ public class SnowShooter extends PeaPlants{
         if (moveBulletTimer != null){
             moveBulletTimer.pause();
         }
-        shootTimer.pause();
+        getShootTimer().pause();
     }
 
     @Override
@@ -194,7 +198,7 @@ public class SnowShooter extends PeaPlants{
         if (moveBulletTimer != null){
             moveBulletTimer.play();
         }
-        shootTimer.play();
+        getShootTimer().play();
     }
 
     @Override
@@ -208,6 +212,14 @@ public class SnowShooter extends PeaPlants{
 
     public static void setGroup(Group g) {
         group = g;
+    }
+
+    public void setShootTimer(double l) {
+        if (l != -1) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
+            getShootTimer().setCycleCount(Timeline.INDEFINITE);
+            getShootTimer().playFrom(Duration.seconds(l));
+        }
     }
 
 }

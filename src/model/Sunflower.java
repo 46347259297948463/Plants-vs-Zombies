@@ -41,8 +41,13 @@ public class Sunflower extends Plants{
         imageView.setFitWidth(120);
         imageView.setFitHeight(125);
         setImage(imageView);
-        startTimer();
+
+        if (!isOnSaveMode) {
+            startTimer();
+        }
+
         group.setOpacity(0.7);
+
         timer = new Timeline(new KeyFrame(Duration.seconds(rechargeTime), event -> recharge()));
         timer.setCycleCount(1);
         timer.play();
@@ -106,7 +111,7 @@ public class Sunflower extends Plants{
     }
 
     public void end(){
-        sunTimeline.stop();
+        sunTimeline.pause();
     }
 
     @Override
@@ -156,4 +161,15 @@ public class Sunflower extends Plants{
         group = g;
     }
 
+    public Timeline getSunTimeline() {
+        return sunTimeline;
+    }
+
+    public void setSunTimeline(double l) {
+        if (l != -1) {
+            sunTimeline = new Timeline(new KeyFrame(Duration.millis(7500), event -> makeSun()));
+            sunTimeline.setCycleCount(Timeline.INDEFINITE);
+            sunTimeline.playFrom(Duration.seconds(l));
+        }
+    }
 }

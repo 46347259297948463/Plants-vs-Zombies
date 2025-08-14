@@ -1,6 +1,8 @@
 package model;
 
+import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 public abstract class PeaPlants extends Plants{
 
@@ -22,8 +24,12 @@ public abstract class PeaPlants extends Plants{
     @Override
     public void end(){
         if (shootTimer != null){
-            shootTimer.stop();
+            shootTimer.pause();
         }
+    }
+
+    public Timeline getShootTimer() {
+        return shootTimer;
     }
 
 }

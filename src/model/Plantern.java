@@ -3,12 +3,15 @@ package model;
 import controller.DayLevel;
 import controller.FogLevel;
 import controller.NightLevel;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class Plantern extends Plants{
 
@@ -24,6 +27,8 @@ public class Plantern extends Plants{
 
     private final static int HP = 4;
 
+    private Clip clip;
+
     public Plantern(int i, int j) {
         super(HP, i, j, 25, 15);
         if (obj instanceof DayLevel) {
@@ -38,15 +43,18 @@ public class Plantern extends Plants{
         }
         needCoffee = false;
         coffee = true;
+
         ImageView imageView = new ImageView(getClass().getResource("/view/images/plantern.png").toString());
-        imageView.setFitWidth(110);
-        imageView.setFitHeight(140);
+        imageView.setFitWidth(120);
+        imageView.setFitHeight(150);
         imageView.setLayoutX(25);
         setImage(imageView);
 
-        planternTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> light()));
-        planternTimer.setCycleCount(1);
-        planternTimer.play();
+        if (!isOnSaveMode) {
+            planternTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> light()));
+            planternTimer.setCycleCount(1);
+            planternTimer.play();
+        }
 
         group.setOpacity(0.7);
 
@@ -94,7 +102,7 @@ public class Plantern extends Plants{
     @Override
     public void end() {
         if (planternTimer != null) {
-            planternTimer.stop();
+            planternTimer.pause();
         }
         for (int i = 0 ; i < 5 ; i++) {
             for (int j = 4 ; j < 9 ; j++) {
@@ -121,6 +129,18 @@ public class Plantern extends Plants{
     }
 
     private void light() {
+
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                    getClass().getResource("/view/audio/plantern sound.wav")
+            );
+            clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         int rows = cells.length;
         int columns = cells[0].length;
 
@@ -133,4 +153,15 @@ public class Plantern extends Plants{
         }
     }
 
+    public Timeline getPlanternTimer() {
+        return planternTimer;
+    }
+
+    public void setPlanternTimer(double l) {
+        if (l != -1) {
+            planternTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> light()));
+            planternTimer.setCycleCount(1);
+            planternTimer.playFrom(Duration.seconds(l));
+        }
+    }
 }

@@ -21,8 +21,6 @@ public class GameState implements Serializable {
 
     public int sunPoints;
 
-    public ArrayList<Long> rechargeTime;
-
     public boolean isOnGameMode = true;
 
 }

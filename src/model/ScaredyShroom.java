@@ -69,9 +69,11 @@ public class ScaredyShroom extends PeaPlants{
         setImage(imageView);
 
         if (obj instanceof NightLevel || obj instanceof FogLevel) {
-            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event1 -> shoot(zombie)));
-            shootTimer.setCycleCount(Timeline.INDEFINITE);
-            shootTimer.play();
+            if (!isOnSaveMode) {
+                shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
+                getShootTimer().setCycleCount(Timeline.INDEFINITE);
+                getShootTimer().play();
+            }
         }
 
         group.setOpacity(0.7);
@@ -206,8 +208,8 @@ public class ScaredyShroom extends PeaPlants{
         if (moveBulletTimer != null){
             moveBulletTimer.pause();
         }
-        if (shootTimer != null) {
-            shootTimer.pause();
+        if (getShootTimer() != null) {
+            getShootTimer().pause();
         }
     }
 
@@ -216,8 +218,8 @@ public class ScaredyShroom extends PeaPlants{
         if (moveBulletTimer != null){
             moveBulletTimer.play();
         }
-        if (shootTimer != null) {
-            shootTimer.play();
+        if (getShootTimer() != null) {
+            getShootTimer().play();
         }
     }
 
@@ -235,10 +237,12 @@ public class ScaredyShroom extends PeaPlants{
 
     public void setCoffee(boolean coffee) {
         this.coffee = coffee;
-        if (coffee && shootTimer == null) {
-            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event1 -> shoot(zombie)));
-            shootTimer.setCycleCount(Timeline.INDEFINITE);
-            shootTimer.play();
+        if (coffee && getShootTimer() == null) {
+            if (!isOnSaveMode) {
+                shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
+                getShootTimer().setCycleCount(Timeline.INDEFINITE);
+                getShootTimer().play();
+            }
         }
     }
 
@@ -267,6 +271,14 @@ public class ScaredyShroom extends PeaPlants{
             scaredImg.setOpacity(1);
         } else {
             image.setOpacity(1);
+        }
+    }
+
+    public void setShootTimer(double l) {
+        if (l != -1) {
+            shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
+            getShootTimer().setCycleCount(Timeline.INDEFINITE);
+            getShootTimer().playFrom(Duration.seconds(l));
         }
     }
 

@@ -63,9 +63,11 @@ public class GraveBuster extends Plants{
             e.printStackTrace();
         }
 
-        busterTimer = new Timeline(new KeyFrame(Duration.seconds(0.75),event -> eat()));
-        busterTimer.setCycleCount(5);
-        busterTimer.play();
+        if (!isOnSaveMode) {
+            busterTimer = new Timeline(new KeyFrame(Duration.seconds(0.75),event -> eat()));
+            busterTimer.setCycleCount(5);
+            busterTimer.play();
+        }
 
         group.setOpacity(0.7);
 
@@ -127,8 +129,7 @@ public class GraveBuster extends Plants{
     @Override
     public void end() {
         if (busterTimer != null) {
-            busterTimer.stop();
-            busterTimer = null;
+            busterTimer.pause();
         }
         clip.stop();
 
@@ -147,4 +148,15 @@ public class GraveBuster extends Plants{
         availableNum = a;
     }
 
+    public Timeline getBusterTimer() {
+        return busterTimer;
+    }
+
+    public void setBusterTimer(double l) {
+        if (l != -1) {
+            busterTimer = new Timeline(new KeyFrame(Duration.seconds(0.75),event -> eat()));
+            busterTimer.setCycleCount(5);
+            busterTimer.playFrom(Duration.seconds(l));
+        }
+    }
 }
