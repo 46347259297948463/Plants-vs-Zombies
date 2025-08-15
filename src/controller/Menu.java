@@ -147,24 +147,6 @@ public class Menu implements Initializable {
         });
 
         homeBTN.setOnAction(event -> {
-            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/HomePage.fxml"));
-            try {
-                loader.load();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            HomePage controller= loader.getController();
-            Stage stage= new Stage();
-            stage.setScene(new Scene(loader.getRoot()));
-
-            stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
-            stage.setFullScreen(true);
-            stage.show();
-            Stage oldStage = (Stage) homeBTN.getScene().getWindow();
-            oldStage.close();
-            FirstPage.playAudio();
-
             if (obj instanceof DayLevel) {
                 DayLevel.getInstance().end();
                 DayLevel.setMenu(0);
@@ -181,6 +163,26 @@ public class Menu implements Initializable {
                 FogLevel.stopAudio();
                 FogLevel.getInstance().restart();
             }
+
+            Stage oldStage = (Stage) homeBTN.getScene().getWindow();
+            oldStage.close();
+
+            FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/HomePage.fxml"));
+            try {
+                loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            HomePage controller= loader.getController();
+            FirstPage.playAudio();
+
+            Stage stage= new Stage();
+            stage.setScene(new Scene(loader.getRoot()));
+
+            stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+            stage.setFullScreen(true);
+            stage.show();
 
         });
 

@@ -86,6 +86,13 @@ public class GraveBuster extends Plants{
             cells[row][column].setAvailable(true);
             cells[row][column].getGroup().getChildren().remove(this.image);
             cells[row][column].setPlants(null);
+            if (obj instanceof NightLevel) {
+                NightLevel.getInstance().X[cells[row][column].getNumberOfGrave()] = -1;
+                NightLevel.getInstance().Y[cells[row][column].getNumberOfGrave()] = -1;
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().X[cells[row][column].getNumberOfGrave()] = -1;
+                FogLevel.getInstance().Y[cells[row][column].getNumberOfGrave()] = -1;
+            }
         } else {
             y += 2;
             image.setLayoutY(y);

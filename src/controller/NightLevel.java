@@ -400,9 +400,10 @@ public class NightLevel implements Initializable {
 
     private static final String SAVE_FILE = "save.dat";
 
-    private int[] X = {-1, -1, -1, -1, -1, -1};
+    public int[] X = {-1, -1, -1, -1, -1, -1};
 
-    private int[] Y = {-1, -1, -1, -1, -1, -1};
+    public int[] Y = {-1, -1, -1, -1, -1, -1};
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -616,7 +617,6 @@ public class NightLevel implements Initializable {
                                         newPlant.setNeedCoffee(false);
                                         cells[row][column].getGroup().getChildren().add(newPlant.getImage());
                                         if (selectedPlant instanceof CoffeeBean) {
-                                            System.out.println("Coffee");
                                             cells[row][column].setCoffeeBean(newPlant);
                                         } else {
                                             cells[row][column].setPlants(newPlant);
@@ -851,7 +851,6 @@ public class NightLevel implements Initializable {
         cells[4][8] = new Cell(cell48, group48);
 
         if (!isOnSaveMode) {
-            int n = 1;
             for (int i = 0 ; i < 6 ; i++) {
                 int x = (int) (Math.random() * 5) + 4;
                 int y = (int) (Math.random() * 5);
@@ -863,14 +862,14 @@ public class NightLevel implements Initializable {
                         j = -1;
                     }
                 }
-                ImageView imageView = new ImageView("/view/images/grave_" + n + ".png");
+                ImageView imageView = new ImageView("/view/images/grave_" + (i + 1) + ".png");
                 imageView.setFitWidth(135);
                 imageView.setFitHeight(140);
                 cells[y][x].setGraveImage(imageView);
                 cells[y][x].getGroup().getChildren().add(imageView);
                 cells[y][x].setAvailable(false);
                 cells[y][x].setGrave(true);
-                n++;
+                cells[y][x].setNumberOfGrave(i);
                 X[i] = x;
                 Y[i] = y;
             }
@@ -947,7 +946,7 @@ public class NightLevel implements Initializable {
             }
 
             for (int i = 0 ; i < 6 ; i++) {
-               if (cells[Y[i]][X[i]].isGrave()) {
+               if (X[i] != -1 && cells[Y[i]][X[i]].isGrave()) {
                    int choose = random.nextInt(2);
                    Node grave = cells[Y[i]][X[i]].getGraveImage();
 
@@ -1070,7 +1069,7 @@ public class NightLevel implements Initializable {
             }
 
             for (int i = 0 ; i < 6 ; i++) {
-                if (cells[Y[i]][X[i]].isGrave()) {
+                if (X[i] != -1 && cells[Y[i]][X[i]].isGrave()) {
                     int choose = random.nextInt(4);
 
                     Node grave = cells[Y[i]][X[i]].getGraveImage();
@@ -1364,10 +1363,13 @@ public class NightLevel implements Initializable {
                 ImageView imageView = new ImageView("/view/images/grave_" + (i + 1) + ".png");
                 imageView.setFitWidth(135);
                 imageView.setFitHeight(140);
-                cells[Y[i]][X[i]].setGraveImage(imageView);
-                cells[Y[i]][X[i]].getGroup().getChildren().add(imageView);
-                cells[Y[i]][X[i]].setAvailable(false);
-                cells[Y[i]][X[i]].setGrave(true);
+                if (X[i] != -1) {
+                    cells[Y[i]][X[i]].setGraveImage(imageView);
+                    cells[Y[i]][X[i]].getGroup().getChildren().add(imageView);
+                    cells[Y[i]][X[i]].setAvailable(false);
+                    cells[Y[i]][X[i]].setGrave(true);
+                    cells[Y[i]][X[i]].setNumberOfGrave(i);
+                }
             }
             if (loadedState.isOnGameMode) {
                 gameTimer = new Timeline(

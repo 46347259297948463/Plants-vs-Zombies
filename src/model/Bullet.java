@@ -37,11 +37,6 @@ public class Bullet {
         this.row = row * 191.5 + 153;
         this.column = column * 153.5 + 590;
         this.n = n;
-//        if (column > 4 && cells[(int) row][(int) column].getCloudImage() != null) {
-//            hide();
-//        } else {
-//            apear();
-//        }
         setting();
     }
 

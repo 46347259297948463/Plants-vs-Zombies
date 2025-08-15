@@ -208,8 +208,6 @@ public class PeaShooter extends PeaPlants {
             shootTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> shoot(zombie)));
             getShootTimer().setCycleCount(Timeline.INDEFINITE);
             getShootTimer().playFrom(Duration.seconds(l));
-            System.out.println("the saved timer");
-            System.out.println(l);
         }
     }
 

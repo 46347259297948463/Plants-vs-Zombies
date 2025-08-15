@@ -26,7 +26,26 @@ public class LosePage implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         homeBTN.setOnAction(event -> {
-            FirstPage.playAudio();
+            if (obj instanceof DayLevel) {
+                DayLevel.getInstance().end();
+                DayLevel.setMenu(0);
+                DayLevel.stopAudio();
+                DayLevel.getInstance().restart();
+            } else if (obj instanceof NightLevel) {
+                NightLevel.getInstance().end();
+                NightLevel.setMenu(0);
+                NightLevel.stopAudio();
+                NightLevel.getInstance().restart();
+            } else if (obj instanceof FogLevel) {
+                FogLevel.getInstance().end();
+                FogLevel.setMenu(0);
+                FogLevel.stopAudio();
+                FogLevel.getInstance().restart();
+            }
+
+            Stage oldStage = (Stage) homeBTN.getScene().getWindow();
+            oldStage.close();
+
             FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/HomePage.fxml"));
             try {
                 loader.load();
@@ -34,25 +53,24 @@ public class LosePage implements Initializable {
                 e.printStackTrace();
             }
 
+            HomePage controller= loader.getController();
             FirstPage.playAudio();
 
-            HomePage controller= loader.getController();
             Stage stage= new Stage();
             stage.setScene(new Scene(loader.getRoot()));
 
             stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
             stage.setFullScreen(true);
             stage.show();
-            Stage oldStage = (Stage) homeBTN.getScene().getWindow();
-            oldStage.close();
         });
 
         tryAgainBTN.setOnAction(event -> {
             if (obj instanceof DayLevel){
-                DayLevel.getInstance().stop();
+                DayLevel.getInstance().end();
                 DayLevel.setMenu(0);
                 DayLevel.stopAudio();
-                FirstPage.playAudio();
+
+                DayLevel.getInstance().restart();
                 Stage oldStage = (Stage) tryAgainBTN.getScene().getWindow();
                 oldStage.close();
 
@@ -63,20 +81,21 @@ public class LosePage implements Initializable {
                     e.printStackTrace();
                 }
 
-                PickIcon controller= loader.getController();
+                PickIcon controller = loader.getController();
                 controller.setObj(DayLevel.getInstance());
-                DayLevel.getInstance().restart();
+                FirstPage.playAudio();
 
-                Stage stage= new Stage();
+                Stage stage = new Stage();
                 stage.setScene(new Scene(loader.getRoot()));
-                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
                 stage.setFullScreen(true);
                 stage.show();
             } else if (obj instanceof NightLevel) {
                 NightLevel.getInstance().stop();
                 NightLevel.setMenu(0);
                 NightLevel.stopAudio();
-                FirstPage.playAudio();
+
+                NightLevel.getInstance().restart();
                 Stage oldStage = (Stage) tryAgainBTN.getScene().getWindow();
                 oldStage.close();
 
@@ -87,20 +106,21 @@ public class LosePage implements Initializable {
                     e.printStackTrace();
                 }
 
-                PickIcon controller= loader.getController();
+                PickIcon controller = loader.getController();
                 controller.setObj(NightLevel.getInstance());
-                NightLevel.getInstance().restart();
+                FirstPage.playAudio();
 
-                Stage stage= new Stage();
+                Stage stage = new Stage();
                 stage.setScene(new Scene(loader.getRoot()));
-                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
                 stage.setFullScreen(true);
                 stage.show();
             } else if (obj instanceof FogLevel) {
                 FogLevel.getInstance().stop();
                 FogLevel.setMenu(0);
                 FogLevel.stopAudio();
-                FirstPage.playAudio();
+
+                FogLevel.getInstance().restart();
                 Stage oldStage = (Stage) tryAgainBTN.getScene().getWindow();
                 oldStage.close();
 
@@ -111,13 +131,13 @@ public class LosePage implements Initializable {
                     e.printStackTrace();
                 }
 
-                PickIcon controller= loader.getController();
+                PickIcon controller = loader.getController();
                 controller.setObj(FogLevel.getInstance());
-                FogLevel.getInstance().restart();
+                FirstPage.playAudio();
 
-                Stage stage= new Stage();
+                Stage stage = new Stage();
                 stage.setScene(new Scene(loader.getRoot()));
-                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);// Any keys you click it won't get out of fullscreen.
+                stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
                 stage.setFullScreen(true);
                 stage.show();
             }

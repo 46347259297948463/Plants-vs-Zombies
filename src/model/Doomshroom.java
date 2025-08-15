@@ -73,6 +73,7 @@ public class Doomshroom extends BombPlants{
     private void afterBOMB() {
         cells[row][column].getGroup().getChildren().remove(image);
         cells[row][column].setAvailable(true);
+        cells[row][column].removePlant();
     }
 
     @Override
@@ -98,7 +99,6 @@ public class Doomshroom extends BombPlants{
             }
         }
 
-        cells[row][column].removePlant();
         image.setImage(new Image(getClass().getResource("/view/images/after doom shroom bomb.png").toString()));
         image.setFitWidth(135);
         image.setFitHeight(105);

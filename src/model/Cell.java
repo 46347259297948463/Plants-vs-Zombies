@@ -27,6 +27,8 @@ public class Cell {
 
     private Plants coffeeBean;
 
+    private int numberOfGrave;
+
     public Cell(Button button, Group group) {
         this.button = button;
         this.group = group;
@@ -135,5 +137,13 @@ public class Cell {
 
     public void setCoffeeBean(Plants coffeeBean) {
         this.coffeeBean = coffeeBean;
+    }
+
+    public int getNumberOfGrave() {
+        return numberOfGrave;
+    }
+
+    public void setNumberOfGrave(int numberOfGrave) {
+        this.numberOfGrave = numberOfGrave;
     }
 }
