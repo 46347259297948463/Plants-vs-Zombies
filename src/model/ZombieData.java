@@ -12,6 +12,8 @@ public class ZombieData implements Serializable {
 
     public String type;
 
+    public double layoutX, layoutY;
+
     public ZombieData(double x, double y, double HP, int rowBTN, int columnBTN, String type){
         this.x = x;
         this.y = y;

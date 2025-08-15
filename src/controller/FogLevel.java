@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -10,7 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -933,16 +931,15 @@ public class FogLevel implements Initializable {
         } catch (Exception ev) {
             ev.printStackTrace();
         }
-        midTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
+        midTimer = new Timeline(new KeyFrame(Duration.seconds(3), event -> {
             for (int i = 0; i < 5; i++){
                 int choose = random.nextInt(2);
-
-                numberOfZombies[i]++;
-
                 if (choose == 0){
+                    numberOfZombies[i]++;
                     Zombie zombie = new Zombie( 1780, i * 185 + 130, i);
                     cells[i][8].setZombies(zombie);
                 } else {
+                    numberOfZombies[i]++;
                     ConeheadZombie coneheadZombie = new ConeheadZombie( 1780, i * 185 + 130, i);
                     cells[i][8].setZombies(coneheadZombie);
                 }
@@ -951,36 +948,16 @@ public class FogLevel implements Initializable {
             for (int i = 0 ; i < 6 ; i++) {
                 if (cells[Y[i]][X[i]].isGrave()) {
                     int choose = random.nextInt(2);
-                    Node grave = cells[Y[i]][X[i]].getGraveImage();
-
-                    Bounds graveBoundsInScene = grave.localToScene(grave.getBoundsInLocal());
-
-                    Point2D topLeftInTarget = fogAnc.sceneToLocal(
-                            graveBoundsInScene.getMinX(),
-                            graveBoundsInScene.getMinY()
-                    );
-
                     if (choose == 0){
                         numberOfZombies[Y[i]]++;
-
-                        Zombie zombie = new Zombie(
-                                topLeftInTarget.getX(),
-                                topLeftInTarget.getY(),
-                                Y[i]
-                        );
-
+                        Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         zombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(zombie);
-
                     } else {
                         numberOfZombies[Y[i]]++;
-
-                        ConeheadZombie coneheadZombie = new ConeheadZombie(
-                                topLeftInTarget.getX(),
-                                topLeftInTarget.getY(),
-                                Y[i]
-                        );
-
+                        ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         coneheadZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(coneheadZombie);
                     }
@@ -1049,7 +1026,7 @@ public class FogLevel implements Initializable {
         } catch (Exception ev) {
             ev.printStackTrace();
         }
-        finalTimer = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
+        finalTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
             for (int i = 0; i < 5; i++){
                 int choose = random.nextInt(4);
                 if (choose == 0){
@@ -1074,52 +1051,28 @@ public class FogLevel implements Initializable {
             for (int i = 0 ; i < 6 ; i++) {
                 if (cells[Y[i]][X[i]].isGrave()) {
                     int choose = random.nextInt(4);
-
-                    Node grave = cells[Y[i]][X[i]].getGraveImage();
-
-                    Bounds graveBoundsInScene = grave.localToScene(grave.getBoundsInLocal());
-
-                    Point2D topLeftInTarget = fogAnc.sceneToLocal(
-                            graveBoundsInScene.getMinX(),
-                            graveBoundsInScene.getMinY()
-                    );
-
-                    numberOfZombies[Y[i]]++;
-
                     if (choose == 0) {
-                        Zombie zombie = new Zombie(
-                                topLeftInTarget.getX(),
-                                topLeftInTarget.getY(),
-                                Y[i]
-                        );
-
+                        numberOfZombies[Y[i]]++;
+                        Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         zombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(zombie);
                     } else if (choose == 1) {
-                        ConeheadZombie coneheadZombie = new ConeheadZombie(
-                                topLeftInTarget.getX(),
-                                topLeftInTarget.getY(),
-                                Y[i]
-                        );
-
+                        numberOfZombies[Y[i]]++;
+                        ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         coneheadZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(coneheadZombie);
                     } else if (choose == 2) {
-                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(
-                                topLeftInTarget.getX(),
-                                topLeftInTarget.getY(),
-                                Y[i]
-                        );
-
+                        numberOfZombies[Y[i]]++;
+                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         screenDoorZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(screenDoorZombie);
                     } else if (choose == 3) {
-                        ImpZombie impZombie = new ImpZombie(
-                                topLeftInTarget.getX(),
-                                topLeftInTarget.getY(),
-                                Y[i]
-                        );
-
+                        numberOfZombies[Y[i]]++;
+                        ImpZombie impZombie = new ImpZombie(cells[Y[i]][X[i]].getButton()
+                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
                         impZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(impZombie);
                     }
@@ -1318,8 +1271,6 @@ public class FogLevel implements Initializable {
         gameState.sunPoints = Integer.parseInt(sunPoints.getText());
         gameState.zombies = getZombiesData();
         gameState.plants = getPlantsData();
-        gameState.XOfGraves = X;
-        gameState.YOfGraves = Y;
 
         if (gameTimer == null) {
             gameState.isOnGameMode = false;
@@ -1357,20 +1308,9 @@ public class FogLevel implements Initializable {
         GameState loadedState = loadGame();
         if (loadedState != null){
             isOnSaveMode = false;
+            makeFog();
             sunPoints.setText(String.valueOf(loadedState.sunPoints));
             this.setNames(loadedState.names);
-            X = loadedState.XOfGraves;
-            Y = loadedState.YOfGraves;
-
-            for (int i = 0 ; i < 6 ; i++) {
-                ImageView imageView = new ImageView("/view/images/grave_" + (i + 1) + ".png");
-                imageView.setFitWidth(135);
-                imageView.setFitHeight(140);
-                cells[Y[i]][X[i]].setGraveImage(imageView);
-                cells[Y[i]][X[i]].getGroup().getChildren().add(imageView);
-                cells[Y[i]][X[i]].setAvailable(false);
-                cells[Y[i]][X[i]].setGrave(true);
-            }
             if (loadedState.isOnGameMode) {
                 gameTimer = new Timeline(
                         new KeyFrame(Duration.seconds(20), e -> step1()),
@@ -1380,15 +1320,11 @@ public class FogLevel implements Initializable {
                         new KeyFrame(Duration.seconds(77), e -> step4()),
                         new KeyFrame(Duration.seconds(93), e -> finalAttack()),
                         new KeyFrame(Duration.seconds(107), e -> {
-                            if (finalTimer != null) {
-                                finalTimer.stop();
-                                finalTimer = null;
-                            }
+                            finalTimer.stop();
+                            finalTimer = null;
                             zombieTimer = null;
-                            if (gameTimer != null) {
-                                gameTimer.stop();
-                                gameTimer = null;
-                            }
+                            gameTimer.stop();
+                            gameTimer = null;
                             exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
                                 if (isGameFinish()) {
                                     clip.stop();
@@ -1471,6 +1407,8 @@ public class FogLevel implements Initializable {
                     case "Zombie":
                         Zombie zombie = new Zombie(zombieData.y, zombieData.x, zombieData.rowBTN);
                         zombie.columnBTN = zombieData.columnBTN;
+                        zombie.getImage().setLayoutX(zombieData.layoutX);
+                        zombie.getImage().setLayoutY(zombieData.layoutY);
                         cells[zombie.rowBTN][zombie.columnBTN].setZombies(zombie);
                         zombie.setHP(zombieData.HP);
                         break;
@@ -1478,6 +1416,8 @@ public class FogLevel implements Initializable {
                         ConeheadZombie coneheadZombie = new ConeheadZombie(zombieData.y, zombieData.x
                                 , zombieData.rowBTN);
                         coneheadZombie.columnBTN = zombieData.columnBTN;
+                        coneheadZombie.getImage().setLayoutX(zombieData.layoutX);
+                        coneheadZombie.getImage().setLayoutY(zombieData.layoutY);
                         cells[coneheadZombie.rowBTN][coneheadZombie.columnBTN].setZombies(coneheadZombie);
                         coneheadZombie.setHP(zombieData.HP);
                         break;
@@ -1485,86 +1425,89 @@ public class FogLevel implements Initializable {
                         ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(zombieData.y, zombieData.x
                                 , zombieData.rowBTN);
                         screenDoorZombie.columnBTN = zombieData.columnBTN;
+                        screenDoorZombie.getImage().setLayoutX(zombieData.layoutX);
+                        screenDoorZombie.getImage().setLayoutY(zombieData.layoutY);
                         cells[screenDoorZombie.rowBTN][screenDoorZombie.columnBTN].setZombies(screenDoorZombie);
                         screenDoorZombie.setHP(zombieData.HP);
                         break;
                     case "ImpZombie":
                         ImpZombie impZombie = new ImpZombie(zombieData.y, zombieData.x, zombieData.rowBTN);
                         impZombie.columnBTN = zombieData.columnBTN;
+                        impZombie.getImage().setLayoutX(zombieData.layoutX);
+                        impZombie.getImage().setLayoutY(zombieData.layoutY);
                         cells[impZombie.rowBTN][impZombie.columnBTN].setZombies(impZombie);
                         impZombie.setHP(zombieData.HP);
                         break;
                 }
             }
 
-            for (PlantData plantData : loadedState.plants) {
-                Plants.isOnSaveMode = true;
-                switch (plantData.type) {
-                    case "CherryBomb":
-                        CherryBomb cherryBomb = new CherryBomb(plantData.row, plantData.column);
+            for (PlantData plantData : loadedState.plants){
+                switch (plantData.type){
+                    case "CherryBomb" :
+                        CherryBomb cherryBomb = new CherryBomb(plantData.row , plantData.column);
                         cherryBomb.setHP(plantData.HP);
-                        cherryBomb.setCherryBombTimer(plantData.plantTimer[0]);
                         cells[cherryBomb.getRow()][cherryBomb.getColumn()].setPlants(cherryBomb);
-                        cells[cherryBomb.getRow()][cherryBomb.getColumn()].getGroup().getChildren().add(cherryBomb.getImage());
+                        cells[cherryBomb.getRow()][cherryBomb.getColumn()].getGroup().getChildren()
+                                .add(cherryBomb.getImage());
                         break;
-                    case "Jalapenos":
-                        Jalapenos jalapenos = new Jalapenos(plantData.row, plantData.column);
+                    case "Jalapenos" :
+                        Jalapenos jalapenos = new Jalapenos(plantData.row , plantData.column);
                         jalapenos.setHP(plantData.HP);
-                        jalapenos.setJalopenosTimer(plantData.plantTimer[0]);
                         cells[jalapenos.getRow()][jalapenos.getColumn()].setPlants(jalapenos);
-                        cells[jalapenos.getRow()][jalapenos.getColumn()].getGroup().getChildren().add(jalapenos.getImage());
+                        cells[jalapenos.getRow()][jalapenos.getColumn()].getGroup().getChildren()
+                                .add(jalapenos.getImage());
                         break;
-                    case "PeaShooter":
-                        PeaShooter peaShooter = new PeaShooter(plantData.row, plantData.column);
+                    case "PeaShooter" :
+                        PeaShooter peaShooter = new PeaShooter(plantData.row , plantData.column);
                         peaShooter.setHP(plantData.HP);
-                        peaShooter.setShootTimer(plantData.plantTimer[0]);
                         cells[peaShooter.getRow()][peaShooter.getColumn()].setPlants(peaShooter);
-                        cells[peaShooter.getRow()][peaShooter.getColumn()].getGroup().getChildren().add(peaShooter.getImage());
+                        cells[peaShooter.getRow()][peaShooter.getColumn()].getGroup().getChildren()
+                                .add(peaShooter.getImage());
                         break;
-                    case "Repeater":
-                        Repeater repeater = new Repeater(plantData.row, plantData.column);
+                    case "Repeater" :
+                        Repeater repeater  = new Repeater(plantData.row , plantData.column);
                         repeater.setHP(plantData.HP);
-                        repeater.setShootTimer(plantData.plantTimer[0]);
                         cells[repeater.getRow()][repeater.getColumn()].setPlants(repeater);
-                        cells[repeater.getRow()][repeater.getColumn()].getGroup().getChildren().add(repeater.getImage());
+                        cells[repeater.getRow()][repeater.getColumn()].getGroup().getChildren()
+                                .add(repeater.getImage());
                         break;
-                    case "SnowShooter":
-                        SnowShooter snowShooter = new SnowShooter(plantData.row, plantData.column);
+                    case "SnowShooter" :
+                        SnowShooter snowShooter = new SnowShooter(plantData.row , plantData.column);
                         snowShooter.setHP(plantData.HP);
-                        snowShooter.setShootTimer(plantData.plantTimer[0]);
                         cells[snowShooter.getRow()][snowShooter.getColumn()].setPlants(snowShooter);
-                        cells[snowShooter.getRow()][snowShooter.getColumn()].getGroup().getChildren().add(snowShooter.getImage());
+                        cells[snowShooter.getRow()][snowShooter.getColumn()].getGroup().getChildren()
+                                .add(snowShooter.getImage());
                         break;
-                    case "Sunflower":
-                        Sunflower sunflower = new Sunflower(plantData.row, plantData.column);
+                    case "Sunflower" :
+                        Sunflower sunflower = new Sunflower(plantData.row , plantData.column);
                         sunflower.setHP(plantData.HP);
-                        sunflower.setSunTimeline(plantData.plantTimer[0]);
                         cells[sunflower.getRow()][sunflower.getColumn()].setPlants(sunflower);
-                        cells[sunflower.getRow()][sunflower.getColumn()].getGroup().getChildren().add(sunflower.getImage());
+                        cells[sunflower.getRow()][sunflower.getColumn()].getGroup().getChildren()
+                                .add(sunflower.getImage());
                         break;
-                    case "TallNut":
-                        TallNut tallNut = new TallNut(plantData.row, plantData.column);
+                    case "TallNut" :
+                        TallNut tallNut = new TallNut(plantData.row , plantData.column);
                         tallNut.setHP(plantData.HP);
                         cells[tallNut.getRow()][tallNut.getColumn()].setPlants(tallNut);
-                        cells[tallNut.getRow()][tallNut.getColumn()].getGroup().getChildren().add(tallNut.getImage());
+                        cells[tallNut.getRow()][tallNut.getColumn()].getGroup().getChildren()
+                                .add(tallNut.getImage());
                         break;
-                    case "WallNut":
-                        WallNut wallNut = new WallNut(plantData.row, plantData.column);
+                    case "WallNut" :
+                        WallNut wallNut = new WallNut(plantData.row , plantData.column);
                         wallNut.setHP(plantData.HP);
                         cells[wallNut.getRow()][wallNut.getColumn()].setPlants(wallNut);
-                        cells[wallNut.getRow()][wallNut.getColumn()].getGroup().getChildren().add(wallNut.getImage());
+                        cells[wallNut.getRow()][wallNut.getColumn()].getGroup().getChildren()
+                                .add(wallNut.getImage());
                         break;
                     case "Blover":
-                        Blover blover = new Blover(plantData.row , plantData.column);
+                        Blover blover = new Blover(plantData.row, plantData.column);
                         blover.setHP(plantData.HP);
-                        blover.setBloverTimer(plantData.plantTimer[0]);
                         cells[blover.getRow()][blover.getColumn()].setPlants(blover);
                         cells[blover.getRow()][blover.getColumn()].getGroup().getChildren().add(blover.getImage());
                         break;
                     case "CoffeeBean":
-                        CoffeeBean coffeeBean = new CoffeeBean(plantData.row , plantData.column);
+                        CoffeeBean coffeeBean = new CoffeeBean(plantData.row, plantData.column);
                         coffeeBean.setHP(plantData.HP);
-                        coffeeBean.setCoffeeBeanTimer(plantData.plantTimer[0]);
                         cells[coffeeBean.getRow()][coffeeBean.getColumn()].setPlants(coffeeBean);
                         cells[coffeeBean.getRow()][coffeeBean.getColumn()].getGroup().getChildren()
                                 .add(coffeeBean.getImage());
@@ -1572,17 +1515,13 @@ public class FogLevel implements Initializable {
                     case "DoomShroom":
                         Doomshroom doomshroom = new Doomshroom(plantData.row, plantData.column);
                         doomshroom.setHP(plantData.HP);
-                        doomshroom.setCoffee(plantData.coffee);
-                        doomshroom.setNeedCoffee(plantData.needCoffee);
-                        doomshroom.setDoomshroomTimer(plantData.plantTimer[0]);
                         cells[doomshroom.getRow()][doomshroom.getColumn()].setPlants(doomshroom);
                         cells[doomshroom.getRow()][doomshroom.getColumn()].getGroup().getChildren()
                                 .add(doomshroom.getImage());
                         break;
                     case "GraveBuster":
-                        GraveBuster graveBuster = new GraveBuster(plantData.row , plantData.column);
+                        GraveBuster graveBuster = new GraveBuster(plantData.row, plantData.column);
                         graveBuster.setHP(plantData.HP);
-                        graveBuster.setBusterTimer(plantData.plantTimer[0]);
                         cells[graveBuster.getRow()][graveBuster.getColumn()].setPlants(graveBuster);
                         cells[graveBuster.getRow()][graveBuster.getColumn()].getGroup().getChildren()
                                 .add(graveBuster.getImage());
@@ -1590,8 +1529,6 @@ public class FogLevel implements Initializable {
                     case "HypnoShroom":
                         HypnoShroom hypnoShroom = new HypnoShroom(plantData.row, plantData.column);
                         hypnoShroom.setHP(plantData.HP);
-                        hypnoShroom.setCoffee(plantData.coffee);
-                        hypnoShroom.setNeedCoffee(plantData.needCoffee);
                         cells[hypnoShroom.getRow()][hypnoShroom.getColumn()].setPlants(hypnoShroom);
                         cells[hypnoShroom.getRow()][hypnoShroom.getColumn()].getGroup().getChildren()
                                 .add(hypnoShroom.getImage());
@@ -1599,17 +1536,13 @@ public class FogLevel implements Initializable {
                     case "IceShroom":
                         IceShroom iceShroom = new IceShroom(plantData.row, plantData.column);
                         iceShroom.setHP(plantData.HP);
-                        iceShroom.setCoffee(plantData.coffee);
-                        iceShroom.setNeedCoffee(plantData.needCoffee);
-                        iceShroom.setIceShroomTimer(plantData.plantTimer[0]);
                         cells[iceShroom.getRow()][iceShroom.getColumn()].setPlants(iceShroom);
                         cells[iceShroom.getRow()][iceShroom.getColumn()].getGroup().getChildren()
                                 .add(iceShroom.getImage());
                         break;
                     case "Plantern":
-                        Plantern plantern = new Plantern(plantData.row , plantData.column);
+                        Plantern plantern = new Plantern(plantData.row, plantData.column);
                         plantern.setHP(plantData.HP);
-                        plantern.setPlanternTimer(plantData.plantTimer[0]);
                         cells[plantern.getRow()][plantern.getColumn()].setPlants(plantern);
                         cells[plantern.getRow()][plantern.getColumn()].getGroup().getChildren()
                                 .add(plantern.getImage());
@@ -1617,9 +1550,6 @@ public class FogLevel implements Initializable {
                     case "PuffShroom":
                         PuffShroom puffShroom = new PuffShroom(plantData.row, plantData.column);
                         puffShroom.setHP(plantData.HP);
-                        puffShroom.setCoffee(plantData.coffee);
-                        puffShroom.setNeedCoffee(plantData.needCoffee);
-                        puffShroom.setShootTimer(plantData.plantTimer[0]);
                         cells[puffShroom.getRow()][puffShroom.getColumn()].setPlants(puffShroom);
                         cells[puffShroom.getRow()][puffShroom.getColumn()].getGroup().getChildren()
                                 .add(puffShroom.getImage());
@@ -1627,26 +1557,18 @@ public class FogLevel implements Initializable {
                     case "ScaredyShroom":
                         ScaredyShroom scaredyShroom = new ScaredyShroom(plantData.row, plantData.column);
                         scaredyShroom.setHP(plantData.HP);
-                        scaredyShroom.setCoffee(plantData.coffee);
-                        scaredyShroom.setNeedCoffee(plantData.needCoffee);
-                        scaredyShroom.setShootTimer(plantData.plantTimer[0]);
                         cells[scaredyShroom.getRow()][scaredyShroom.getColumn()].setPlants(scaredyShroom);
                         cells[scaredyShroom.getRow()][scaredyShroom.getColumn()].getGroup().getChildren()
                                 .add(scaredyShroom.getImage());
                         break;
                     case "SunShroom":
-                        SunShroom sunShroom = new SunShroom(plantData.row, plantData.column, plantData.heightImage
-                                , plantData.widthImage);                        sunShroom.setHP(plantData.HP);
-                        sunShroom.setCoffee(plantData.coffee);
-                        sunShroom.setNeedCoffee(plantData.needCoffee);
-                        sunShroom.setSunTimeline(plantData.plantTimer[0]);
-                        sunShroom.setIncreaseSizeTimer(plantData.plantTimer[1]);
+                        SunShroom sunShroom = new SunShroom(plantData.row, plantData.column);
+                        sunShroom.setHP(plantData.HP);
                         cells[sunShroom.getRow()][sunShroom.getColumn()].setPlants(sunShroom);
                         cells[sunShroom.getRow()][sunShroom.getColumn()].getGroup().getChildren()
                                 .add(sunShroom.getImage());
                         break;
                 }
-                Plants.isOnSaveMode = false;
             }
 
         }
@@ -1660,6 +1582,8 @@ public class FogLevel implements Initializable {
                     for (Zombie zombie : cells[i][j].getZombies()){
                         ZombieData z = new ZombieData(zombie.getRow(), zombie.getColumn(), zombie.getHP(),
                                 zombie.rowBTN, zombie.columnBTN, zombie.getClass().getSimpleName());
+                        z.layoutX = zombie.getImage().getLayoutX();
+                        z.layoutY = zombie.getImage().getLayoutY();
                         zombieData.add(z);
                     }
                 }
@@ -1670,123 +1594,34 @@ public class FogLevel implements Initializable {
     }
 
     private ArrayList<PlantData> getPlantsData() {
-        ArrayList<PlantData> plantDatas = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 9; j++) {
+        ArrayList<PlantData> plantData = new ArrayList<>();
+        for (int i = 0 ; i < 5 ; i++){
+            for (int j = 0; j < 9 ; j++){
                 if (cells[i][j].getPlant() != null) {
                     Plants plant = cells[i][j].getPlant();
-                    PlantData plantData = new PlantData(plant.getRow(), plant.getColumn(), plant.getHP(),
-                            plant.getClass().getSimpleName(), plant.isCoffee(), plant.isNeedCoffee());
-                    switch (plant.getClass().getSimpleName()) {
-                        case "Blover" :
-                            if (((Blover) plant).getBloverTimer() != null) {
-                                plantData.plantTimer[0] = ((Blover) plant).getBloverTimer().getCurrentTime()
-                                        .toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            break;
-                        case "CherryBomb" :
-                            if (((CherryBomb) plant).getCherryBombTimer() != null) {
-                                plantData.plantTimer[0] = ((CherryBomb) plant).getCherryBombTimer()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            break;
-                        case "CoffeeBean" :
-                            if (((CoffeeBean) plant).getCoffeeBeanTimer() != null) {
-                                plantData.plantTimer[0] = ((CoffeeBean) plant).getCoffeeBeanTimer()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            break;
-                        case "GraveBuster" :
-                            if (((GraveBuster) plant).getBusterTimer() != null) {
-                                plantData.plantTimer[0] = ((GraveBuster) plant).getBusterTimer()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            break;
-                        case "IceShroom" :
-                            if (((IceShroom) plant).getIceShroomTimer() != null) {
-                                plantData.plantTimer[0] = ((IceShroom) plant).getIceShroomTimer()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            break;
-                        case "Jalapenos" :
-                            if (((Jalapenos) plant).getJalopenosTimer() != null) {
-                                plantData.plantTimer[0] = ((Jalapenos) plant).getJalopenosTimer()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            break;
-                        case "PeaShooter" :
-                        case "PuffShroom" :
-                        case "Repeater" :
-                        case "ScaredyShroom" :
-                        case "SnowShooter" :
-                            if (((PeaPlants) plant).getShootTimer() != null) {
-                                plantData.plantTimer[0] = ((PeaPlants) plant).getShootTimer()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            break;
-                        case "Sunflower" :
-                            if (((Sunflower) plant).getSunTimeline() != null) {
-                                plantData.plantTimer[0] = ((Sunflower) plant).getSunTimeline()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            break;
-                        case "Plantern" :
-                            if (((Plantern) plant).getPlanternTimer() != null) {
-                                plantData.plantTimer[0] = ((Plantern) plant).getPlanternTimer()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            break;
-                        case "SunShroom" :
-                            plantData.heightImage = plant.getImage().getFitHeight();
-                            plantData.widthImage = plant.getImage().getFitWidth();
-
-                            if (((SunShroom) plant).getSunTimeline() != null) {
-                                plantData.plantTimer[0] = ((SunShroom) plant).getSunTimeline()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            if (((SunShroom) plant).getIncreaseSizeTimer() != null) {
-                                plantData.plantTimer[1] = ((SunShroom) plant).getIncreaseSizeTimer()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[1] = -1;
-                            }
-                            break;
-                        case "DoomShroom" :
-                            if (((Doomshroom) plant).getDoomshroomTimer() != null) {
-                                plantData.plantTimer[0] = ((Doomshroom) plant).getDoomshroomTimer()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[0] = -1;
-                            }
-                            break;
-                    }
-                    plantDatas.add(plantData);
+                    PlantData p = new PlantData(plant.getRow(), plant.getColumn(), plant.getHP(),
+                            plant.getClass().getSimpleName(),plant.isCoffee(), plant.isNeedCoffee());
+                    plantData.add(p);
                 }
             }
         }
 
-        return plantDatas;
+        return plantData;
     }
+
+//    private ArrayList<Long> getRechargeTimer() {
+//        ArrayList<Long> l = new ArrayList<>();
+//        for (int i = 0 ; i < 6 ; i++) {
+//            if (!availablePicked[i]) {
+//                if (plants.get(i).getTimer() != null) {
+//                    l.add((long) plants.get(i).getTimer().getCurrentTime().toSeconds());
+//                }
+//            } else {
+//                l.add(-1L);
+//            }
+//        }
+//        return l;
+//    }
 
     public void restart() {
         groupsOfPicked.clear();
@@ -1837,6 +1672,7 @@ public class FogLevel implements Initializable {
     }
 
     private void makeFog () {
+        System.out.println("FogLevel.makeFog");
         for (int i = 0 ; i < 5 ; i++) {
             for (int j = 4 ; j < 9 ; j++) {
                 setCloud(cells[i][j]);
@@ -1845,20 +1681,19 @@ public class FogLevel implements Initializable {
     }
 
     public void setCloud(Cell cell) {
+        System.out.println("FogLevel.setCloud");
         ImageView cloudImage = new ImageView(cloudImageResource);
         cloudImage.setFitWidth(300);
         cloudImage.setFitHeight(350);
 
         Platform.runLater(() -> {
-           if (fogAnc != null) {
-               Bounds boundsInScene = cell.getButton().localToScene(cell.getButton().getBoundsInLocal());
-               Point2D pointInFog = fogAnc.sceneToLocal(boundsInScene.getMinX(), boundsInScene.getMinY());
+            Bounds boundsInScene = cell.getButton().localToScene(cell.getButton().getBoundsInLocal());
+            Point2D pointInFog = fogAnc.sceneToLocal(boundsInScene.getMinX(), boundsInScene.getMinY());
 
-               cloudImage.setLayoutX(pointInFog.getX());
-               cloudImage.setLayoutY(pointInFog.getY());
-               cell.setCloudImage(cloudImage);
-               fogAnc.getChildren().add(cloudImage);
-           }
+            cloudImage.setLayoutX(pointInFog.getX());
+            cloudImage.setLayoutY(pointInFog.getY());
+            cell.setCloudImage(cloudImage);
+            fogAnc.getChildren().add(cloudImage);
     });
 
         if (cell.getPlant() != null) {

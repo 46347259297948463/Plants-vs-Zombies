@@ -1469,6 +1469,8 @@ public class NightLevel implements Initializable {
                     case "Zombie":
                         Zombie zombie = new Zombie(zombieData.y, zombieData.x, zombieData.rowBTN);
                         zombie.columnBTN = zombieData.columnBTN;
+                        zombie.getImage().setLayoutX(zombieData.layoutX);
+                        zombie.getImage().setLayoutY(zombieData.layoutY);
                         cells[zombie.rowBTN][zombie.columnBTN].setZombies(zombie);
                         zombie.setHP(zombieData.HP);
                         break;
@@ -1476,6 +1478,8 @@ public class NightLevel implements Initializable {
                         ConeheadZombie coneheadZombie = new ConeheadZombie(zombieData.y, zombieData.x
                                 , zombieData.rowBTN);
                         coneheadZombie.columnBTN = zombieData.columnBTN;
+                        coneheadZombie.getImage().setLayoutX(zombieData.layoutX);
+                        coneheadZombie.getImage().setLayoutY(zombieData.layoutY);
                         cells[coneheadZombie.rowBTN][coneheadZombie.columnBTN].setZombies(coneheadZombie);
                         coneheadZombie.setHP(zombieData.HP);
                         break;
@@ -1483,12 +1487,16 @@ public class NightLevel implements Initializable {
                         ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(zombieData.y, zombieData.x
                                 , zombieData.rowBTN);
                         screenDoorZombie.columnBTN = zombieData.columnBTN;
+                        screenDoorZombie.getImage().setLayoutX(zombieData.layoutX);
+                        screenDoorZombie.getImage().setLayoutY(zombieData.layoutY);
                         cells[screenDoorZombie.rowBTN][screenDoorZombie.columnBTN].setZombies(screenDoorZombie);
                         screenDoorZombie.setHP(zombieData.HP);
                         break;
                     case "ImpZombie":
                         ImpZombie impZombie = new ImpZombie(zombieData.y, zombieData.x, zombieData.rowBTN);
                         impZombie.columnBTN = zombieData.columnBTN;
+                        impZombie.getImage().setLayoutX(zombieData.layoutX);
+                        impZombie.getImage().setLayoutY(zombieData.layoutY);
                         cells[impZombie.rowBTN][impZombie.columnBTN].setZombies(impZombie);
                         impZombie.setHP(zombieData.HP);
                         break;
@@ -1659,6 +1667,8 @@ public class NightLevel implements Initializable {
                     for (Zombie zombie : cells[i][j].getZombies()){
                         ZombieData z = new ZombieData(zombie.getRow(), zombie.getColumn(), zombie.getHP(),
                                 zombie.rowBTN, zombie.columnBTN, zombie.getClass().getSimpleName());
+                        z.layoutX = zombie.getImage().getLayoutX();
+                        z.layoutY = zombie.getImage().getLayoutY();
                         zombieData.add(z);
                     }
                 }
