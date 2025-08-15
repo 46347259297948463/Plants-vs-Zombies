@@ -53,10 +53,6 @@ public class Zombie {
 
     private int isHypnotized = 1;
 
-    private int iHypnotized;
-
-    private int jHypnotized;
-
     private Zombie eatenZombie;
 
     public Zombie(double x, double y, int rowBTN){
@@ -71,6 +67,7 @@ public class Zombie {
         this.row = y;
         this.rowBTN = rowBTN;
 
+        fixClip();
         setImageOnAnc();
 
         startMove();
@@ -82,8 +79,6 @@ public class Zombie {
 
     public void hypnotize() {
         isHypnotized *= -1;
-        iHypnotized = columnBTN;
-        jHypnotized = rowBTN;
         if (isHypnotized == 1) {
             image.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
         } else if (isHypnotized == -1) {
@@ -116,7 +111,7 @@ public class Zombie {
     private void startMove(){
         if(moveTimeline == null){
             currentWidthBTN = cells[rowBTN][columnBTN].getButton().getWidth();
-            limitColumn = column - currentWidthBTN;
+            limitColumn = column - (isHypnotized * currentWidthBTN);
             moveTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> move()));
             moveTimeline.setCycleCount(Timeline.INDEFINITE);
             moveTimeline.play();
@@ -133,8 +128,7 @@ public class Zombie {
             eatTimeline = null;
         }
         if (clip != null) {
-            clip.stop();
-            System.out.println("stopMove clip stoped");
+            stopClip();
         }
     }
 
@@ -148,39 +142,22 @@ public class Zombie {
             if (!eat() && !eatZombie()){
                 column -= (isHypnotized * (speed/2));
                 image.setLayoutX(column);
-            } else if (eat() && (cells[rowBTN][columnBTN].getPlant() instanceof HypnoShroom) && iHypnotized == columnBTN
-                    && jHypnotized == rowBTN && isHypnotized == -1) {
-                column -= (isHypnotized * (speed/2));
-                image.setLayoutX(column);
             } else {
-                try {
-                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(
-                            getClass().getResource("/view/audio/eating sound.wav")
-                    );
-                    clip = AudioSystem.getClip();
-                    clip.open(audioStream);
-                    clip.loop(Clip.LOOP_CONTINUOUSLY);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 if (moveTimeline != null) {
                     moveTimeline.stop();
                 }
+                playClip();
                 if (eatZombie()) {
-                    System.out.println("eatZombie if line 155 clip started");
                     eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
                         if(eatenZombie != null){
                             eatenZombie.takeDamage(1);
                             if (eatenZombie.isDead()){
                                 eatenZombie.dead();
                                 eatenZombie = null;
-                                iHypnotized = -1;
-                                jHypnotized = -1;
                                 eatTimeline.stop();
                                 moveTimeline = null;
                                 eatTimeline = null;
-                                clip.stop();
-                                System.out.println("eatTimeline the eaten zombie is dead & clip stoped line 169");
+                                stopClip();
                                 startMove();
                             }
                         } else {
@@ -188,49 +165,40 @@ public class Zombie {
                                 eatTimeline.stop();
                             }
                             moveTimeline = null;
-                            clip.stop();
-                            System.out.println("eaten Zombie is null the clip stoped line 176");
+                            stopClip();
                             startMove();
                         }
                     }));
                     eatTimeline.setCycleCount(Timeline.INDEFINITE);
                     eatTimeline.play();
                 } else {
-                    System.out.println("the plant will be eaten clip started line 184");
                     if (cells[rowBTN][columnBTN].getPlant() instanceof HypnoShroom
                             && cells[rowBTN][columnBTN].getPlant().isCoffee()) {
-                        if (iHypnotized != columnBTN && jHypnotized != rowBTN) {
-                            eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-                                Plants plant = cells[rowBTN][columnBTN].getPlant();
-                                if(plant != null){
-                                    plant.takeDamage(1);
-                                    if (plant.isDead()){
-                                        cells[rowBTN][columnBTN].getGroup().getChildren().remove(plant.getImage());
-                                        cells[rowBTN][columnBTN].removePlant();
-                                        plant.end();
-                                    }
-                                    eatTimeline.stop();
-                                    moveTimeline = null;
-                                    eatTimeline = null;
-                                    clip.stop();
-                                    System.out.println("The plant is hypno so i eat it and the clip stopped line 201");
-                                    hypnotize();
-                                    startMove();
-                                } else {
-                                    eatTimeline.stop();
-                                    eatTimeline = null;
-                                    moveTimeline = null;
-                                    clip.stop();
-                                    System.out.println("The plant is hypno but it's null so the clip stopped line 209");
-                                    startMove();
+                        eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+                            Plants plant = cells[rowBTN][columnBTN].getPlant();
+                            if(plant != null){
+                                plant.takeDamage(1);
+                                if (plant.isDead()){
+                                    cells[rowBTN][columnBTN].getGroup().getChildren().remove(plant.getImage());
+                                    cells[rowBTN][columnBTN].removePlant();
+                                    plant.end();
                                 }
-                            }));
-                            eatTimeline.setCycleCount(1);
-                            eatTimeline.play();
-                        } else {
-                            moveTimeline = null;
-                            startMove();
-                        }
+                                eatTimeline.stop();
+                                moveTimeline = null;
+                                eatTimeline = null;
+                                stopClip();
+                                hypnotize();
+                                startMove();
+                            } else {
+                                eatTimeline.stop();
+                                eatTimeline = null;
+                                moveTimeline = null;
+                                stopClip();
+                                startMove();
+                            }
+                        }));
+                        eatTimeline.setCycleCount(1);
+                        eatTimeline.play();
                     } else {
                         eatTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
                             Plants plant = cells[rowBTN][columnBTN].getPlant();
@@ -243,15 +211,13 @@ public class Zombie {
                                     eatTimeline.stop();
                                     moveTimeline = null;
                                     eatTimeline = null;
-                                    clip.stop();
-                                    System.out.println("I eat the non hypno plant and it dies the clip is stopped line 232");
+                                    stopClip();
                                     startMove();
                                 }
                             } else {
                                 eatTimeline.stop();
                                 moveTimeline = null;
-                                clip.stop();
-                                System.out.println("I try to eat the non hypno plant but it was null so the clip is stopped line 239");
+                                stopClip();
                                 startMove();
                             }
                         }));
@@ -264,7 +230,7 @@ public class Zombie {
     }
 
     private void update() {
-        if (limitColumn > column) {
+        if ((isHypnotized == 1 && limitColumn > column) || (isHypnotized == -1 && limitColumn < column)) {
             if (columnBTN >= 0 && columnBTN < 9) {
                 cells[rowBTN][columnBTN].removeZombie(this);
             }
@@ -284,8 +250,6 @@ public class Zombie {
             } else if (column > 1780) {
                 if (isHypnotized == -1) {
                     dead();
-                    System.out.println("Dead!");
-                    System.out.println("columnBTN = " + columnBTN);
                     return;
                 }
             }
@@ -385,10 +349,7 @@ public class Zombie {
             eatTimeline.stop();
         }
         if (clip != null) {
-            clip.stop();
-            clip.close();
-            clip = null;
-            System.out.println("The zombie is dead so i kill the voice...");
+            endClip();
         }
 
     }
@@ -439,6 +400,47 @@ public class Zombie {
 
     protected void apear() {
         image.setOpacity(1);
+    }
+
+    private void fixClip() {
+        if (clip == null) {
+            try {
+                AudioInputStream audioStream = AudioSystem.getAudioInputStream(
+                        getClass().getResource("/view/audio/eating sound.wav")
+                );
+                clip = AudioSystem.getClip();
+                clip.open(audioStream);
+                audioStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void stopClip() {
+        if (clip != null && clip.isRunning()) {
+            clip.stop();
+            clip.flush();
+            clip.setFramePosition(0);
+        }
+    }
+
+    private void playClip() {
+        if (clip == null) {
+            fixClip();
+        }
+        if (!clip.isRunning()) {
+            clip.setFramePosition(0);
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+    }
+
+    private void endClip() {
+        if (clip != null) {
+            stopClip();
+            clip.close();
+            clip = null;
+        }
     }
 
 }

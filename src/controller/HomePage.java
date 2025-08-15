@@ -55,7 +55,7 @@ public class HomePage implements Initializable {
                 } else if (gameState.type.equals("NightLevel")) {
                     LoadPage.obj = NightLevel.getInstance();
                 } else if (gameState.type.equals("FogLevel")) {
-                    LoadPage.obj = NightLevel.getInstance();
+                    LoadPage.obj = FogLevel.getInstance();
                 }
                 input.close();
             } catch (Exception e) {

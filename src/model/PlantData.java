@@ -12,7 +12,9 @@ public class PlantData implements Serializable {
 
     public boolean coffee;
 
-    public double[] plantTimer = new double[3];
+    public double[] plantTimer = new double[2];
+
+    public double heightImage, widthImage;
 
     public PlantData(int row, int column, int HP, String type, boolean coffee, boolean needCoffee){
         this.row = row;

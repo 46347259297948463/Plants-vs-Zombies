@@ -36,6 +36,7 @@ public class LoadPage implements Initializable {
                 HomePage.getInstance().getAnchorPane().getChildren().remove(this.anchorPane);
             }
             HomePage.getInstance().setLoad(false);
+
         });
 
         yesBTN.setOnAction(event -> {

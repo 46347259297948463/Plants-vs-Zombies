@@ -24,6 +24,7 @@ public class WinPage implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         homeBTN.setOnAction(event -> {
             FXMLLoader loader = new FXMLLoader(this.getClass().getResource("../view/HomePage.fxml"));
             try {

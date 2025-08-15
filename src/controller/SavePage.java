@@ -38,6 +38,7 @@ public class SavePage implements Initializable {
             }
             Platform.exit();
         });
+
     }
 
 }

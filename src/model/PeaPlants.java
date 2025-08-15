@@ -1,8 +1,6 @@
 package model;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.util.Duration;
 
 public abstract class PeaPlants extends Plants{
 

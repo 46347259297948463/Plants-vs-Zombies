@@ -945,8 +945,8 @@ public class NightLevel implements Initializable {
                    int choose = random.nextInt(2);
                    if (choose == 0){
                        numberOfZombies[Y[i]]++;
-                       Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton()
-                               .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                       Zombie zombie = new Zombie(cells[Y[i]][X[i]].getGraveImage()
+                               .getParent().getLayoutX(), Y[i] * 185 + 130, Y[i]);
                        zombie.columnBTN = X[i];
                        cells[Y[i]][X[i]].setZombies(zombie);
                    } else {
@@ -1313,11 +1313,15 @@ public class NightLevel implements Initializable {
                         new KeyFrame(Duration.seconds(77), e -> step4()),
                         new KeyFrame(Duration.seconds(93), e -> finalAttack()),
                         new KeyFrame(Duration.seconds(107), e -> {
-                            finalTimer.stop();
-                            finalTimer = null;
+                            if (finalTimer != null) {
+                                finalTimer.stop();
+                                finalTimer = null;
+                            }
                             zombieTimer = null;
-                            gameTimer.stop();
-                            gameTimer = null;
+                            if (gameTimer != null) {
+                                gameTimer.stop();
+                                gameTimer = null;
+                            }
                             exitTimer = new Timeline(new KeyFrame(Duration.millis(100), event -> {
                                 if (isGameFinish()) {
                                     clip.stop();
@@ -1432,7 +1436,6 @@ public class NightLevel implements Initializable {
                     case "CherryBomb":
                         CherryBomb cherryBomb = new CherryBomb(plantData.row, plantData.column);
                         cherryBomb.setHP(plantData.HP);
-                        cherryBomb.setOnSaveMode(true);
                         cherryBomb.setCherryBombTimer(plantData.plantTimer[0]);
                         cells[cherryBomb.getRow()][cherryBomb.getColumn()].setPlants(cherryBomb);
                         cells[cherryBomb.getRow()][cherryBomb.getColumn()].getGroup().getChildren().add(cherryBomb.getImage());
@@ -1440,7 +1443,6 @@ public class NightLevel implements Initializable {
                     case "Jalapenos":
                         Jalapenos jalapenos = new Jalapenos(plantData.row, plantData.column);
                         jalapenos.setHP(plantData.HP);
-                        jalapenos.setOnSaveMode(true);
                         jalapenos.setJalopenosTimer(plantData.plantTimer[0]);
                         cells[jalapenos.getRow()][jalapenos.getColumn()].setPlants(jalapenos);
                         cells[jalapenos.getRow()][jalapenos.getColumn()].getGroup().getChildren().add(jalapenos.getImage());
@@ -1455,7 +1457,6 @@ public class NightLevel implements Initializable {
                     case "Repeater":
                         Repeater repeater = new Repeater(plantData.row, plantData.column);
                         repeater.setHP(plantData.HP);
-                        repeater.setOnSaveMode(true);
                         repeater.setShootTimer(plantData.plantTimer[0]);
                         cells[repeater.getRow()][repeater.getColumn()].setPlants(repeater);
                         cells[repeater.getRow()][repeater.getColumn()].getGroup().getChildren().add(repeater.getImage());
@@ -1463,7 +1464,6 @@ public class NightLevel implements Initializable {
                     case "SnowShooter":
                         SnowShooter snowShooter = new SnowShooter(plantData.row, plantData.column);
                         snowShooter.setHP(plantData.HP);
-                        snowShooter.setOnSaveMode(true);
                         snowShooter.setShootTimer(plantData.plantTimer[0]);
                         cells[snowShooter.getRow()][snowShooter.getColumn()].setPlants(snowShooter);
                         cells[snowShooter.getRow()][snowShooter.getColumn()].getGroup().getChildren().add(snowShooter.getImage());
@@ -1471,7 +1471,6 @@ public class NightLevel implements Initializable {
                     case "Sunflower":
                         Sunflower sunflower = new Sunflower(plantData.row, plantData.column);
                         sunflower.setHP(plantData.HP);
-                        sunflower.setOnSaveMode(true);
                         sunflower.setSunTimeline(plantData.plantTimer[0]);
                         cells[sunflower.getRow()][sunflower.getColumn()].setPlants(sunflower);
                         cells[sunflower.getRow()][sunflower.getColumn()].getGroup().getChildren().add(sunflower.getImage());
@@ -1491,7 +1490,6 @@ public class NightLevel implements Initializable {
                     case "Blover":
                         Blover blover = new Blover(plantData.row , plantData.column);
                         blover.setHP(plantData.HP);
-                        blover.setOnSaveMode(true);
                         blover.setBloverTimer(plantData.plantTimer[0]);
                         cells[blover.getRow()][blover.getColumn()].setPlants(blover);
                         cells[blover.getRow()][blover.getColumn()].getGroup().getChildren().add(blover.getImage());
@@ -1499,7 +1497,6 @@ public class NightLevel implements Initializable {
                     case "CoffeeBean":
                         CoffeeBean coffeeBean = new CoffeeBean(plantData.row , plantData.column);
                         coffeeBean.setHP(plantData.HP);
-                        coffeeBean.setOnSaveMode(true);
                         coffeeBean.setCoffeeBeanTimer(plantData.plantTimer[0]);
                         cells[coffeeBean.getRow()][coffeeBean.getColumn()].setPlants(coffeeBean);
                         cells[coffeeBean.getRow()][coffeeBean.getColumn()].getGroup().getChildren()
@@ -1510,7 +1507,6 @@ public class NightLevel implements Initializable {
                         doomshroom.setHP(plantData.HP);
                         doomshroom.setCoffee(plantData.coffee);
                         doomshroom.setNeedCoffee(plantData.needCoffee);
-                        doomshroom.setOnSaveMode(true);
                         doomshroom.setDoomshroomTimer(plantData.plantTimer[0]);
                         cells[doomshroom.getRow()][doomshroom.getColumn()].setPlants(doomshroom);
                         cells[doomshroom.getRow()][doomshroom.getColumn()].getGroup().getChildren()
@@ -1519,7 +1515,6 @@ public class NightLevel implements Initializable {
                     case "GraveBuster":
                         GraveBuster graveBuster = new GraveBuster(plantData.row , plantData.column);
                         graveBuster.setHP(plantData.HP);
-                        graveBuster.setOnSaveMode(true);
                         graveBuster.setBusterTimer(plantData.plantTimer[0]);
                         cells[graveBuster.getRow()][graveBuster.getColumn()].setPlants(graveBuster);
                         cells[graveBuster.getRow()][graveBuster.getColumn()].getGroup().getChildren()
@@ -1539,7 +1534,6 @@ public class NightLevel implements Initializable {
                         iceShroom.setHP(plantData.HP);
                         iceShroom.setCoffee(plantData.coffee);
                         iceShroom.setNeedCoffee(plantData.needCoffee);
-                        iceShroom.setOnSaveMode(true);
                         iceShroom.setIceShroomTimer(plantData.plantTimer[0]);
                         cells[iceShroom.getRow()][iceShroom.getColumn()].setPlants(iceShroom);
                         cells[iceShroom.getRow()][iceShroom.getColumn()].getGroup().getChildren()
@@ -1548,7 +1542,6 @@ public class NightLevel implements Initializable {
                     case "Plantern":
                         Plantern plantern = new Plantern(plantData.row , plantData.column);
                         plantern.setHP(plantData.HP);
-                        plantern.setOnSaveMode(true);
                         plantern.setPlanternTimer(plantData.plantTimer[0]);
                         cells[plantern.getRow()][plantern.getColumn()].setPlants(plantern);
                         cells[plantern.getRow()][plantern.getColumn()].getGroup().getChildren()
@@ -1559,7 +1552,6 @@ public class NightLevel implements Initializable {
                         puffShroom.setHP(plantData.HP);
                         puffShroom.setCoffee(plantData.coffee);
                         puffShroom.setNeedCoffee(plantData.needCoffee);
-                        puffShroom.setOnSaveMode(true);
                         puffShroom.setShootTimer(plantData.plantTimer[0]);
                         cells[puffShroom.getRow()][puffShroom.getColumn()].setPlants(puffShroom);
                         cells[puffShroom.getRow()][puffShroom.getColumn()].getGroup().getChildren()
@@ -1570,17 +1562,19 @@ public class NightLevel implements Initializable {
                         scaredyShroom.setHP(plantData.HP);
                         scaredyShroom.setCoffee(plantData.coffee);
                         scaredyShroom.setNeedCoffee(plantData.needCoffee);
-                        scaredyShroom.setOnSaveMode(true);
                         scaredyShroom.setShootTimer(plantData.plantTimer[0]);
                         cells[scaredyShroom.getRow()][scaredyShroom.getColumn()].setPlants(scaredyShroom);
                         cells[scaredyShroom.getRow()][scaredyShroom.getColumn()].getGroup().getChildren()
                                 .add(scaredyShroom.getImage());
                         break;
                     case "SunShroom":
-                        SunShroom sunShroom = new SunShroom(plantData.row, plantData.column);
+                        SunShroom sunShroom = new SunShroom(plantData.row, plantData.column, plantData.heightImage
+                                , plantData.widthImage);
                         sunShroom.setHP(plantData.HP);
                         sunShroom.setCoffee(plantData.coffee);
                         sunShroom.setNeedCoffee(plantData.needCoffee);
+                        sunShroom.setSunTimeline(plantData.plantTimer[0]);
+                        sunShroom.setIncreaseSizeTimer(plantData.plantTimer[1]);
                         cells[sunShroom.getRow()][sunShroom.getColumn()].setPlants(sunShroom);
                         cells[sunShroom.getRow()][sunShroom.getColumn()].getGroup().getChildren()
                                 .add(sunShroom.getImage());
@@ -1674,14 +1668,12 @@ public class NightLevel implements Initializable {
                             if (((PeaPlants) plant).getShootTimer() != null) {
                                 plantData.plantTimer[0] = ((PeaPlants) plant).getShootTimer()
                                         .getCurrentTime().toMillis();
-                                System.out.println("save mode"+plantData.plantTimer[0]);
                             } else {
                                 plantData.plantTimer[0] = -1;
                             }
                             Timeline t = ((PeaPlants) plant).getShootTimer();
                             Duration current = t.getCurrentTime();
                             boolean isPaused = t.getStatus() == Animation.Status.PAUSED;
-                            System.out.println("currentTime: " + current.toMillis() + " , paused: " + isPaused);
                             break;
                         case "Sunflower" :
                             if (((Sunflower) plant).getSunTimeline() != null) {
@@ -1700,6 +1692,9 @@ public class NightLevel implements Initializable {
                             }
                             break;
                         case "SunShroom" :
+                            plantData.heightImage = plant.getImage().getFitHeight();
+                            plantData.widthImage = plant.getImage().getFitWidth();
+
                             if (((SunShroom) plant).getSunTimeline() != null) {
                                 plantData.plantTimer[0] = ((SunShroom) plant).getSunTimeline()
                                         .getCurrentTime().toMillis();
@@ -1711,12 +1706,6 @@ public class NightLevel implements Initializable {
                                         .getCurrentTime().toMillis();
                             } else {
                                 plantData.plantTimer[1] = -1;
-                            }
-                            if (((SunShroom) plant).getGrowTimer() != null) {
-                                plantData.plantTimer[2] = ((SunShroom) plant).getGrowTimer()
-                                        .getCurrentTime().toMillis();
-                            } else {
-                                plantData.plantTimer[2] = -1;
                             }
                             break;
                         case "DoomShroom" :
