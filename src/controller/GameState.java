@@ -13,6 +13,10 @@ public class GameState implements Serializable {
 
     public ArrayList<String> names;
 
+    public int[] XOfGraves;
+
+    public int[] YOfGraves;
+
     public long gameTimer;
 
     public ArrayList<ZombieData> zombies;

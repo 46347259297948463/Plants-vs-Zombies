@@ -893,13 +893,15 @@ public class DayLevel implements Initializable {
         midTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
             for (int i = 0; i < 5; i++) {
                 int choose = random.nextInt(2);
+
                 int row = random.nextInt(5);
+
+                numberOfZombies[row]++;
+
                 if (choose == 0) {
-                    numberOfZombies[row]++;
                     Zombie zombie = new Zombie(1780, row * 185 + 130, row);
                     cells[row][8].setZombies(zombie);
                 } else {
-                    numberOfZombies[row]++;
                     ConeheadZombie coneheadZombie = new ConeheadZombie(1780, row * 185 + 130, row);
                     cells[row][8].setZombies(coneheadZombie);
                 }
@@ -969,21 +971,21 @@ public class DayLevel implements Initializable {
         finalTimer = new Timeline(new KeyFrame(Duration.seconds(1.5), event -> {
             for (int i = 0; i < 5; i++) {
                 int choose = random.nextInt(4);
+
                 int row = random.nextInt(5);
+
+                numberOfZombies[row]++;
+
                 if (choose == 0) {
-                    numberOfZombies[row]++;
                     Zombie zombie = new Zombie(1780, row * 185 + 130, row);
                     cells[row][8].setZombies(zombie);
                 } else if (choose == 1) {
-                    numberOfZombies[row]++;
                     ConeheadZombie coneheadZombie = new ConeheadZombie(1780, row * 185 + 130, row);
                     cells[row][8].setZombies(coneheadZombie);
                 } else if (choose == 2) {
-                    numberOfZombies[row]++;
                     ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(1780, row * 185 + 130, row);
                     cells[row][8].setZombies(screenDoorZombie);
                 } else {
-                    numberOfZombies[row]++;
                     ImpZombie impZombie = new ImpZombie(1780, row * 185 + 130, row);
                     cells[row][8].setZombies(impZombie);
                 }

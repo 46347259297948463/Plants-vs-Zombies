@@ -6,7 +6,10 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -847,28 +850,30 @@ public class NightLevel implements Initializable {
         cells[4][7] = new Cell(cell47, group47);
         cells[4][8] = new Cell(cell48, group48);
 
-        int n = 1;
-        for (int i = 0 ; i < 6 ; i++) {
-            int x = (int) (Math.random() * 5) + 4;
-            int y = (int) (Math.random() * 5);
+        if (!isOnSaveMode) {
+            int n = 1;
+            for (int i = 0 ; i < 6 ; i++) {
+                int x = (int) (Math.random() * 5) + 4;
+                int y = (int) (Math.random() * 5);
 
-            for (int j = 0 ; j < i ; j++) {
-                if (x == X[j] && y == Y[j]) {
-                    x = (int) (Math.random() * 5) + 4;
-                    y = (int) (Math.random() * 5);
-                    j = -1;
+                for (int j = 0 ; j < i ; j++) {
+                    if (x == X[j] && y == Y[j]) {
+                        x = (int) (Math.random() * 5) + 4;
+                        y = (int) (Math.random() * 5);
+                        j = -1;
+                    }
                 }
+                ImageView imageView = new ImageView("/view/images/grave_" + n + ".png");
+                imageView.setFitWidth(135);
+                imageView.setFitHeight(140);
+                cells[y][x].setGraveImage(imageView);
+                cells[y][x].getGroup().getChildren().add(imageView);
+                cells[y][x].setAvailable(false);
+                cells[y][x].setGrave(true);
+                n++;
+                X[i] = x;
+                Y[i] = y;
             }
-            ImageView imageView = new ImageView("/view/images/grave_" + n + ".png");
-            imageView.setFitWidth(135);
-            imageView.setFitHeight(140);
-            cells[y][x].setGraveImage(imageView);
-            cells[y][x].getGroup().getChildren().add(imageView);
-            cells[y][x].setAvailable(false);
-            cells[y][x].setGrave(true);
-            n++;
-            X[i] = x;
-            Y[i] = y;
         }
     }
 
@@ -929,12 +934,13 @@ public class NightLevel implements Initializable {
         midTimer = new Timeline(new KeyFrame(Duration.seconds(2), event -> {
             for (int i = 0; i < 5; i++){
                 int choose = random.nextInt(2);
+
+                numberOfZombies[i]++;
+
                 if (choose == 0){
-                    numberOfZombies[i]++;
                     Zombie zombie = new Zombie( 1780, i * 185 + 130, i);
                     cells[i][8].setZombies(zombie);
                 } else {
-                    numberOfZombies[i]++;
                     ConeheadZombie coneheadZombie = new ConeheadZombie( 1780, i * 185 + 130, i);
                     cells[i][8].setZombies(coneheadZombie);
                 }
@@ -943,16 +949,36 @@ public class NightLevel implements Initializable {
             for (int i = 0 ; i < 6 ; i++) {
                if (cells[Y[i]][X[i]].isGrave()) {
                    int choose = random.nextInt(2);
+                   Node grave = cells[Y[i]][X[i]].getGraveImage();
+
+                   Bounds graveBoundsInScene = grave.localToScene(grave.getBoundsInLocal());
+
+                   Point2D topLeftInTarget = nightAnc.sceneToLocal(
+                           graveBoundsInScene.getMinX(),
+                           graveBoundsInScene.getMinY()
+                   );
+
                    if (choose == 0){
                        numberOfZombies[Y[i]]++;
-                       Zombie zombie = new Zombie(cells[Y[i]][X[i]].getGraveImage()
-                               .getParent().getLayoutX(), Y[i] * 185 + 130, Y[i]);
+
+                       Zombie zombie = new Zombie(
+                               topLeftInTarget.getX(),
+                               topLeftInTarget.getY(),
+                               Y[i]
+                       );
+
                        zombie.columnBTN = X[i];
                        cells[Y[i]][X[i]].setZombies(zombie);
+
                    } else {
                        numberOfZombies[Y[i]]++;
-                       ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton()
-                               .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+
+                       ConeheadZombie coneheadZombie = new ConeheadZombie(
+                               topLeftInTarget.getX(),
+                               topLeftInTarget.getY(),
+                               Y[i]
+                       );
+
                        coneheadZombie.columnBTN = X[i];
                        cells[Y[i]][X[i]].setZombies(coneheadZombie);
                    }
@@ -1046,28 +1072,52 @@ public class NightLevel implements Initializable {
             for (int i = 0 ; i < 6 ; i++) {
                 if (cells[Y[i]][X[i]].isGrave()) {
                     int choose = random.nextInt(4);
+
+                    Node grave = cells[Y[i]][X[i]].getGraveImage();
+
+                    Bounds graveBoundsInScene = grave.localToScene(grave.getBoundsInLocal());
+
+                    Point2D topLeftInTarget = nightAnc.sceneToLocal(
+                            graveBoundsInScene.getMinX(),
+                            graveBoundsInScene.getMinY()
+                    );
+
+                    numberOfZombies[Y[i]]++;
+
                     if (choose == 0) {
-                        numberOfZombies[Y[i]]++;
-                        Zombie zombie = new Zombie(cells[Y[i]][X[i]].getButton()
-                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        Zombie zombie = new Zombie(
+                                topLeftInTarget.getX(),
+                                topLeftInTarget.getY(),
+                                Y[i]
+                        );
+
                         zombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(zombie);
                     } else if (choose == 1) {
-                        numberOfZombies[Y[i]]++;
-                        ConeheadZombie coneheadZombie = new ConeheadZombie(cells[Y[i]][X[i]].getButton()
-                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        ConeheadZombie coneheadZombie = new ConeheadZombie(
+                                topLeftInTarget.getX(),
+                                topLeftInTarget.getY(),
+                                Y[i]
+                        );
+
                         coneheadZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(coneheadZombie);
                     } else if (choose == 2) {
-                        numberOfZombies[Y[i]]++;
-                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(cells[Y[i]][X[i]].getButton()
-                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        ScreenDoorZombie screenDoorZombie = new ScreenDoorZombie(
+                                topLeftInTarget.getX(),
+                                topLeftInTarget.getY(),
+                                Y[i]
+                        );
+
                         screenDoorZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(screenDoorZombie);
                     } else if (choose == 3) {
-                        numberOfZombies[Y[i]]++;
-                        ImpZombie impZombie = new ImpZombie(cells[Y[i]][X[i]].getButton()
-                                .getParent().getLayoutX() + 450, Y[i] * 185 + 130, Y[i]);
+                        ImpZombie impZombie = new ImpZombie(
+                                topLeftInTarget.getX(),
+                                topLeftInTarget.getY(),
+                                Y[i]
+                        );
+
                         impZombie.columnBTN = X[i];
                         cells[Y[i]][X[i]].setZombies(impZombie);
                     }
@@ -1266,6 +1316,9 @@ public class NightLevel implements Initializable {
         gameState.sunPoints = Integer.parseInt(sunPoints.getText());
         gameState.zombies = getZombiesData();
         gameState.plants = getPlantsData();
+        gameState.XOfGraves = X;
+        gameState.YOfGraves = Y;
+
         if (gameTimer == null) {
             gameState.isOnGameMode = false;
         } else {
@@ -1304,6 +1357,18 @@ public class NightLevel implements Initializable {
             isOnSaveMode = false;
             sunPoints.setText(String.valueOf(loadedState.sunPoints));
             this.setNames(loadedState.names);
+            X = loadedState.XOfGraves;
+            Y = loadedState.YOfGraves;
+
+            for (int i = 0 ; i < 6 ; i++) {
+                ImageView imageView = new ImageView("/view/images/grave_" + (i + 1) + ".png");
+                imageView.setFitWidth(135);
+                imageView.setFitHeight(140);
+                cells[Y[i]][X[i]].setGraveImage(imageView);
+                cells[Y[i]][X[i]].getGroup().getChildren().add(imageView);
+                cells[Y[i]][X[i]].setAvailable(false);
+                cells[Y[i]][X[i]].setGrave(true);
+            }
             if (loadedState.isOnGameMode) {
                 gameTimer = new Timeline(
                         new KeyFrame(Duration.seconds(20), e -> step1()),
